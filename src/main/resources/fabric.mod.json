@@ -1,0 +1,36 @@
+{
+	"schemaVersion": 1,
+	"id": "legacyskins",
+	"version": "${version}",
+	"name": "Legacy Skins",
+	"description": "An addon for Legacy4J and Customizable Player Models that brings back the ability to choose skins!",
+	"authors": [
+		"RedRain0o0"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/legacyskins/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"io.github.redrain0o0.legacyskins.Legacyskins"
+		]
+	},
+	"mixins": [
+		"legacyskins.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.21",
+		"java": ">=21",
+		"fabric-api": "*",
+		"legacy": "*",
+		"cpm": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
