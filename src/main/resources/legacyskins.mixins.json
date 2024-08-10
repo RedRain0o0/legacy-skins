@@ -3,7 +3,8 @@
 	"package": "io.github.redrain0o0.legacyskins.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"HelpOptionsMixin"
+		"HelpOptionsMixin",
+		"HideSkinEditorButtonMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
