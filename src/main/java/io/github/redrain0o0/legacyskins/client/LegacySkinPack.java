@@ -29,7 +29,7 @@ public record LegacySkinPack(Component buttonName, ResourceLocation icon, Resour
                         JsonObject obj = GsonHelper.parse(bufferedReader);
                         obj.asMap().forEach((s,element)->{
                             if (element instanceof JsonObject tabObj) {
-                                packs.add(new LegacySkinPack(Component.translatable(s),ResourceLocation.parse(GsonHelper.getAsString(tabObj,"icon")),ResourceLocation.parse(GsonHelper.getAsString(tabObj,"skinsLocation"))));
+                                packs.add(new LegacySkinPack(Component.translatable(s),ResourceLocation.parse(GsonHelper.getAsString(tabObj,"icon")),ResourceLocation.parse(GsonHelper.getAsString(tabObj,"skins"))));
                             }
                         });
                         bufferedReader.close();

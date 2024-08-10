@@ -1,6 +1,6 @@
 {
   "default": {
     "icon": "legacyskins:skin_packs/default",
-    "skins": "legacy:skins/steve.cpmmodel"
+    "skins": "legacy:default/Model.cpmmodel"
   }
 }

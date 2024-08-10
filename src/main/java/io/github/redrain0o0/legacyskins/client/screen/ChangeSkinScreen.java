@@ -52,8 +52,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
     protected final Map<ModInfo, SizedLocation> modLogosCache = new ConcurrentHashMap<>();
     protected ScrollableRenderer scrollableRenderer =  new ScrollableRenderer(new LegacyScrollRenderer());
 
-    static final String TUTORIAL_FOLDER_NAME = "Tutorial";
-    private PlayGameScreen screen;
     protected final Minecraft minecraft;
 
     public record SizedLocation(ResourceLocation location, int width, int height){
@@ -135,25 +133,16 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
         //    });
         //});
         minecraft = Minecraft.getInstance();
-        LegacySkinPack.list.forEach(t-> renderableVList.addRenderable(new AbstractButton(0,0,260,22, Component.translatable(t.buttonName().getString())) {
+        LegacySkinPack.list.forEach(s-> renderableVList.addRenderable(new AbstractButton(0,0,260,22, Component.translatable(s.buttonName().getString())) {
             @Override
             public void onPress() {
-                if (isFocused()){
+                if (isFocused()) {
                     //ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL,);
-                    ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL, ".minecraft/player_models/Model.cpmmodel");
-                    ModConfig.getCommonConfig().save();
-                    MinecraftClientAccess.get().sendSkinUpdate();
+                    //ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL, ".minecraft/player_models/Model.cpmmodel");
+                    //ModConfig.getCommonConfig().save();
+                    //MinecraftClientAccess.get().sendSkinUpdate();
                 }
-            }//addIconButton(this.getRenderableVList(),t.icon(),t.buttonName(), c-> {
-            //try {
-                //String name = Legacy4JClient.importSaveFile(minecraft,minecraft.getResourceManager().getResourceOrThrow(t.worldTemplate()).open(),t.folderName());
-                //if (t.directJoin()) minecraft.createWorldOpenFlows().openWorld(name, ()-> minecraft.setScreen(screen));
-                //else {
-                //    LevelStorageSource.LevelStorageAccess access = minecraft.getLevelSource().createAccess(name);
-                //    LevelSummary summary = access.getSummary(access.getDataTag());
-                //    minecraft.setScreen(new LoadSaveScreen(screen,summary, access,true));
-                //}
-            //}
+            }
             @Override
             protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
                 defaultButtonNarrationText(narrationElementOutput);
