@@ -11,6 +11,7 @@ import com.tom.cpm.shared.config.ConfigKeys;
 import com.tom.cpm.shared.config.ModConfig;
 import com.tom.cpm.shared.config.Player;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
+import io.github.redrain0o0.legacyskins.util.LegacySkinSprites;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -133,7 +134,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
         //    });
         //});
         minecraft = Minecraft.getInstance();
-        LegacySkinPack.list.forEach(s-> renderableVList.addRenderable(new AbstractButton(0,0,260,22, Component.translatable(s.buttonName().getString())) {
+        LegacyWorldTemplate.list.forEach(s-> renderableVList.addRenderable(new AbstractButton(0,0,260,22, Component.translatable(s.buttonName().getString())) {
             @Override
             public void onPress() {
                 if (isFocused()) {
@@ -167,13 +168,18 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
             guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width - 1, panel.y + tooltipBox.getHeight() - 60, tooltipBox.getWidth() - 55, 55);
             guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 2, 24, 24);
             guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 28, 24, 24);
+            RenderSystem.enableBlend();
+            guiGraphics.blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 2, panel.y + 16, tooltipBox.getWidth() - 18, tooltipBox.getHeight() - 80); //12231`32
+            RenderSystem.disableBlend();
+            //guiGraphics.
+
             if (focusedMod != null) {
                 List<FormattedCharSequence> label = modLabelsCache.getUnchecked(focusedMod);
                 scrollableRenderer.scrolled.max = Math.max(0,label.size() - (tooltipBox.getHeight() - 50) / 12);
                 SizedLocation logo = modLogosCache.get(focusedMod);
                 int x = panel.x + panel.width + (logo == null ? 5 : logo.getScaledWidth(28) + 10);
                 if (logo != null)
-                    //guiGraphics.blit(logo.location, panel.x + panel.width - 5, panel.y + 0, 0.0f, 0.0f, logo.getScaledWidth(28), 28, logo.getScaledWidth(28), 28);
+                    guiGraphics.blit(logo.location, panel.x + panel.width - 5, panel.y + 0, 0.0f, 0.0f, logo.getScaledWidth(28), 28, logo.getScaledWidth(28), 28);
                     //guiGraphics.pose(logo.location, panel.x + panel.width - 5, panel.y + 0, 0.0f, 0.0f, logo.getScaledWidth(28), 28, logo.getScaledWidth(28), 28);
                 if (logo == null || logo.getScaledWidth(28) < 120) {
                     //ScreenUtil.renderScrollingString(guiGraphics, font, Component.translatable("legacy.menu.mods.id", focusedMod.getId()), x, panel.y + 12, panel.x + panel.width + 185, panel.y + 24, 0xFFFFFF, true);
