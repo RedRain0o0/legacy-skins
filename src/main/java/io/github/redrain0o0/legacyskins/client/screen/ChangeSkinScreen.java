@@ -4,6 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.tom.cpm.shared.MinecraftClientAccess;
@@ -20,13 +21,23 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.LayerDefinitions;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.LevelSummary;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import wily.legacy.Legacy4J;
 import wily.legacy.Legacy4JClient;
 import wily.legacy.Legacy4JPlatform;
@@ -43,6 +54,7 @@ import wily.legacy.util.ScreenUtil;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.security.spec.EdDSAParameterSpec;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
@@ -156,21 +168,52 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
         super.addControlTooltips(renderer);
         renderer.set(0,()-> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_RETURN) : ControllerBinding.DOWN_BUTTON.bindingState.getIcon(), ()-> Component.translatable("legacyskins.menu.select_skin"));
         renderer.set(1,()-> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_ESCAPE) : ControllerBinding.RIGHT_BUTTON.bindingState.getIcon(), ()-> Component.translatable("legacyskins.menu.cancel"));
-        //renderer.add(()-> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.LEFT_STICK.bindingState.getIcon(), ()-> null);
+        renderer.add(()-> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.UP_BUTTON.bindingState.getIcon(), ()-> Component.translatable("legacyskins.menu.favourite"));
+        renderer.add(()-> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_B) : ControllerBinding.LEFT_STICK.bindingState.getIcon(), ()-> Component.translatable("legacyskins.menu.navigate"));
+                //renderer.add(()-> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.LEFT_STICK.bindingState.getIcon(), ()-> null);
     }
 
     @Override
     public void renderDefaultBackground(GuiGraphics guiGraphics, int i, int j, float f) {
         ScreenUtil.renderDefaultBackground(guiGraphics,false);
         if (ScreenUtil.hasTooltipBoxes()) {
-            //tooltipBox.render(guiGraphics,i,j,f);
             guiGraphics.blitSprite(LegacySprites.SMALL_PANEL, panel.x + panel.width - 10, panel.y + 7, tooltipBox.getWidth(), tooltipBox.getHeight() - 2);
             guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width - 1, panel.y + tooltipBox.getHeight() - 60, tooltipBox.getWidth() - 55, 55);
             guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 2, 24, 24);
             guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 28, 24, 24);
             RenderSystem.enableBlend();
-            guiGraphics.blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 2, panel.y + 16, tooltipBox.getWidth() - 18, tooltipBox.getHeight() - 80); //12231`32
+            guiGraphics.blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 2, panel.y + 16, tooltipBox.getWidth() - 18, tooltipBox.getHeight() - 80);
             RenderSystem.disableBlend();
+
+            //RenderSystem.enableScissor(panel.x + panel.width - 2, panel.y + 16, tooltipBox.getWidth() - 18, tooltipBox.getHeight() - 80);
+
+            //LayerDefinition layerDefinition = LayerDefinitions.createRoots().get(ModelLayers.PLAYER);
+            //PlayerModel<LivingEntity> livingEntityPlayerModel = new PlayerModel<>(layerDefinition.bakeRoot(), false);
+            //RenderType renderType = livingEntityPlayerModel.renderType(ResourceLocation.tryParse("minecraft:textures/entity/player/wide/steve.png"));
+            //guiGraphics.pose().pushPose();
+            //guiGraphics.pose().scale(100, 100, 100);
+            //guiGraphics.pose().mulPose((new Matrix4f()).scaling((float)1, (float)1, (float)(-1)));  //Not sure if this should be a `.mulPose()` or not
+            //guiGraphics.pose().mulPose(new Quaternionf().rotationXYZ((float) Math.toRadians(180), 0, 0));
+            //guiGraphics.pose().mulPose((new Quaternionf()).rotationXYZ(0.43633232F, (float) Math.toRadians(System.currentTimeMillis() % 360), 3.1415927F));
+            //Lighting.setupForEntityInInventory();
+            //livingEntityPlayerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY, 1); //It doesn't like `.getPlatform()`
+            //Lighting.setupFor3DItems();
+            //guiGraphics.pose().popPose();
+
+            LayerDefinition layerDefinition = LayerDefinitions.createRoots().get(ModelLayers.PLAYER);
+            PlayerModel<LivingEntity> livingEntityPlayerModel = new PlayerModel<>(layerDefinition.bakeRoot(), false);
+            RenderType renderType = livingEntityPlayerModel.renderType(ResourceLocation.parse("minecraft:textures/entity/player/wide/steve.png"));
+            guiGraphics.pose().pushPose();
+            guiGraphics.pose().scale(100, 100, 100);
+            guiGraphics.pose().scale(1, 1, -1);
+            guiGraphics.pose().mulPose(new Quaternionf().rotationXYZ((float) Math.toRadians(180), 0, 0));
+            guiGraphics.pose().mulPose((new Quaternionf()).rotationXYZ(0.43633232F, (float) Math.toRadians(System.currentTimeMillis() % 360), 3.1415927F));
+            Lighting.setupForEntityInInventory();
+            livingEntityPlayerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY/*, 1, 1, 1, 1*/);
+            Lighting.setupFor3DItems();
+            guiGraphics.pose().popPose();
+            //RenderSystem.disableScissor();
+
             //guiGraphics.
 
             if (focusedMod != null) {
