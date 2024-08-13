@@ -22,7 +22,9 @@ public class LegacySkinUtils {
 		try (InputStream opened = resource.open()) {
 			ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL, temp(skin.model(), opened.readAllBytes()));
 			ModConfig.getCommonConfig().save();
-			MinecraftClientAccess.get().sendSkinUpdate();
+			if (Minecraft.getInstance().getConnection() != null) {
+				MinecraftClientAccess.get().sendSkinUpdate();
+			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
