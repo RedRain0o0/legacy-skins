@@ -17,10 +17,10 @@ import java.nio.file.Path;
 
 public class LegacySkinUtils {
 	public static void switchSkin(LegacySkin skin) {
-		ResourceLocation texture = skin.texture();
+		ResourceLocation texture = skin.model();
 		Resource resource = Minecraft.getInstance().getResourceManager().getResource(texture).orElseThrow();
 		try (InputStream opened = resource.open()) {
-			ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL, temp(skin.texture(), opened.readAllBytes()));
+			ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL, temp(skin.model(), opened.readAllBytes()));
 			ModConfig.getCommonConfig().save();
 			MinecraftClientAccess.get().sendSkinUpdate();
 		} catch (IOException e) {
