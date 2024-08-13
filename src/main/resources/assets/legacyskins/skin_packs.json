@@ -3,7 +3,7 @@
     "icon": "legacyskins:skin_packs/default",
     "skins": [
       {
-        "texture": "legacyskins:b.cpmmodel"
+        "model": "legacyskins:b.cpmmodel"
       }
     ]
   }
