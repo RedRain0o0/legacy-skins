@@ -5,13 +5,14 @@
 	"name": "Legacy Skins",
 	"description": "An addon for Legacy4J and Customizable Player Models that brings back the ability to choose skins!",
 	"authors": [
-		"RedRain0o0"
+		"RedRain0o0",
+		"Jab125"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/mod/legacy-skins",
+		"sources": "https://github.com/RedRain0o0/legacy-skins"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/legacyskins/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -29,8 +30,5 @@
 		"fabric-api": "*",
 		"legacy": "*",
 		"cpm": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }
