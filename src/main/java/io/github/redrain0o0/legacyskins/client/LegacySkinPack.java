@@ -20,12 +20,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public record LegacySkinPack(ResourceLocation icon, List<ResourceLocation> skins) {
+public record LegacySkinPack(ResourceLocation icon, List<LegacySkin> skins) {
     public static final List<LegacySkinPack> list = new ArrayList<>();
     private static final String PACKS = "skin_packs.json";
 	public static final Codec<LegacySkinPack> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ResourceLocation.CODEC.fieldOf("icon").forGetter(LegacySkinPack::icon),
-			Codec.list(ResourceLocation.CODEC).fieldOf("skins").forGetter(LegacySkinPack::skins)
+			Codec.list(LegacySkin.CODEC).fieldOf("skins").forGetter(LegacySkinPack::skins)
 	).apply(instance, LegacySkinPack::new));
 
     public static class Manager extends SimplePreparableReloadListener<List<LegacySkinPack>> {
