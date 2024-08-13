@@ -11,7 +11,9 @@ import com.tom.cpm.shared.MinecraftClientAccess;
 import com.tom.cpm.shared.config.ConfigKeys;
 import com.tom.cpm.shared.config.ModConfig;
 import com.tom.cpm.shared.config.Player;
+import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
+import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import io.github.redrain0o0.legacyskins.util.LegacySkinSprites;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -150,6 +152,11 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
             @Override
             public void onPress() {
                 if (isFocused()) {
+					for (LegacySkinPack legacySkinPack : LegacySkinPack.list) {
+						System.out.println("Clicked");
+						Minecraft.getInstance().getToasts().addToast(new LegacyTip(Component.literal(legacySkinPack.skins().get(0).toString())));
+						LegacySkinUtils.switchSkin(legacySkinPack.skins().get(0));
+					}
                     //ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL,);
                     //ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL, ".minecraft/player_models/Model.cpmmodel");
                     //ModConfig.getCommonConfig().save();

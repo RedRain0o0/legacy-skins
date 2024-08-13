@@ -2,8 +2,9 @@
   "default": {
     "icon": "legacyskins:skin_packs/default",
     "skins": [
-      "reset",
-      "legacy:default/Model.cpmmodel"
+      {
+        "texture": "legacyskins:b.cpmmodel"
+      }
     ]
   }
 }
