@@ -46,6 +46,10 @@ dependencies {
 	localRuntime "dev.isxander:libsdl4j:3.693c75e-36"
 }
 
+fabricApi {
+	configureDataGeneration()
+}
+
 processResources {
 	inputs.property "version", project.version
 

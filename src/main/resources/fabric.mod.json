@@ -21,6 +21,9 @@
       ],
       "client": [
         "io.github.redrain0o0.legacyskins.client.LegacySkinsClient"
+      ],
+      "fabric-datagen": [
+        "io.github.redrain0o0.legacyskins.data.LegacySkinsDataGenerator"
       ]
 	},
 	"mixins": [
