@@ -27,31 +27,26 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public record LegacySkinPack(ResourceLocation icon, List<LegacySkin> skins) {
-    public static final Map<String, LegacySkinPack> list = new LinkedHashMap<>();
+    public static final Map<ResourceLocation, LegacySkinPack> list = new LinkedHashMap<>();
     private static final String PACKS = "skin_packs.json";
 	public static final Codec<LegacySkinPack> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ResourceLocation.CODEC.fieldOf("icon").forGetter(LegacySkinPack::icon),
 			Codec.list(LegacySkin.CODEC).fieldOf("skins").forGetter(LegacySkinPack::skins)
 	).apply(instance, LegacySkinPack::new));
+	public static final Codec<Map<ResourceLocation, LegacySkinPack>> MAP_CODEC = Codec.unboundedMap(ResourceLocation.CODEC, LegacySkinPack.CODEC);
 
-    public static class Manager implements SimpleResourceReloadListener<Map<String, LegacySkinPack>> {
+    public static class Manager implements SimpleResourceReloadListener<Map<ResourceLocation, LegacySkinPack>> {
 		@Override
-		public CompletableFuture<Map<String, LegacySkinPack>> load(ResourceManager resourceManager, ProfilerFiller profiler, Executor executor) {
+		public CompletableFuture<Map<ResourceLocation, LegacySkinPack>> load(ResourceManager resourceManager, ProfilerFiller profiler, Executor executor) {
 			return CompletableFuture.supplyAsync(() -> {
-				Map<String, LegacySkinPack> packs = new LinkedHashMap<>();
+				Map<ResourceLocation, LegacySkinPack> packs = new LinkedHashMap<>();
 				JsonUtil.getOrderedNamespaces(resourceManager).forEach(name->{
 					resourceManager.getResource(ResourceLocation.tryBuild(name, PACKS)).ifPresent(r->{
 						try {
 							BufferedReader bufferedReader = r.openAsReader();
 							JsonObject obj = GsonHelper.parse(bufferedReader);
-							obj.asMap().forEach((s,element)->{
-								// yikes!
-								if (element instanceof JsonObject tabObj) {
-									//packs.add(new LegacySkinPack(Component.translatable(s),ResourceLocation.parse(GsonHelper.getAsString(tabObj,"icon")),ResourceLocation.parse(GsonHelper.getAsString(tabObj,"skins"))));
-									LegacySkinPack deserialized = CODEC.parse(JsonOps.INSTANCE, tabObj).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
-									packs.put(s, deserialized);
-								}
-							});
+							Map<ResourceLocation, LegacySkinPack> map = MAP_CODEC.parse(JsonOps.INSTANCE, obj).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+							packs.putAll(map);
 							bufferedReader.close();
 						} catch (IOException var8) {
 							Legacy4J.LOGGER.warn(var8.getMessage());
@@ -63,7 +58,7 @@ public record LegacySkinPack(ResourceLocation icon, List<LegacySkin> skins) {
 		}
 
 		@Override
-		public CompletableFuture<Void> apply(Map<String, LegacySkinPack> data, ResourceManager manager, ProfilerFiller profiler, Executor executor) {
+		public CompletableFuture<Void> apply(Map<ResourceLocation, LegacySkinPack> data, ResourceManager manager, ProfilerFiller profiler, Executor executor) {
 			list.clear();
 			list.putAll(data);
 			return CompletableFuture.completedFuture(null);
