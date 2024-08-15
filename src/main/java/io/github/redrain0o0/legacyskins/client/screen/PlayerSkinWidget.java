@@ -128,9 +128,9 @@ public class PlayerSkinWidget extends AbstractWidget {
 
 			renderer.setRenderModel(playerModel);
 			renderer.setRenderType(RenderType::entityTranslucent);
+			RenderType renderType = playerModel.renderType(ResourceLocation.fromNamespaceAndPath("minecraft","textures/entity/player/wide/steve.png"));// playerSkin.texture());
 			setupAnim(playerModel);
 			renderer.preRender(guiGraphics.bufferSource(), AnimationEngine.AnimationMode.PLAYER);
-			RenderType renderType = playerModel.renderType(ResourceLocation.fromNamespaceAndPath("aa","aa"));// playerSkin.texture());
 			playerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
 			renderer.postRender();
 			guiGraphics.pose().popPose();
