@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import org.apache.commons.io.FileUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -24,8 +25,7 @@ public class LegacySkinUtils {
 			ModConfig.getCommonConfig().save();
 		} else {
 			ResourceLocation texture = skin.model();
-			Resource resource = Minecraft.getInstance().getResourceManager().getResource(texture).orElseThrow();
-			try (InputStream opened = resource.open()) {
+			try (InputStream opened = from(skin)) {
 				ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL, temp(skin.model(), opened.readAllBytes()));
 				ModConfig.getCommonConfig().save();
 			} catch (IOException e) {
@@ -35,6 +35,12 @@ public class LegacySkinUtils {
 		if (Minecraft.getInstance().getConnection() != null) {
 			MinecraftClientAccess.get().sendSkinUpdate();
 		}
+	}
+
+	public static InputStream from(@NotNull LegacySkin skin) throws IOException {
+		ResourceLocation texture = skin.model();
+		Resource resource = Minecraft.getInstance().getResourceManager().getResource(texture).orElseThrow();
+		return resource.open();
 	}
 
 	public static void cleanup() {

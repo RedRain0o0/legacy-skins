@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.math.Axis;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.function.Supplier;
 
 import com.tom.cpm.api.IClientAPI;
@@ -94,6 +95,8 @@ public class PlayerSkinWidget extends AbstractWidget {
 		return null;
 	}
 
+	private static HashMap<String, IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile>> rendererHashMap = new HashMap<>();
+
 	@Environment(EnvType.CLIENT)
 	static record Model(PlayerModel<?> wideModel, PlayerModel<?> slimModel) {
 		public static PlayerSkinWidget.Model bake(EntityModelSet entityModelSet) {
@@ -108,16 +111,23 @@ public class PlayerSkinWidget extends AbstractWidget {
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(1.0F, 1.0F, -1.0F);
 			guiGraphics.pose().translate(0.0F, -1.5F, 0.0F);
-			IClientAPI.LocalModel localModel = null;
-			try {
-				localModel = CPMCompat.loadModel(playerSkin.hashCode() + "-temp", LegacySkinUtils.from(playerSkin));
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+
 			PlayerModel<?> playerModel = this.wideModel;// playerSkin.model() == PlayerSkin.Model.SLIM ? this.slimModel : this.wideModel;
-			IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> renderer = CPMCompat.createRenderer();
+			IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> renderer = rendererHashMap.computeIfAbsent(playerSkin.hashCode() + "-temp", c -> {
+				IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> renderer1 = CPMCompat.createRenderer();
+				IClientAPI.LocalModel localModel = null;
+				try {
+					localModel = CPMCompat.loadModel(playerSkin.hashCode() + "-temp", LegacySkinUtils.from(playerSkin));
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+				renderer1.setLocalModel(localModel);
+				System.out.println("Figured out stuff! "+ renderer1 + ", " + localModel);
+				return renderer1;
+			});
+
 			renderer.setRenderModel(playerModel);
-			renderer.setLocalModel(localModel);
+			renderer.setRenderType(RenderType::entityTranslucent);
 			setupAnim(playerModel);
 			renderer.preRender(guiGraphics.bufferSource(), AnimationEngine.AnimationMode.PLAYER);
 			RenderType renderType = playerModel.renderType(ResourceLocation.fromNamespaceAndPath("aa","aa"));// playerSkin.texture());

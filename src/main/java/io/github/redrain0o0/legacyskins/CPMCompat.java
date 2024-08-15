@@ -9,19 +9,34 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 public class CPMCompat implements ICPMPlugin {
 
 	public static IClientAPI.PlayerRenderer<Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> renderer;
 	private static Supplier<IClientAPI.PlayerRenderer<Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile>> supplier;
-
+	private static BiFunction<String, InputStream, IClientAPI.LocalModel> loadModel;
 	public static IClientAPI.PlayerRenderer<Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> createRenderer() {
 		return supplier.get();
+	}
+	public static IClientAPI.LocalModel loadModel(String name, InputStream stream) {
+		return loadModel.apply(name, stream);
 	}
 
 	@Override
 	public void initClient(IClientAPI api) {
+		Legacyskins.LOGGER.info("CPMCompat client initialized.");
+		loadModel = (name, b) -> {
+			// why does java require this
+			try {
+				return api.loadModel(name, b);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		};
 		supplier = () -> api.createPlayerRenderer(Model.class, ResourceLocation.class, RenderType.class, MultiBufferSource.class, GameProfile.class);
 	}
 
