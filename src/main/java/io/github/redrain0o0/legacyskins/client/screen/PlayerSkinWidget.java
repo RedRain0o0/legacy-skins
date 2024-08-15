@@ -1,8 +1,17 @@
 package io.github.redrain0o0.legacyskins.client.screen;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.math.Axis;
+
+import java.io.IOException;
 import java.util.function.Supplier;
+
+import com.tom.cpm.api.IClientAPI;
+import com.tom.cpm.shared.animation.AnimationEngine;
+import io.github.redrain0o0.legacyskins.CPMCompat;
+import io.github.redrain0o0.legacyskins.client.LegacySkin;
+import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.ComponentPath;
@@ -10,9 +19,11 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.PlayerSkin;
@@ -31,11 +42,11 @@ public class PlayerSkinWidget extends AbstractWidget {
 	private static final float DEFAULT_ROTATION_Y = 30.0F;
 	private static final float ROTATION_X_LIMIT = 50.0F;
 	private final PlayerSkinWidget.Model model;
-	private final Supplier<PlayerSkin> skin;
+	private final Supplier<LegacySkin> skin;
 	private float rotationX = -5.0F;
 	private float rotationY = 30.0F;
 
-	public PlayerSkinWidget(int i, int j, EntityModelSet entityModelSet, Supplier<PlayerSkin> supplier) {
+	public PlayerSkinWidget(int i, int j, EntityModelSet entityModelSet, Supplier<LegacySkin> supplier) {
 		super(0, 0, i, j, CommonComponents.EMPTY);
 		this.model = PlayerSkinWidget.Model.bake(entityModelSet);
 		this.skin = supplier;
@@ -52,7 +63,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 		guiGraphics.pose().mulPose(Axis.YP.rotationDegrees(this.rotationY));
 		guiGraphics.flush();
 		Lighting.setupForEntityInInventory(Axis.XP.rotationDegrees(this.rotationX));
-		this.model.render(guiGraphics, null);//this.skin.get());
+		this.model.render(guiGraphics, this.skin.get());
 		guiGraphics.flush();
 		Lighting.setupFor3DItems();
 		guiGraphics.pose().popPose();
@@ -93,22 +104,33 @@ public class PlayerSkinWidget extends AbstractWidget {
 			return new PlayerSkinWidget.Model(playerModel, playerModel2);
 		}
 
-		public void render(GuiGraphics guiGraphics, PlayerSkin playerSkin) {
+		public void render(GuiGraphics guiGraphics, LegacySkin playerSkin) {
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(1.0F, 1.0F, -1.0F);
 			guiGraphics.pose().translate(0.0F, -1.5F, 0.0F);
+			IClientAPI.LocalModel localModel = null;
+			try {
+				localModel = CPMCompat.loadModel(playerSkin.hashCode() + "-temp", LegacySkinUtils.from(playerSkin));
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 			PlayerModel<?> playerModel = this.wideModel;// playerSkin.model() == PlayerSkin.Model.SLIM ? this.slimModel : this.wideModel;
+			IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> renderer = CPMCompat.createRenderer();
+			renderer.setRenderModel(playerModel);
+			renderer.setLocalModel(localModel);
 			setupAnim(playerModel);
+			renderer.preRender(guiGraphics.bufferSource(), AnimationEngine.AnimationMode.PLAYER);
 			RenderType renderType = playerModel.renderType(ResourceLocation.fromNamespaceAndPath("aa","aa"));// playerSkin.texture());
 			playerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
+			renderer.postRender();
 			guiGraphics.pose().popPose();
 		}
 
 		public void setupAnim(PlayerModel<?> model) {
 			model.leftArm.xRot = (float) Math.sin(System.currentTimeMillis() / 500d) / 5f;
 			model.leftLeg.xRot = (float) Math.sin(System.currentTimeMillis() / 500d) / 5f;
-			model.rightArm.xRot = (float) Math.sin(System.currentTimeMillis() / 500d+2) / 5f;
-			model.rightLeg.xRot = (float) Math.sin(System.currentTimeMillis() / 500d+2) / 5f;
+			model.rightArm.xRot = (float) -Math.sin(System.currentTimeMillis() / 500d) / 5f;
+			model.rightLeg.xRot = (float) -Math.sin(System.currentTimeMillis() / 500d) / 5f;
 			model.leftPants.copyFrom(model.leftLeg);
 			model.rightPants.copyFrom(model.rightLeg);
 			model.leftSleeve.copyFrom(model.leftArm);
