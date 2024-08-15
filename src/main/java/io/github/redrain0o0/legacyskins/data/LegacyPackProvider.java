@@ -13,38 +13,61 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class LegacyPackProvider implements DataProvider {
 
 	private final FabricDataOutput dataOutput;
-	private final Map<ResourceLocation, LegacySkinPack> packs = new LinkedHashMap<>();
+	private final CompletableFuture<HolderLookup.Provider> registryLookup;
 
-	public LegacyPackProvider(FabricDataOutput dataOutput) {
+	public LegacyPackProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
 		this.dataOutput = dataOutput;
+		this.registryLookup = registryLookup;
 	}
 
 	@Override
 	public CompletableFuture<?> run(CachedOutput cachedOutput) {
-		return CompletableFuture.supplyAsync(() -> {
-			addPacks();
-			JsonElement packs = LegacySkinPack.MAP_CODEC.encodeStart(JsonOps.INSTANCE, this.packs).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
-			return DataProvider.saveStable(cachedOutput, packs, dataOutput.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(dataOutput.getModId()).resolve("skin_packs.json"));
+		TreeMap<ResourceLocation, LegacySkinPack> packs = new TreeMap<>();
+		return registryLookup.thenCompose(v -> {
+			addPacks(new InternalPackBuilder(packs));
+			JsonElement element = LegacySkinPack.MAP_CODEC.encodeStart(JsonOps.INSTANCE, packs).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+			System.out.println(element);
+			return DataProvider.saveStable(cachedOutput, element, dataOutput.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(dataOutput.getModId()).resolve("skin_packs.json"));
 		});
 	}
-
-	public void addPack(ResourceLocation id, LegacySkinPack pack) {
-		this.packs.put(id, pack);
-	}
-
-	public void addPack(String id, LegacySkinPack pack) {
-		this.addPack(!id.contains(":") ? ResourceLocation.fromNamespaceAndPath(dataOutput.getModId(), id) : ResourceLocation.parse(id), pack);
-	}
-
-	public abstract void addPacks();
+	public abstract void addPacks(PackBuilder builder);
 
 	@Override
 	public String getName() {
 		return "Legacy Packs: %s".formatted(dataOutput.getModId());
+	}
+
+	public sealed interface PackBuilder {
+		void addPack(ResourceLocation id, LegacySkinPack pack);
+
+		default void addPack(String id, LegacySkinPack pack) {
+			this.addPack(!id.contains(":") ? ResourceLocation.fromNamespaceAndPath(getOutput().getModId(), id) : ResourceLocation.parse(id), pack);
+		}
+
+		FabricDataOutput getOutput();
+	}
+
+	private final class InternalPackBuilder implements PackBuilder {
+		private final TreeMap<ResourceLocation, LegacySkinPack> packs;
+
+		public InternalPackBuilder(TreeMap<ResourceLocation, LegacySkinPack> packs) {
+			this.packs = packs;
+		}
+
+		@Override
+		public void addPack(ResourceLocation id, LegacySkinPack pack) {
+			packs.put(id, pack);
+		}
+
+		@Override
+		public FabricDataOutput getOutput() {
+			return dataOutput;
+		}
 	}
 }
