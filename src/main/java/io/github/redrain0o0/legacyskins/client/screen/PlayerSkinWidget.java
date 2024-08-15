@@ -49,7 +49,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 	private final PlayerSkinWidget.Model model;
 	private final Supplier<LegacySkin> skin;
 	private float rotationX = 0.0F;//-5.0F;
-	private float rotationY = 30.0F;
+	private float rotationY = 0.0F;//30.0F;
 	public boolean interactable = true;
 	private float targetRotationX = Float.NEGATIVE_INFINITY;
 	private float targetRotationY = Float.NEGATIVE_INFINITY;
@@ -118,7 +118,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 	@Override
 	public void onRelease(double d, double e) {
 		progress = 0;
-		beginInterpolation(0.0F/*-5.0F*/, 30.0F);
+		beginInterpolation(0.0F/*-5.0F*/, /*30.0F*/0.0F);
 		super.onRelease(d, e);
 	}
 
@@ -187,10 +187,10 @@ public class PlayerSkinWidget extends AbstractWidget {
 
 		public void setupAnim(PlayerModel<?> model) {
 			long l = System.currentTimeMillis();
-			model.leftArm.xRot = (float) Math.sin(l / 500d) / 5f;
-			model.leftLeg.xRot = (float) Math.sin(l / 500d) / 5f;
-			model.rightArm.xRot = (float) -Math.sin(l / 500d) / 5f;
-			model.rightLeg.xRot = (float) -Math.sin(l / 500d) / 5f;
+			model.leftArm.xRot = (float) Math.sin(l / 250d) / 5f;
+			model.leftLeg.xRot = (float) Math.sin(l / 250d) / 5f;
+			model.rightArm.xRot = (float) -Math.sin(l / 250d) / 5f;
+			model.rightLeg.xRot = (float) -Math.sin(l / 250d) / 5f;
 			model.leftPants.copyFrom(model.leftLeg);
 			model.rightPants.copyFrom(model.rightLeg);
 			model.leftSleeve.copyFrom(model.leftArm);
