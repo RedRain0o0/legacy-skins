@@ -24,7 +24,6 @@ public class LegacySkinUtils {
 			ModConfig.getCommonConfig().clearValue(ConfigKeys.SELECTED_MODEL);
 			ModConfig.getCommonConfig().save();
 		} else {
-			ResourceLocation texture = skin.model();
 			try (InputStream opened = from(skin)) {
 				ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL, temp(skin.model(), opened.readAllBytes()));
 				ModConfig.getCommonConfig().save();
