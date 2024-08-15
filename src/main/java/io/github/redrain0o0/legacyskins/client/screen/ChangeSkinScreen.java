@@ -162,19 +162,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 			//RenderSystem.enableScissor(panel.x + panel.width - 2, panel.y + 16, tooltipBox.getWidth() - 18, tooltipBox.getHeight() - 80);
 
-			//LayerDefinition layerDefinition = LayerDefinitions.createRoots().get(ModelLayers.PLAYER);
-			//PlayerModel<LivingEntity> livingEntityPlayerModel = new PlayerModel<>(layerDefinition.bakeRoot(), false);
-			//RenderType renderType = livingEntityPlayerModel.renderType(ResourceLocation.tryParse("minecraft:textures/entity/player/wide/steve.png"));
-			//guiGraphics.pose().pushPose();
-			//guiGraphics.pose().scale(100, 100, 100);
-			//guiGraphics.pose().mulPose((new Matrix4f()).scaling((float)1, (float)1, (float)(-1)));  //Not sure if this should be a `.mulPose()` or not
-			//guiGraphics.pose().mulPose(new Quaternionf().rotationXYZ((float) Math.toRadians(180), 0, 0));
-			//guiGraphics.pose().mulPose((new Quaternionf()).rotationXYZ(0.43633232F, (float) Math.toRadians(System.currentTimeMillis() % 360), 3.1415927F));
-			//Lighting.setupForEntityInInventory();
-			//livingEntityPlayerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY, 1); //It doesn't like `.getPlatform()`
-			//Lighting.setupFor3DItems();
-			//guiGraphics.pose().popPose();
-
 			LayerDefinition layerDefinition = LayerDefinitions.createRoots().get(ModelLayers.PLAYER);
 			PlayerModel<LivingEntity> livingEntityPlayerModel = new PlayerModel<>(layerDefinition.bakeRoot(), false);
 			RenderType renderType = livingEntityPlayerModel.renderType(ResourceLocation.parse("minecraft:textures/entity/player/wide/steve.png"));
@@ -187,9 +174,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			livingEntityPlayerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY/*, 1, 1, 1, 1*/);
 			Lighting.setupFor3DItems();
 			guiGraphics.pose().popPose();
-			//RenderSystem.disableScissor();
 
-			//guiGraphics.
+			//RenderSystem.disableScissor();
 
 			if (focusedMod != null) {
 				List<FormattedCharSequence> label = modLabelsCache.getUnchecked(focusedMod);
@@ -198,7 +184,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				int x = panel.x + panel.width + (logo == null ? 5 : logo.getScaledWidth(28) + 10);
 				if (logo != null)
 					guiGraphics.blit(logo.location, panel.x + panel.width - 5, panel.y, 0.0f, 0.0f, logo.getScaledWidth(28), 28, logo.getScaledWidth(28), 28);
-				//guiGraphics.pose(logo.location, panel.x + panel.width - 5, panel.y + 0, 0.0f, 0.0f, logo.getScaledWidth(28), 28, logo.getScaledWidth(28), 28);
 				if (logo == null || logo.getScaledWidth(28) < 120) {
 					//ScreenUtil.renderScrollingString(guiGraphics, font, Component.translatable("legacy.menu.mods.id", focusedMod.getId()), x, panel.y + 12, panel.x + panel.width + 185, panel.y + 24, 0xFFFFFF, true);
 					//ScreenUtil.renderScrollingString(guiGraphics, font, Component.translatable("legacy.menu.mods.version",focusedMod.getVersion()), x, panel.y + 24, panel.x + panel.width + 185, panel.y + 36, 0xFFFFFF, true);
