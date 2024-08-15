@@ -22,6 +22,9 @@
       "client": [
         "io.github.redrain0o0.legacyskins.client.LegacySkinsClient"
       ],
+      "cpmapi": [
+        "io.github.redrain0o0.legacyskins.CPMCompat"
+      ],
       "fabric-datagen": [
         "io.github.redrain0o0.legacyskins.data.LegacySkinsDataGenerator"
       ]

@@ -140,6 +140,10 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 //        }));
 	}
 
+	private static void renderDolls(GuiGraphics guiGraphics, int mouseX, int mouseY, float tickDelta) {
+
+	}
+
 	@Override
 	public void addControlTooltips(ControlTooltip.Renderer renderer) {
 		super.addControlTooltips(renderer);
@@ -227,6 +231,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			// x, y, u, v, width, height, texWidth, texHeight?
 			guiGraphics.blit(icon, panel.x + 35, panel.y + 11, 0, 0, 109, 109, 109, 109);
 		});
+		addRenderableOnly(ChangeSkinScreen::renderDolls);
+		addRenderableWidget(new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), null));
 
 		tooltipBox.init();
 		getRenderableVList().init(this, panel.x + 11, panel.y + 11 + 125 - 10 + 5 - 15, panel.width - 22, panel.height - 135 + 10 - 2);
@@ -247,6 +253,16 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	//            guiGraphics.blit(logo.location, panel.x + panel.width - 5, panel.y + 0, 0.0f, 0.0f, logo.getScaledWidth(28), 28, logo.getScaledWidth(28), 28);
 	//    }
 	//}
+
+//	// TODO whose left and whose right?
+//	// translate the pose before calling renderDoll
+//	// pos < 0 -> faces left
+//	// pos = 0 -> faces forwards
+//	// pos > 0 -> faces right
+//	public void renderDoll(GuiGraphics graphics, double pos, LegacySkin skin) {
+//		//CPMCompat.createRenderer().setRenderModel();
+//		CPMCompat.createRenderer().setRenderModel(new PlayerModel<>());
+//	}
 
 	public record SizedLocation(ResourceLocation location, int width, int height) {
 		public int getScaledWidth(int height) {
