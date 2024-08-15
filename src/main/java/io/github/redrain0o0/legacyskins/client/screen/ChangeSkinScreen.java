@@ -7,6 +7,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
+import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.util.LegacySkinSprites;
 import net.minecraft.Util;
@@ -234,7 +235,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			guiGraphics.blit(icon, panel.x + 35, panel.y + 11, 0, 0, 109, 109, 109, 109);
 		});
 		addRenderableOnly(ChangeSkinScreen::renderDolls);
-		addRenderableWidget(new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), null));
+		addRenderableWidget(new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> new LegacySkin(ResourceLocation.parse("legacyskins:skinpacks/temporary/boxersteve.cpmmodel"))));
 
 		tooltipBox.init();
 		getRenderableVList().init(this, panel.x + 11, panel.y + 11 + 125 - 10 + 5 - 15, panel.width - 22, panel.height - 135 + 10 - 2);
