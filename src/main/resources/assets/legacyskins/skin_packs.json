@@ -1,6 +1,6 @@
 {
   "legacyskins:default": {
-    "icon": "legacyskins:skin_packs/default",
+    "icon": "legacyskins:textures/skin_packs/default.png",
     "skins": [
       {
         "model": "legacyskins:b.cpmmodel"
