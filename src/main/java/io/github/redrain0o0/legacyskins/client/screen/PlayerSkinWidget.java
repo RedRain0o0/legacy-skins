@@ -5,11 +5,15 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.math.Axis;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.function.Supplier;
 
 import com.tom.cpm.api.IClientAPI;
+import com.tom.cpm.shared.MinecraftClientAccess;
 import com.tom.cpm.shared.animation.AnimationEngine;
+import com.tom.cpm.shared.animation.AnimationHandler;
 import io.github.redrain0o0.legacyskins.CPMCompat;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
@@ -95,7 +99,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 		return null;
 	}
 
-	private static HashMap<String, IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile>> rendererHashMap = new HashMap<>();
+	private static final HashMap<String, IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile>> rendererHashMap = new HashMap<>();
 
 	@Environment(EnvType.CLIENT)
 	static record Model(PlayerModel<?> wideModel, PlayerModel<?> slimModel) {
@@ -116,22 +120,25 @@ public class PlayerSkinWidget extends AbstractWidget {
 			IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> renderer = rendererHashMap.computeIfAbsent(playerSkin.hashCode() + "-temp", c -> {
 				IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> renderer1 = CPMCompat.createRenderer();
 				IClientAPI.LocalModel localModel = null;
-				try {
-					localModel = CPMCompat.loadModel(playerSkin.hashCode() + "-temp", LegacySkinUtils.from(playerSkin));
+				try (var f = LegacySkinUtils.from(playerSkin);){
+					localModel = CPMCompat.loadModel(playerSkin.hashCode() + "-temp", f);
+					renderer1.setLocalModel(localModel);
+					//Files.write(Path.of("whyyounotwork.cpmmodel"), LegacySkinUtils.from(playerSkin).readAllBytes());
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
-				renderer1.setLocalModel(localModel);
 				System.out.println("Figured out stuff! "+ renderer1 + ", " + localModel);
 				return renderer1;
 			});
 
 			renderer.setRenderModel(playerModel);
 			renderer.setRenderType(RenderType::entityTranslucent);
-			RenderType renderType = playerModel.renderType(ResourceLocation.fromNamespaceAndPath("minecraft","textures/entity/player/wide/steve.png"));// playerSkin.texture());
-			setupAnim(playerModel);
+			//setupAnim(playerModel);
 			renderer.preRender(guiGraphics.bufferSource(), AnimationEngine.AnimationMode.PLAYER);
-			playerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
+			if(renderer.getDefaultTexture() != null) {
+				RenderType renderType = playerModel.renderType(renderer.getDefaultTexture());// playerSkin.texture());
+				playerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
+			}
 			renderer.postRender();
 			guiGraphics.pose().popPose();
 		}
@@ -147,5 +154,11 @@ public class PlayerSkinWidget extends AbstractWidget {
 			model.rightSleeve.copyFrom(model.rightArm);
 			model.jacket.copyFrom(model.body);
 		}
+
+//		void a() {
+//			IClientAPI.LocalModel localModel = CPMCompat.loadModel(playerSkin.hashCode() + "-temp", LegacySkinUtils.from(playerSkin));
+//			MinecraftClientAccess.get().getPlayerRenderManager().getAnimationEngine().handleGuiAnimation(new AnimationHandler(localModel), getSelectedDefinition());
+//		}
+//		}
 	}
 }
