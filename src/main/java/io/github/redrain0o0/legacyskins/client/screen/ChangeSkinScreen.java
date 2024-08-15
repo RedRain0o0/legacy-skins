@@ -7,6 +7,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.datafixers.util.Pair;
 import com.tom.cpm.shared.MinecraftClientAccess;
 import com.tom.cpm.shared.config.ConfigKeys;
 import com.tom.cpm.shared.config.ModConfig;
@@ -15,6 +16,7 @@ import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import io.github.redrain0o0.legacyskins.util.LegacySkinSprites;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -68,6 +70,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
     protected ScrollableRenderer scrollableRenderer =  new ScrollableRenderer(new LegacyScrollRenderer());
 
     protected final Minecraft minecraft;
+	private Pair<ResourceLocation, LegacySkinPack> focusedPack;
 
     public record SizedLocation(ResourceLocation location, int width, int height){
         public int getScaledWidth(int height){
@@ -148,26 +151,30 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
         //    });
         //});
         minecraft = Minecraft.getInstance();
-        LegacyWorldTemplate.list.forEach(s-> renderableVList.addRenderable(new AbstractButton(0,0,260,22, Component.translatable(s.buttonName().getString())) {
-            @Override
-            public void onPress() {
-                if (isFocused()) {
-					for (LegacySkinPack legacySkinPack : LegacySkinPack.list) {
-						System.out.println("Clicked");
-						Minecraft.getInstance().getToasts().addToast(new LegacyTip(Component.literal(legacySkinPack.skins().get(0).toString())));
-						LegacySkinUtils.switchSkin(legacySkinPack.skins().get(0));
-					}
-                    //ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL,);
-                    //ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL, ".minecraft/player_models/Model.cpmmodel");
-                    //ModConfig.getCommonConfig().save();
-                    //MinecraftClientAccess.get().sendSkinUpdate();
-                }
-            }
-            @Override
-            protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-                defaultButtonNarrationText(narrationElementOutput);
-            }
-        }));
+		LegacySkinPack.list.forEach((id, pack) -> {
+			renderableVList.addRenderable(Button.builder(Component.translatable(Util.makeDescriptionId("skin_pack", id)), button -> {
+				this.focusedPack = Pair.of(id, pack);
+			}).width(260).build());
+		});
+//		for (LegacySkinPack legacySkinPack : LegacySkinPack.list.entrySet()) {
+//			renderableVList.addRenderable(Button.builder(Component.translatable(legacySkinPack)))
+//		}
+//        list.forEach(s-> renderableVList.addRenderable(new AbstractButton(0,0,260,22, Component.translatable(s.buttonName().getString())) {
+//            @Override
+//            public void onPress() {
+//                if (isFocused()) {
+//					for (LegacySkinPack legacySkinPack : LegacySkinPack.list) {
+//						System.out.println("Clicked");
+//						Minecraft.getInstance().getToasts().addToast(new LegacyTip(Component.literal(legacySkinPack.skins().get(0).toString())));
+//						LegacySkinUtils.switchSkin(legacySkinPack.skins().get(0));
+//					}
+//                }
+//            }
+//            @Override
+//            protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
+//                defaultButtonNarrationText(narrationElementOutput);
+//            }
+//        }));
     }
 
     @Override
@@ -250,6 +257,12 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
     public void renderableVListInit() {
         addRenderableOnly(((guiGraphics, i, j, f) -> guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + 7, panel.y + 7 + 130 - 8, panel.width - 14, panel.height - 14 - 135 + 1 + 8)));
         addRenderableOnly(((guiGraphics, i, j, f) -> guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + 34, panel.y + 10, 112, 112)));
+		addRenderableOnly((guiGraphics, i, j, f) -> {
+			if (this.focusedPack == null) return;
+			ResourceLocation icon = this.focusedPack.getSecond().icon();
+			// x, y, u, v, width, height, texWidth, texHeight?
+			guiGraphics.blit(icon, panel.x + 35, panel.y + 11, 0, 0, 109, 109, 109, 109);
+		});
 
         tooltipBox.init();
         getRenderableVList().init(this,panel.x + 11,panel.y + 11 + 125 - 10 + 5 - 15,panel.width - 22, panel.height - 135 + 10 - 2);
