@@ -54,7 +54,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				components.add(Component.literal(focusedMod.getName()));
 				components.add(Component.translatable("legacy.menu.mods.id", focusedMod.getId()));
 			}
-			
+
 			MultilineTooltip tooltip = new MultilineTooltip(components, tooltipBox.getWidth() - 16);
 			return tooltip.toCharSequence(minecraft);
 		}
