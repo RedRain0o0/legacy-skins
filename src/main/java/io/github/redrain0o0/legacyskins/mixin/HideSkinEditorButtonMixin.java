@@ -1,11 +1,7 @@
 package io.github.redrain0o0.legacyskins.mixin;
 
 import com.tom.cpm.client.CustomPlayerModelsClient;
-import net.fabricmc.api.ClientModInitializer;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = CustomPlayerModelsClient.class, remap = false)
 public class HideSkinEditorButtonMixin {

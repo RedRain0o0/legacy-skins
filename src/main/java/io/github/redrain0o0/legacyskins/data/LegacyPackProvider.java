@@ -11,8 +11,6 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 
@@ -36,6 +34,7 @@ public abstract class LegacyPackProvider implements DataProvider {
 			return DataProvider.saveStable(cachedOutput, element, dataOutput.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(dataOutput.getModId()).resolve("skin_packs.json"));
 		});
 	}
+
 	public abstract void addPacks(PackBuilder builder);
 
 	@Override

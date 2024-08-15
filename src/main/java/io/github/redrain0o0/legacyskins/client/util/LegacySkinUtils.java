@@ -9,6 +9,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
+import org.apache.commons.io.FileUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,17 +18,32 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class LegacySkinUtils {
-	public static void switchSkin(LegacySkin skin) {
-		ResourceLocation texture = skin.model();
-		Resource resource = Minecraft.getInstance().getResourceManager().getResource(texture).orElseThrow();
-		try (InputStream opened = resource.open()) {
-			ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL, temp(skin.model(), opened.readAllBytes()));
+	public static void switchSkin(@Nullable LegacySkin skin) {
+		if (skin == null) {
+			ModConfig.getCommonConfig().clearValue(ConfigKeys.SELECTED_MODEL);
 			ModConfig.getCommonConfig().save();
-			if (Minecraft.getInstance().getConnection() != null) {
-				MinecraftClientAccess.get().sendSkinUpdate();
+		} else {
+			ResourceLocation texture = skin.model();
+			Resource resource = Minecraft.getInstance().getResourceManager().getResource(texture).orElseThrow();
+			try (InputStream opened = resource.open()) {
+				ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL, temp(skin.model(), opened.readAllBytes()));
+				ModConfig.getCommonConfig().save();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
 			}
+		}
+		if (Minecraft.getInstance().getConnection() != null) {
+			MinecraftClientAccess.get().sendSkinUpdate();
+		}
+	}
+
+	public static void cleanup() {
+		Path playerModels = FabricLoader.getInstance().getGameDir().resolve("player_models").resolve("legacyskins-models");
+		try {
+			FileUtils.delete(playerModels.toFile());
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			// Don't bother throwing here, the client is stopping already
+			Legacyskins.LOGGER.error("Failed to delete temporary models folder!", e);
 		}
 	}
 

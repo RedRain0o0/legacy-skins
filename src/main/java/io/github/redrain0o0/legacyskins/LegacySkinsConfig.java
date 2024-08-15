@@ -3,7 +3,6 @@ package io.github.redrain0o0.legacyskins;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
-import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
