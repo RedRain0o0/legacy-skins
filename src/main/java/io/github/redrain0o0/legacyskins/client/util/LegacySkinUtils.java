@@ -40,7 +40,7 @@ public class LegacySkinUtils {
 	public static void cleanup() {
 		Path playerModels = FabricLoader.getInstance().getGameDir().resolve("player_models").resolve("legacyskins-models");
 		try {
-			FileUtils.delete(playerModels.toFile());
+			FileUtils.deleteDirectory(playerModels.toFile());
 		} catch (IOException e) {
 			// Don't bother throwing here, the client is stopping already
 			Legacyskins.LOGGER.error("Failed to delete temporary models folder!", e);
