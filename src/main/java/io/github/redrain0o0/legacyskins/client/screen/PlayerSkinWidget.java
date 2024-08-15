@@ -48,7 +48,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 	private static final float ROTATION_X_LIMIT = 50.0F;
 	private final PlayerSkinWidget.Model model;
 	private final Supplier<LegacySkin> skin;
-	private float rotationX = -5.0F;
+	private float rotationX = 0.0F;//-5.0F;
 	private float rotationY = 30.0F;
 	public boolean interactable = true;
 	private float targetRotationX = Float.NEGATIVE_INFINITY;
@@ -118,7 +118,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 	@Override
 	public void onRelease(double d, double e) {
 		progress = 0;
-		beginInterpolation(-5.0F, 30.0F);
+		beginInterpolation(0.0F/*-5.0F*/, 30.0F);
 		super.onRelease(d, e);
 	}
 
