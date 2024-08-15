@@ -50,6 +50,12 @@ public class PlayerSkinWidget extends AbstractWidget {
 	private final Supplier<LegacySkin> skin;
 	private float rotationX = -5.0F;
 	private float rotationY = 30.0F;
+	public boolean interactable = true;
+	private float targetRotationX = Float.NEGATIVE_INFINITY;
+	private float targetRotationY = Float.NEGATIVE_INFINITY;
+	private float prevRotationX = 0;
+	private float prevRotationY = 0;
+	private float progress = 0;
 
 	public PlayerSkinWidget(int i, int j, EntityModelSet entityModelSet, Supplier<LegacySkin> supplier) {
 		super(0, 0, i, j, CommonComponents.EMPTY);
@@ -57,8 +63,35 @@ public class PlayerSkinWidget extends AbstractWidget {
 		this.skin = supplier;
 	}
 
+	public void beginInterpolation(float targetRotationX, float targetRotationY) {
+		this.prevRotationX = rotationX;
+		this.prevRotationY = rotationY;
+		this.targetRotationX = targetRotationX;
+		this.targetRotationY = targetRotationY;
+	}
+
+	public void interpolate(float progress) {
+		if (targetRotationX == Float.NEGATIVE_INFINITY && targetRotationY == targetRotationX) return;
+		if (progress >= 1) {
+			this.rotationX = this.targetRotationX;
+			this.rotationY = this.targetRotationY;
+			this.targetRotationX = Float.NEGATIVE_INFINITY;
+			this.targetRotationY = Float.NEGATIVE_INFINITY;
+			return;
+		}
+		float x = progress;
+		// sin((2πx - π) / 2) + 1) / 2
+		float delta = Mth.sin(x*Mth.HALF_PI);//(Mth.sin((2 * Mth.PI * x - Mth.PI) / 2 + 1) / 2);
+		float nX = prevRotationX * (1 - delta) + targetRotationX * delta;
+		float nY = prevRotationY * (1 - delta) + targetRotationY * delta;
+		this.rotationX = nX;
+		this.rotationY = nY;
+	}
+
 	@Override
 	protected void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
+		interpolate(progress);
+		progress += 0.05f;
 		guiGraphics.pose().pushPose();
 		guiGraphics.pose().translate((float)this.getX() + (float)this.getWidth() / 2.0F, (float)(this.getY() + this.getHeight()), Z_OFFSET);
 		float g = (float)this.getHeight() / MODEL_HEIGHT;
@@ -76,8 +109,17 @@ public class PlayerSkinWidget extends AbstractWidget {
 
 	@Override
 	protected void onDrag(double d, double e, double f, double g) {
+		if (!interactable) return;
 		this.rotationX = Mth.clamp(this.rotationX - (float)g * 2.5F, -ROTATION_X_LIMIT, ROTATION_X_LIMIT);
 		this.rotationY += (float)f * ROTATION_SENSITIVITY;
+		System.out.println("DRAGGINH");
+	}
+
+	@Override
+	public void onRelease(double d, double e) {
+		progress = 0;
+		beginInterpolation(-5.0F, 30.0F);
+		super.onRelease(d, e);
 	}
 
 	@Override
