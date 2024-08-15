@@ -133,7 +133,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 
 			renderer.setRenderModel(playerModel);
 			renderer.setRenderType(RenderType::entityTranslucent);
-			//setupAnim(playerModel);
+			setupAnim(playerModel);
 			renderer.preRender(guiGraphics.bufferSource(), AnimationEngine.AnimationMode.PLAYER);
 			if(renderer.getDefaultTexture() != null) {
 				RenderType renderType = playerModel.renderType(renderer.getDefaultTexture());// playerSkin.texture());
