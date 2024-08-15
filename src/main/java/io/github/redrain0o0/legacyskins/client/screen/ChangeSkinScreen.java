@@ -210,7 +210,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			// x, y, u, v, width, height, texWidth, texHeight?
 			guiGraphics.blit(icon, panel.x + 35, panel.y + 11, 0, 0, 109, 109, 109, 109);
 		});
-		addRenderableOnly(ChangeSkinScreen::renderDolls);
+		//addRenderableOnly(ChangeSkinScreen::renderDolls);
 		addRenderableWidget(new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> new LegacySkin(ResourceLocation.parse("legacyskins:b.cpmmodel"))));
 
 		tooltipBox.init();
