@@ -22,24 +22,24 @@ public class LegacySkinsDataGenerator implements DataGeneratorEntrypoint {
 				// Temp pack
 				{
 					List<String> models = List.of(
-							"Alex",
-							"AthleteAlex",
-							"AthleteSteve",
-							"BoxerAlex",
-							"BoxerSteve",
-							"CyclistAlex",
-							"CyclistSteve",
-							"DEVAlex",
-							"DEVSteve",
-							"PrisonerAlex",
-							"PrisonerSteve",
-							"ScottishSteve",
-							"Steve",
-							"SwedishAlex",
-							"TennisAlex",
-							"TennisSteve",
-							"TuxedoAlex",
-							"TuxedoSteve"
+							"alex",
+							"athletealex",
+							"athletesteve",
+							"boxeralex",
+							"boxersteve",
+							"cyclistalex",
+							"cycliststeve",
+							"devalex",
+							"devsteve",
+							"prisoneralex",
+							"prisonersteve",
+							"scottishsteve",
+							"steve",
+							"swedishalex",
+							"tennisalex",
+							"tennissteve",
+							"tuxedoalex",
+							"tuxedosteve"
 					);
 					LegacySkinPack legacySkinPack = new LegacySkinPack(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "textures/skin_packs/default.png"),
 							models.stream().map(a -> new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/default/%s.cpmmodel".formatted(a)))).toList());
