@@ -54,16 +54,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				components.add(Component.literal(focusedMod.getName()));
 				components.add(Component.translatable("legacy.menu.mods.id", focusedMod.getId()));
 			}
-			//if (!key.getAuthors().isEmpty())
-			//    components.add(Component.translatable("legacy.menu.mods.authors", String.join(", ", key.getAuthors())));
-			//if (!key.getCredits().isEmpty())
-			//    components.add(Component.translatable("legacy.menu.mods.credits", String.join(", ", key.getCredits())));
-			//key.getHomepage().ifPresent(s-> components.add(Component.translatable("legacy.menu.mods.homepage",s)));
-			//key.getIssues().ifPresent(s-> components.add(Component.translatable("legacy.menu.mods.issues",s)));
-			//key.getSources().ifPresent(s-> components.add(Component.translatable("legacy.menu.mods.sources",s)));
-			//if (key.getLicense() != null && !key.getLicense().isEmpty()) components.add(Component.translatable("legacy.menu.mods.license", String.join(", ", key.getLicense())));
-			//components.add(Component.literal(key.getDescription()));
-
+			
 			MultilineTooltip tooltip = new MultilineTooltip(components, tooltipBox.getWidth() - 16);
 			return tooltip.toCharSequence(minecraft);
 		}
