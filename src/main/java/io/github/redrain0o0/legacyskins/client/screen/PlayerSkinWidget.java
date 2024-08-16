@@ -74,6 +74,10 @@ public class PlayerSkinWidget extends AbstractWidget {
 		this.skin = supplier;
 	}
 
+	public boolean isInterpolating() {
+		return !(targetRotationX == Float.NEGATIVE_INFINITY && targetRotationY == targetRotationX);
+	}
+
 	public void beginInterpolation(float targetRotationX, float targetRotationY, float targetPosX, float targetPosY, float targetScale) {
 		this.progress = 0;
 		this.prevRotationX = rotationX;
@@ -86,7 +90,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 		this.targetPosY = targetPosY;
 		this.prevScale = scale;
 		this.targetScale = targetScale;
-		if(!this.visible) {
+		if(!this.visible || this.wasHidden) {
 			this.rotationX = this.targetRotationX;
 			this.rotationY = this.targetRotationY;
 			this.targetRotationX = Float.NEGATIVE_INFINITY;
@@ -100,17 +104,19 @@ public class PlayerSkinWidget extends AbstractWidget {
 			setHeight((int) (this.originalHeight * scale));
 			this.targetScale = Float.NEGATIVE_INFINITY;
 			this.progress = 2;
+			if (this.visible) this.wasHidden = false;
 		}
 	}
 
 	public void visible() {
-		boolean wasVisible = this.visible;
 		this.visible = true;
-		if (wasVisible) return;
+		//if (wasVisible) return;
 		//this.progress = 2;
 	}
 
+	private boolean wasHidden = true;
 	public void invisible() {
+		this.wasHidden = true;
 		this.visible = false;
 		this.progress = 2;
 		if (progress >= 1) {
@@ -185,10 +191,10 @@ public class PlayerSkinWidget extends AbstractWidget {
 
 	@Override
 	protected void onDrag(double d, double e, double f, double g) {
+		if (isInterpolating()) return;
 		if (!interactable) return;
 		this.rotationX = Mth.clamp(this.rotationX - (float)g * 2.5F, -ROTATION_X_LIMIT, ROTATION_X_LIMIT);
 		this.rotationY += (float)f * ROTATION_SENSITIVITY;
-		System.out.println("DRAGGINH");
 	}
 
 	@Override

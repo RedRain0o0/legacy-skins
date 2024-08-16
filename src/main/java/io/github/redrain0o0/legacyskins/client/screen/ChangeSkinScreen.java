@@ -14,6 +14,7 @@ import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.LayerDefinitions;
@@ -65,55 +66,13 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	public ChangeSkinScreen(Screen parent) {
 		super(parent, 180, 290, Component.empty());
 		renderableVList.layoutSpacing(l -> 0);
-		//if (focusedMod != null) {
-		//    SizedLocation logo = modLogosCache.get(focusedMod);
-		//    if (logo != null)
-		//        addRenderableOnly(((guiGraphics, i, j, f) -> guiGraphics.blit(logo.location, panel.x + panel.width - 5, panel.y + 0, 0.0f, 0.0f, logo.getScaledWidth(28), 28, logo.getScaledWidth(28), 28)));
-		//}
-		//Legacy4JPlatform.getMods().forEach(mod->{
-		//    if (mod.isHidden()) return;
-		//    renderableVList.addRenderable(new AbstractButton(0,0,260,22, Component.literal(mod.getName())) {
-		//        @Override
-		//        public void onPress() {
-		//            if (isFocused()){
-//
-		//            }
-		//        }
-//
-		//        @Override
-		//        protected void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
-		//            super.renderWidget(guiGraphics, i, j, f);
-		//            if (isFocused()) focusedMod = mod;
-		//            RenderSystem.enableBlend();
-		//            SizedLocation logo = modLogosCache.computeIfAbsent(mod, m-> {
-		//                Optional<String> opt = m.getLogoFile(100);
-		//                if (opt.isPresent() && mod.findResource(opt.get()).isPresent())
-		//                    try {
-		//                        NativeImage image = NativeImage.read(Files.newInputStream(mod.findResource(opt.get()).get()));
-		//                        return new SizedLocation(minecraft.getTextureManager().register(opt.get().toLowerCase(Locale.ENGLISH), new DynamicTexture(image)),image.getWidth(),image.getHeight());
-		//                    } catch (IOException e) {
-		//                    }
-		//                ResourceLocation defaultLogo = PackSelector.DEFAULT_ICON;
-		//                if (mod.getId().equals("minecraft")) defaultLogo = PackSelector.loadPackIcon(minecraft.getTextureManager(),minecraft.getResourcePackRepository().getPack("vanilla"),"pack.png",defaultLogo);
-		//                return new SizedLocation(defaultLogo,1,1);
-		//            });
-		//            //if (logo != null) guiGraphics.blit(logo.location,getX() + 5, getY() + 5, 0,0, logo.getScaledWidth(20),20,logo.getScaledWidth(20),20);
-//
-		//            RenderSystem.disableBlend();
-		//        }
-		//        @Override
-		//        protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-		//            defaultButtonNarrationText(narrationElementOutput);
-		//        }
-		//    });
-		//});
 		minecraft = Minecraft.getInstance();
 		int[] index = new int[]{0};
 		LegacySkinPack.list.forEach((id, pack) -> {
 			renderableVList.addRenderable(Button.builder(Component.translatable(Util.makeDescriptionId("skin_pack", id)), button -> {
 				this.focusedPack = Pair.of(id, pack);
 				if (this.playerSkinWidgetList != null)
-				this.playerSkinWidgetList.sortForIndex(index[0]++);
+				this.playerSkinWidgetList.sortForIndex(index[0]--);
 			}).width(260).build());
 		});
 //		for (LegacySkinPack legacySkinPack : LegacySkinPack.list.entrySet()) {
@@ -216,8 +175,25 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			guiGraphics.blit(icon, panel.x + 35, panel.y + 11, 0, 0, 109, 109, 109, 109);
 		});
 		//addRenderableOnly(ChangeSkinScreen::renderDolls);
+
+		//playerSkinWidgetList = PlayerSkinWidgetList.of(this.focusedPack.getSecond().skins().stream().map(a -> new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> a))).toArray(PlayerSkinWidget[]::new));
+
+		tooltipBox.init();
+		getRenderableVList().init(this, panel.x + 11, panel.y + 11 + 125 - 10 + 5 - 15, panel.width - 22, panel.height - 135 + 10 - 2);
 		if (this.focusedPack != null) {
 			int quota = 8;
+			int x = (panel.x + panel.width);
+			int y = (panel.y + 45);
+			int width = (tooltipBox.getWidth() - 23);
+			int height = tooltipBox.getHeight() - 80 - 50;
+			addRenderableOnly(new Renderable() {
+
+				@Override
+				public void render(GuiGraphics guiGraphics, int i, int j, float f) {
+					//guiGraphics.fill(x, y, x+width, y+height, 0x7fffffff);
+					guiGraphics.enableScissor(x, y, x+width, y+height);
+				}
+			});
 			List<LegacySkin> skins = new ArrayList<>();
 			while (quota > 0) {
 				for (LegacySkin skin : this.focusedPack.getSecond().skins()) {
@@ -225,12 +201,19 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 					quota--;
 				}
 			}
-			playerSkinWidgetList = PlayerSkinWidgetList.of(skins.stream().map(a -> this.addRenderableWidget(new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> a))).toArray(PlayerSkinWidget[]::new));
-		}
-		//playerSkinWidgetList = PlayerSkinWidgetList.of(this.focusedPack.getSecond().skins().stream().map(a -> new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> a))).toArray(PlayerSkinWidget[]::new));
+			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
+			// tooltipBox.getWidth() - 18, 40
+			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
+			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
+			playerSkinWidgetList = PlayerSkinWidgetList.of(x + width / 2 - 85 / 2, y + (height) / 2 - 120 / 2, skins.stream().map(a -> this.addRenderableWidget(new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> a))).toArray(PlayerSkinWidget[]::new));
+			addRenderableOnly(new Renderable() {
 
-		tooltipBox.init();
-		getRenderableVList().init(this, panel.x + 11, panel.y + 11 + 125 - 10 + 5 - 15, panel.width - 22, panel.height - 135 + 10 - 2);
+				@Override
+				public void render(GuiGraphics guiGraphics, int i, int j, float f) {
+					guiGraphics.disableScissor();
+				}
+			});
+		}
 	}
 
 	@Override
