@@ -11,58 +11,58 @@
     "icon": "legacyskins:null.png",
     "skins": [
       {
-        "model": "legacyskins:skinpacks/temporary/alex.cpmmodel"
-      },
-      {
-        "model": "legacyskins:skinpacks/temporary/athletealex.cpmmodel"
-      },
-      {
-        "model": "legacyskins:skinpacks/temporary/athletesteve.cpmmodel"
-      },
-      {
-        "model": "legacyskins:skinpacks/temporary/boxeralex.cpmmodel"
-      },
-      {
-        "model": "legacyskins:skinpacks/temporary/boxersteve.cpmmodel"
-      },
-      {
-        "model": "legacyskins:skinpacks/temporary/cyclistalex.cpmmodel"
-      },
-      {
-        "model": "legacyskins:skinpacks/temporary/cycliststeve.cpmmodel"
-      },
-      {
-        "model": "legacyskins:skinpacks/temporary/devalex.cpmmodel"
-      },
-      {
-        "model": "legacyskins:skinpacks/temporary/devsteve.cpmmodel"
-      },
-      {
-        "model": "legacyskins:skinpacks/temporary/prisoneralex.cpmmodel"
-      },
-      {
-        "model": "legacyskins:skinpacks/temporary/prisonersteve.cpmmodel"
-      },
-      {
-        "model": "legacyskins:skinpacks/temporary/scottishsteve.cpmmodel"
-      },
-      {
         "model": "legacyskins:skinpacks/temporary/steve.cpmmodel"
-      },
-      {
-        "model": "legacyskins:skinpacks/temporary/swedishalex.cpmmodel"
-      },
-      {
-        "model": "legacyskins:skinpacks/temporary/tennisalex.cpmmodel"
       },
       {
         "model": "legacyskins:skinpacks/temporary/tennissteve.cpmmodel"
       },
       {
+        "model": "legacyskins:skinpacks/temporary/tuxedosteve.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/temporary/athletesteve.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/temporary/scottishsteve.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/temporary/prisonersteve.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/temporary/cycliststeve.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/temporary/boxersteve.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/temporary/alex.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/temporary/tennisalex.cpmmodel"
+      },
+      {
         "model": "legacyskins:skinpacks/temporary/tuxedoalex.cpmmodel"
       },
       {
-        "model": "legacyskins:skinpacks/temporary/tuxedosteve.cpmmodel"
+        "model": "legacyskins:skinpacks/temporary/athletealex.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/temporary/swedishalex.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/temporary/prisoneralex.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/temporary/cyclistalex.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/temporary/boxeralex.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/temporary/devsteve.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/temporary/devalex.cpmmodel"
       }
     ]
   }

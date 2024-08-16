@@ -26,24 +26,24 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 		// Temp pack
 		{
 			List<String> models = List.of(
-					"alex",
-					"athletealex",
-					"athletesteve",
-					"boxeralex",
-					"boxersteve",
-					"cyclistalex",
-					"cycliststeve",
-					"devalex",
-					"devsteve",
-					"prisoneralex",
-					"prisonersteve",
-					"scottishsteve",
 					"steve",
-					"swedishalex",
-					"tennisalex",
 					"tennissteve",
+					"tuxedosteve",
+					"athletesteve",
+					"scottishsteve",
+					"prisonersteve",
+					"cycliststeve",
+					"boxersteve",
+					"alex",
+					"tennisalex",
 					"tuxedoalex",
-					"tuxedosteve"
+					"athletealex",
+					"swedishalex",
+					"prisoneralex",
+					"cyclistalex",
+					"boxeralex",
+					"devsteve",
+					"devalex"
 			);
 			LegacySkinPack legacySkinPack = new LegacySkinPack(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "null.png"),
 					models.stream().map(a -> new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/temporary/%s.cpmmodel".formatted(a)))).toList());
