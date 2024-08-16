@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 public class ChangeSkinScreen extends PanelVListScreen implements Controller.Event, ControlTooltip.Event {
 	protected final Map<ModInfo, SizedLocation> modLogosCache = new ConcurrentHashMap<>();
@@ -64,19 +65,25 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	private Pair<ResourceLocation, LegacySkinPack> focusedPack;
 	private PlayerSkinWidgetList playerSkinWidgetList;
 
+	private boolean queuedChangeSkinPack = false;
 	public ChangeSkinScreen(Screen parent) {
 		super(parent, 180, 290, Component.empty());
 		renderableVList.layoutSpacing(l -> 0);
 		minecraft = Minecraft.getInstance();
 		//int[] index = new int[]{0};
-		LegacySkinPack.list.forEach((id, pack) -> {
-			renderableVList.addRenderable(Button.builder(Component.translatable(Util.makeDescriptionId("skin_pack", id)), button -> {
-				this.focusedPack = Pair.of(id, pack);
-				skinPack();
-				//if (this.playerSkinWidgetList != null)
-				//this.playerSkinWidgetList.sortForIndex(index[0]--);
-			}).width(260).build());
-		});
+		LegacySkinPack.list.forEach((id, pack) -> renderableVList.addRenderable(new Button(0, 0, 260, 20, Component.translatable(Util.makeDescriptionId("skin_pack", id)), b -> {}, Supplier::get){
+			@Override
+			protected void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
+				super.renderWidget(guiGraphics, i, j, f);
+				if (this.isFocused()) {
+					if (focusedPack != null && focusedPack.getSecond() == pack) return;
+					ChangeSkinScreen.this.focusedPack = Pair.of(id, pack);
+					queuedChangeSkinPack = true;
+				}
+			}
+		}));
+		// this.focusedPack = Pair.of(id, pack);
+		//				skinPack();
 //		for (LegacySkinPack legacySkinPack : LegacySkinPack.list.entrySet()) {
 //			renderableVList.addRenderable(Button.builder(Component.translatable(legacySkinPack)))
 //		}
@@ -103,6 +110,26 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	}
 
 	@Override
+	public boolean keyPressed(int keyCode, int j, int k) {
+		if (control(keyCode == InputConstants.KEY_LEFT, keyCode == InputConstants.KEY_RIGHT)) return true;
+		return super.keyPressed(keyCode,j,k);
+	}
+
+	boolean control(boolean left, boolean right) {
+		if ((left || right)) {
+			if (this.playerSkinWidgetList != null) {
+				if (this.playerSkinWidgetList.widgets.stream().anyMatch(a -> a.progress <= 1)) return true;
+				int offset = 0;
+				if (left) offset--;
+				if (right) offset++;
+				this.playerSkinWidgetList.sortForIndex(this.playerSkinWidgetList.index + offset);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
 	public void addControlTooltips(ControlTooltip.Renderer renderer) {
 		super.addControlTooltips(renderer);
 		renderer.set(0, () -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_RETURN) : ControllerBinding.DOWN_BUTTON.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.select_skin"));
@@ -114,6 +141,11 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 	@Override
 	public void renderDefaultBackground(GuiGraphics guiGraphics, int i, int j, float f) {
+		// Stop concurrent modification
+		if (queuedChangeSkinPack) {
+			queuedChangeSkinPack = false;
+			skinPack();
+		}
 		ScreenUtil.renderDefaultBackground(guiGraphics, false);
 		if (ScreenUtil.hasTooltipBoxes()) {
 			guiGraphics.blitSprite(LegacySkinSprites.SKIN_PANEL, panel.x + panel.width - 10, panel.y + 7, tooltipBox.getWidth(), tooltipBox.getHeight() - 2);
@@ -182,8 +214,9 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 		tooltipBox.init();
 		getRenderableVList().init(this, panel.x + 11, panel.y + 11 + 125 - 10 + 5 - 15, panel.width - 22, panel.height - 135 + 10 - 2);
-		skinPack();
 	}
+
+
 
 	Renderable f;
 	Renderable g;
@@ -241,6 +274,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		panel.height = Math.min(height, 290);
 		super.init();
 		panel.y = panel.y - 15;
+		skinPack();
 	}
 
 	//@Override public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float tickDelta) {
