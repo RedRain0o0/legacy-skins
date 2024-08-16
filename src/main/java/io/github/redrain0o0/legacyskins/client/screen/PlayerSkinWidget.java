@@ -114,7 +114,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 		//this.progress = 2;
 	}
 
-	private boolean wasHidden = true;
+	boolean wasHidden = true;
 	public void invisible() {
 		this.wasHidden = true;
 		this.visible = false;
