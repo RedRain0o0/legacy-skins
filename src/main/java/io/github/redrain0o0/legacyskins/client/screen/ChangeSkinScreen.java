@@ -9,6 +9,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
+import io.github.redrain0o0.legacyskins.mixin.ScreenAccessor;
 import io.github.redrain0o0.legacyskins.util.LegacySkinSprites;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -67,12 +68,13 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		super(parent, 180, 290, Component.empty());
 		renderableVList.layoutSpacing(l -> 0);
 		minecraft = Minecraft.getInstance();
-		int[] index = new int[]{0};
+		//int[] index = new int[]{0};
 		LegacySkinPack.list.forEach((id, pack) -> {
 			renderableVList.addRenderable(Button.builder(Component.translatable(Util.makeDescriptionId("skin_pack", id)), button -> {
 				this.focusedPack = Pair.of(id, pack);
-				if (this.playerSkinWidgetList != null)
-				this.playerSkinWidgetList.sortForIndex(index[0]--);
+				skinPack();
+				//if (this.playerSkinWidgetList != null)
+				//this.playerSkinWidgetList.sortForIndex(index[0]--);
 			}).width(260).build());
 		});
 //		for (LegacySkinPack legacySkinPack : LegacySkinPack.list.entrySet()) {
@@ -180,13 +182,30 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 		tooltipBox.init();
 		getRenderableVList().init(this, panel.x + 11, panel.y + 11 + 125 - 10 + 5 - 15, panel.width - 22, panel.height - 135 + 10 - 2);
+		skinPack();
+	}
+
+	Renderable f;
+	Renderable g;
+	void skinPack() {
+		if (f != null) {
+			((ScreenAccessor)this).getRenderables().remove(f);
+		}
+		if (g != null) {
+			((ScreenAccessor)this).getRenderables().remove(g);
+		}
+		if (playerSkinWidgetList != null) {
+			for (PlayerSkinWidget widget : playerSkinWidgetList.widgets) {
+				removeWidget(widget);
+			}
+		}
 		if (this.focusedPack != null) {
-			int quota = 8;
+			int quota = 10;
 			int x = (panel.x + panel.width);
 			int y = (panel.y + 45);
 			int width = (tooltipBox.getWidth() - 23);
 			int height = tooltipBox.getHeight() - 80 - 50;
-			addRenderableOnly(new Renderable() {
+			addRenderableOnly(f = new Renderable() {
 
 				@Override
 				public void render(GuiGraphics guiGraphics, int i, int j, float f) {
@@ -206,7 +225,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
 			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
 			playerSkinWidgetList = PlayerSkinWidgetList.of(x + width / 2 - 85 / 2, y + (height) / 2 - 120 / 2, skins.stream().map(a -> this.addRenderableWidget(new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> a))).toArray(PlayerSkinWidget[]::new));
-			addRenderableOnly(new Renderable() {
+			playerSkinWidgetList.sortForIndex(0);
+			addRenderableOnly(g = new Renderable() {
 
 				@Override
 				public void render(GuiGraphics guiGraphics, int i, int j, float f) {
