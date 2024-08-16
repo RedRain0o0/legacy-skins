@@ -26,27 +26,22 @@ public class PlayerSkinWidgetList {
 		playerSkinWidgetList.CENTER_Y = y;
 		playerSkinWidgetList.widgets.addAll(List.of(playerSkinWidgets));
 		int i = 0;
-		for (PlayerSkinWidget playerSkinWidget : playerSkinWidgets) {
-			playerSkinWidgetList.widgets.forEach(a -> a.wasHidden = true);
-			playerSkinWidgetList.sortForIndex(i);
-			i++;
-		}
-		playerSkinWidgetList.sortForIndex(0);
+		//playerSkinWidgetList.sortForIndex(0);
 		return playerSkinWidgetList;
 	}
 	@SuppressWarnings("SuspiciousNameCombination")
 	public void sortForIndex(int index) {
-		widgets.forEach(a -> a.visible = false);
+		//widgets.forEach(a -> a.visible = false);
 		// 0 -> [4, 5, 1, 2, 3]
 		// 1 -> [5, 6, 2, 3, 4]
 		// etc
 		elementN1 = get(index - 4);elementN1.interactable = false;elementN1.invisible(); elementN1.beginInterpolation(0, FACING_FROM_LEFT, CENTER_X - OFFSET * 4 + 15, CENTER_Y + VERTICAL_OFFSET, 0.4f);
 		element0 = get(index - 3);element0.interactable = false;element0.visible(); element0.beginInterpolation(0, FACING_FROM_LEFT, CENTER_X - OFFSET * 3 + 10, CENTER_Y + VERTICAL_OFFSET, 0.5f);
-		element1 = get(index - 2);element1.interactable = false;element1.visible(); element1.beginInterpolation(0, FACING_FROM_LEFT, CENTER_X - OFFSET * 2 + 5, CENTER_Y + VERTICAL_OFFSET, 0.7f);
-		element2 = get(index - 1);element2.interactable = false;element2.visible(); element2.beginInterpolation(0, FACING_FROM_LEFT, CENTER_X - OFFSET, CENTER_Y + VERTICAL_OFFSET, 0.85f);
+		element1 = get(index - 2);element1.interactable = false;element1.visible(); element1.beginInterpolation(0, FACING_FROM_LEFT, CENTER_X - OFFSET * 2 + 5, CENTER_Y + VERTICAL_OFFSET, 0.6f);
+		element2 = get(index - 1);element2.interactable = false;element2.visible(); element2.beginInterpolation(0, FACING_FROM_LEFT, CENTER_X - OFFSET, CENTER_Y + VERTICAL_OFFSET, 0.75f);
 		element3 = get(index);element3.interactable = true;element3.visible(); element3.beginInterpolation(0, 0, CENTER_X, CENTER_Y, 1);
-		element4 = get(index + 1);element4.interactable = false;element4.visible(); element4.beginInterpolation(0, FACING_FROM_RIGHT, CENTER_X + OFFSET, CENTER_Y + VERTICAL_OFFSET, 0.85f);
-		element5 = get(index + 2);element5.interactable = false;element5.visible(); element5.beginInterpolation(0, FACING_FROM_RIGHT, CENTER_X + OFFSET * 2, CENTER_Y + VERTICAL_OFFSET * 2, 0.7f);
+		element4 = get(index + 1);element4.interactable = false;element4.visible(); element4.beginInterpolation(0, FACING_FROM_RIGHT, CENTER_X + OFFSET, CENTER_Y + VERTICAL_OFFSET, 0.75f);
+		element5 = get(index + 2);element5.interactable = false;element5.visible(); element5.beginInterpolation(0, FACING_FROM_RIGHT, CENTER_X + OFFSET * 2, CENTER_Y + VERTICAL_OFFSET * 2, 0.6f);
 		element6 = get(index + 3);element6.interactable = false;element6.visible(); element6.beginInterpolation(0, FACING_FROM_RIGHT, CENTER_X + OFFSET * 3, CENTER_Y + VERTICAL_OFFSET * 3, 0.5f);
 		element7 = get(index + 4);element7.interactable = false;element7.invisible(); element7.beginInterpolation(0, FACING_FROM_RIGHT, CENTER_X + OFFSET * 4, CENTER_Y + VERTICAL_OFFSET * 4, 0.4f);
 	}
@@ -60,7 +55,7 @@ public class PlayerSkinWidgetList {
 
 	private PlayerSkinWidget get(int index) {
 		while (index < 0) {
-			index = widgets.size() - index;
+			index += widgets.size();
 		}
 		while (index >= widgets.size()) {
 			index = index - widgets.size();
