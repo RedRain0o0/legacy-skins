@@ -48,26 +48,86 @@ public class PlayerSkinWidget extends AbstractWidget {
 	private static final float ROTATION_X_LIMIT = 50.0F;
 	private final PlayerSkinWidget.Model model;
 	private final Supplier<LegacySkin> skin;
+	private final int originalWidth;
+	private final int originalHeight;
 	private float rotationX = 0.0F;//-5.0F;
 	private float rotationY = 0.0F;//30.0F;
 	public boolean interactable = true;
 	private float targetRotationX = Float.NEGATIVE_INFINITY;
 	private float targetRotationY = Float.NEGATIVE_INFINITY;
+	private float targetPosX = Float.NEGATIVE_INFINITY;
+	private float targetPosY = Float.NEGATIVE_INFINITY;
+	private float prevPosX = 0;
+	private float prevPosY = 0;
 	private float prevRotationX = 0;
 	private float prevRotationY = 0;
-	private float progress = 0;
+	float progress = 0;
+	private float scale = 1;
+	private float targetScale = Float.NEGATIVE_INFINITY;
+	private float prevScale = 0;
 
-	public PlayerSkinWidget(int i, int j, EntityModelSet entityModelSet, Supplier<LegacySkin> supplier) {
-		super(0, 0, i, j, CommonComponents.EMPTY);
+	public PlayerSkinWidget(int width, int height, EntityModelSet entityModelSet, Supplier<LegacySkin> supplier) {
+		super(0, 0, width, height, CommonComponents.EMPTY);
+		originalWidth = width;
+		originalHeight = height;
 		this.model = PlayerSkinWidget.Model.bake(entityModelSet);
 		this.skin = supplier;
 	}
 
-	public void beginInterpolation(float targetRotationX, float targetRotationY) {
+	public void beginInterpolation(float targetRotationX, float targetRotationY, float targetPosX, float targetPosY, float targetScale) {
+		this.progress = 0;
 		this.prevRotationX = rotationX;
 		this.prevRotationY = rotationY;
 		this.targetRotationX = targetRotationX;
 		this.targetRotationY = targetRotationY;
+		this.prevPosX = getX();
+		this.prevPosY = getY();
+		this.targetPosX = targetPosX;
+		this.targetPosY = targetPosY;
+		this.prevScale = scale;
+		this.targetScale = targetScale;
+		if(!this.visible) {
+			this.rotationX = this.targetRotationX;
+			this.rotationY = this.targetRotationY;
+			this.targetRotationX = Float.NEGATIVE_INFINITY;
+			this.targetRotationY = Float.NEGATIVE_INFINITY;
+			this.setX((int) this.targetPosX);
+			this.setY((int) targetPosY);
+			this.targetPosX = Float.NEGATIVE_INFINITY;
+			this.targetPosY = Float.NEGATIVE_INFINITY;
+			this.scale = targetScale;
+			setWidth((int) (this.originalWidth * scale));
+			setHeight((int) (this.originalHeight * scale));
+			this.targetScale = Float.NEGATIVE_INFINITY;
+			this.progress = 2;
+		}
+	}
+
+	public void visible() {
+		boolean wasVisible = this.visible;
+		this.visible = true;
+		if (wasVisible) return;
+		//this.progress = 2;
+	}
+
+	public void invisible() {
+		this.visible = false;
+		this.progress = 2;
+		if (progress >= 1) {
+			this.rotationX = this.targetRotationX;
+			this.rotationY = this.targetRotationY;
+			this.targetRotationX = Float.NEGATIVE_INFINITY;
+			this.targetRotationY = Float.NEGATIVE_INFINITY;
+			this.setX((int) this.targetPosX);
+			this.setY((int) targetPosY);
+			this.targetPosX = Float.NEGATIVE_INFINITY;
+			this.targetPosY = Float.NEGATIVE_INFINITY;
+			this.scale = targetScale;
+			setWidth((int) (this.originalWidth * scale));
+			setHeight((int) (this.originalHeight * scale));
+			this.targetScale = Float.NEGATIVE_INFINITY;
+			return;
+		}
 	}
 
 	public void interpolate(float progress) {
@@ -77,6 +137,14 @@ public class PlayerSkinWidget extends AbstractWidget {
 			this.rotationY = this.targetRotationY;
 			this.targetRotationX = Float.NEGATIVE_INFINITY;
 			this.targetRotationY = Float.NEGATIVE_INFINITY;
+			this.setX((int) this.targetPosX);
+			this.setY((int) targetPosY);
+			this.targetPosX = Float.NEGATIVE_INFINITY;
+			this.targetPosY = Float.NEGATIVE_INFINITY;
+			this.scale = targetScale;
+			setWidth((int) (this.originalWidth * scale));
+			setHeight((int) (this.originalHeight * scale));
+			this.targetScale = Float.NEGATIVE_INFINITY;
 			return;
 		}
 		float x = progress;
@@ -84,8 +152,16 @@ public class PlayerSkinWidget extends AbstractWidget {
 		float delta = Mth.sin(x*Mth.HALF_PI);//(Mth.sin((2 * Mth.PI * x - Mth.PI) / 2 + 1) / 2);
 		float nX = prevRotationX * (1 - delta) + targetRotationX * delta;
 		float nY = prevRotationY * (1 - delta) + targetRotationY * delta;
+		float nX2 = prevPosX * (1 - delta) + targetPosX * delta;
+		float nY2 = prevPosY * (1 - delta) + targetPosY * delta;
+		float nS = prevScale * (1 - delta) + targetScale * delta;
 		this.rotationX = nX;
 		this.rotationY = nY;
+		this.setX((int) nX2);
+		this.setY((int) nY2);
+		this.scale = nS;
+		setWidth((int) (this.originalWidth * scale));
+		setHeight((int) (this.originalHeight * scale));
 	}
 
 	@Override
@@ -117,8 +193,8 @@ public class PlayerSkinWidget extends AbstractWidget {
 
 	@Override
 	public void onRelease(double d, double e) {
-		progress = 0;
-		beginInterpolation(0.0F/*-5.0F*/, /*30.0F*/0.0F);
+		//progress = 0;
+		//beginInterpolation(0.0F/*-5.0F*/, /*30.0F*/0.0F);
 		super.onRelease(d, e);
 	}
 

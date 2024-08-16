@@ -38,8 +38,12 @@ public class LegacySkinUtils {
 
 	public static InputStream from(@NotNull LegacySkin skin) throws IOException {
 		ResourceLocation texture = skin.model();
-		Resource resource = Minecraft.getInstance().getResourceManager().getResource(texture).orElseThrow();
-		return resource.open();
+		try {
+			Resource resource = Minecraft.getInstance().getResourceManager().getResource(texture).orElseThrow();
+			return resource.open();
+		} catch (Throwable t) {
+			return from(new LegacySkin(ResourceLocation.fromNamespaceAndPath("legacyskins", "skinpacks/temporary/alex.cpmmodel")));
+		}
 	}
 
 	public static void cleanup() {

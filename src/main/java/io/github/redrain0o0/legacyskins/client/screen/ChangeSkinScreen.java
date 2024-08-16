@@ -60,6 +60,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		}
 	});
 	private Pair<ResourceLocation, LegacySkinPack> focusedPack;
+	private PlayerSkinWidgetList playerSkinWidgetList;
+
 	public ChangeSkinScreen(Screen parent) {
 		super(parent, 180, 290, Component.empty());
 		renderableVList.layoutSpacing(l -> 0);
@@ -106,9 +108,12 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		//    });
 		//});
 		minecraft = Minecraft.getInstance();
+		int[] index = new int[]{0};
 		LegacySkinPack.list.forEach((id, pack) -> {
 			renderableVList.addRenderable(Button.builder(Component.translatable(Util.makeDescriptionId("skin_pack", id)), button -> {
 				this.focusedPack = Pair.of(id, pack);
+				if (this.playerSkinWidgetList != null)
+				this.playerSkinWidgetList.sortForIndex(index[0]++);
 			}).width(260).build());
 		});
 //		for (LegacySkinPack legacySkinPack : LegacySkinPack.list.entrySet()) {
@@ -211,7 +216,18 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			guiGraphics.blit(icon, panel.x + 35, panel.y + 11, 0, 0, 109, 109, 109, 109);
 		});
 		//addRenderableOnly(ChangeSkinScreen::renderDolls);
-		addRenderableWidget(new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> new LegacySkin(ResourceLocation.parse("legacyskins:b.cpmmodel"))));
+		if (this.focusedPack != null) {
+			int quota = 8;
+			List<LegacySkin> skins = new ArrayList<>();
+			while (quota > 0) {
+				for (LegacySkin skin : this.focusedPack.getSecond().skins()) {
+					skins.add(skin);
+					quota--;
+				}
+			}
+			playerSkinWidgetList = PlayerSkinWidgetList.of(skins.stream().map(a -> this.addRenderableWidget(new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> a))).toArray(PlayerSkinWidget[]::new));
+		}
+		//playerSkinWidgetList = PlayerSkinWidgetList.of(this.focusedPack.getSecond().skins().stream().map(a -> new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> a))).toArray(PlayerSkinWidget[]::new));
 
 		tooltipBox.init();
 		getRenderableVList().init(this, panel.x + 11, panel.y + 11 + 125 - 10 + 5 - 15, panel.width - 22, panel.height - 135 + 10 - 2);
