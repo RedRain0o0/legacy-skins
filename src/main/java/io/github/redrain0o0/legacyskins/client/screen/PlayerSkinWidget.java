@@ -96,7 +96,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 			this.targetRotationX = Float.NEGATIVE_INFINITY;
 			this.targetRotationY = Float.NEGATIVE_INFINITY;
 			this.setX((int) this.targetPosX);
-			this.setY((int) targetPosY);
+			this.setY((int) this.targetPosY);
 			this.targetPosX = Float.NEGATIVE_INFINITY;
 			this.targetPosY = Float.NEGATIVE_INFINITY;
 			this.scale = targetScale;
