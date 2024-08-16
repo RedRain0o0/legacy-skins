@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -58,7 +60,16 @@ public record LegacySkinPack(ResourceLocation icon, List<LegacySkin> skins) {
 			LegacySkinUtils.cleanup();
 			list.clear();
 			list.putAll(data);
-			LegacySkinUtils.switchSkin(Legacyskins.INSTANCE.skin.orElse(null));
+			Optional<SkinReference> skin = Legacyskins.INSTANCE.skin;
+			if (skin.isPresent()) {
+				SkinReference skinReference = skin.get();
+				try {
+					LegacySkin legacySkin = list.get(skinReference.pack()).skins().get(skinReference.ordinal());
+					LegacySkinUtils.switchSkin(legacySkin);
+				} catch (Throwable t) {
+					Legacyskins.LOGGER.error("Failed to load skin from pack: %s".formatted(skinReference.pack()), t);
+				}
+			}
 			return CompletableFuture.completedFuture(null);
 		}
 

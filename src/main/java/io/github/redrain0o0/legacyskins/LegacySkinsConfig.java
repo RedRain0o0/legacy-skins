@@ -9,15 +9,15 @@ import java.util.Optional;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class LegacySkinsConfig {
-	public static final Codec<LegacySkinsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(LegacySkin.CODEC.optionalFieldOf("skin").forGetter(a -> a.skin)).apply(instance, LegacySkinsConfig::new));
+	public static final Codec<LegacySkinsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(SkinReference.CODEC.optionalFieldOf("skin").forGetter(a -> a.skin)).apply(instance, LegacySkinsConfig::new));
 	// selected skin
-	public Optional<LegacySkin> skin;
+	public Optional<SkinReference> skin;
 
-	public LegacySkinsConfig(Optional<LegacySkin> skin) {
+	public LegacySkinsConfig(Optional<SkinReference> skin) {
 		this.skin = skin;
 	}
 
-	public void setSkin(@Nullable LegacySkin skin) {
+	public void setSkin(@Nullable SkinReference skin) {
 		this.skin = Optional.ofNullable(skin);
 	}
 }
