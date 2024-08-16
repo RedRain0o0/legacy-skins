@@ -6,7 +6,8 @@
   "mixins": [
     "AnimationEngineMixin",
     "HelpOptionsMixin",
-    "HideSkinEditorButtonMixin"
+    "HideSkinEditorButtonMixin",
+    "ScreenAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
