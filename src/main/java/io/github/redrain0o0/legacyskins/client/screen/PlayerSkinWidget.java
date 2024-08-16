@@ -251,7 +251,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
-				System.out.println("Figured out stuff! "+ renderer1 + ", " + localModel);
+				//System.out.println("Figured out stuff! "+ renderer1 + ", " + localModel);
 				return renderer1;
 			});
 
