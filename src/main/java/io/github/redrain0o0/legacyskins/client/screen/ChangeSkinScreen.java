@@ -217,13 +217,15 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 					guiGraphics.blit(ResourceLocation.withDefaultNamespace("textures/gui/sprites/hud/heart/container.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
 					guiGraphics.blit(ResourceLocation.withDefaultNamespace("textures/gui/sprites/hud/heart/full.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
 				}
+			}
+			if (this.focusedPack != null) {
 				guiGraphics.pose().pushPose();
 				// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
 				int x = panel.x + panel.width - 5;
 				int width = tooltipBox.getWidth() - 18;
 				int middle = x + width / 2;
-				guiGraphics.pose().translate(middle, panel.y + 16 + 4, 0);
-				guiGraphics.pose().scale(2, 2, 1);
+				guiGraphics.pose().translate(middle, panel.y + 16 + 4 + 10, 0);
+				guiGraphics.pose().scale(1.5f, 1.5f, 1);
 				guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable(Util.makeDescriptionId("skin_pack", focusedPack.getFirst())), 0, 0, 0xffffffff);
 				guiGraphics.pose().popPose();
 			}
