@@ -125,6 +125,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 	@Override
 	public boolean keyPressed(int keyCode, int j, int k) {
+		if (this.playerSkinWidgetList != null) this.setFocused(this.buttons.get(focusedPack.getFirst()));
 		if (keyCode == InputConstants.KEY_RETURN) {
 			if (this.playerSkinWidgetList != null) {
 				Legacyskins.INSTANCE.setSkin(this.playerSkinWidgetList.element3.skinRef.get());
