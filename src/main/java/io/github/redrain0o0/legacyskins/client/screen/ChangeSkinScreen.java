@@ -83,7 +83,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 					if (this.isFocused()) {
 						if (focusedPack != null && focusedPack.getSecond() == pack) return;
 						ChangeSkinScreen.this.focusedPack = Pair.of(id, pack);
-						System.out.println("We are " + focusedPack + " and we are changing it to this");
 						queuedChangeSkinPack = true;
 					}
 				}
@@ -117,6 +116,12 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 	@Override
 	public boolean keyPressed(int keyCode, int j, int k) {
+		if (keyCode == InputConstants.KEY_RETURN) {
+			if (this.playerSkinWidgetList != null) {
+				Legacyskins.INSTANCE.setSkin(this.playerSkinWidgetList.element3.skinRef.get());
+			}
+			return true;
+		}
 		if (keyCode == InputConstants.KEY_F) {
 			favorite();
 			return true;
@@ -134,7 +139,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				if (left) offset--;
 				if (right) offset++;
 				this.playerSkinWidgetList.sortForIndex(this.playerSkinWidgetList.index + offset);
-				Legacyskins.INSTANCE.setSkin(this.playerSkinWidgetList.element3.skinRef.get());
 				return true;
 			}
 		}
@@ -178,7 +182,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		// Stop concurrent modification
 		if (queuedChangeSkinPack) {
 			queuedChangeSkinPack = false;
-			System.out.println("LOL RESETED SKIN");
 			skinPack();
 		}
 		ScreenUtil.renderDefaultBackground(guiGraphics, false);
@@ -261,7 +264,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			this.queuedChangeSkinPack = true;
 			this.setFocused(this.buttons.get(focusedPack.getFirst()));
 			skinPack(0);
-			System.out.println("Opened to " + focusedPack + ", " + 0 + " as this is the default skin.");
 		} else {
 			SkinReference skinReference = currentSkin.get();
 			Pair<ResourceLocation, LegacySkinPack> pack = Pair.of(skinReference.pack(), LegacySkinPack.list.get(skinReference.pack()));
@@ -269,7 +271,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			this.queuedChangeSkinPack = true;
 			this.setFocused(this.buttons.get(focusedPack.getFirst()));
 			skinPack(skinReference.ordinal());
-			System.out.println("Opened to " + focusedPack + ", " + skinReference.ordinal() + " as this is a custom skin.");
 		}
 	}
 
