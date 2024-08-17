@@ -306,6 +306,14 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 	void openToCurrentSkin() {
 		Optional<SkinReference> currentSkin = Legacyskins.INSTANCE.getSkin();
+		SkinReference ref = currentSkin.orElse(new SkinReference(Constants.DEFAULT_PACK, 0));
+		if (Legacyskins.INSTANCE.favorites.contains(ref)) {
+			this.focusedPack = Pair.of(Constants.FAVORITES_PACK, LegacySkinPack.list.get(Constants.FAVORITES_PACK));
+			this.queuedChangeSkinPack = true;
+			this.setFocused(this.buttons.get(focusedPack.getFirst()));
+			skinPack(Legacyskins.INSTANCE.favorites.indexOf(ref));
+			return;
+		}
 		if (currentSkin.isEmpty()) {
 			// No skin
 			Pair<ResourceLocation, LegacySkinPack> pack = Pair.of(Constants.DEFAULT_PACK, LegacySkinPack.list.get(Constants.DEFAULT_PACK));
