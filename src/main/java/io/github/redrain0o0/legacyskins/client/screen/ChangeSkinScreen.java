@@ -270,6 +270,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			int y = (panel.y + 45);
 			int width = (tooltipBox.getWidth() - 23);
 			int height = tooltipBox.getHeight() - 80 - 50;
+			// wedge the skins between 2 scissor renderables
 			addRenderableOnly(f = new Renderable() {
 
 				@Override
