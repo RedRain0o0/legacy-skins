@@ -49,5 +49,14 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 			LegacySkinPack pack = new LegacySkinPack(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "null.png"), List.of(new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/default/b.cpmmodel"))));
 			builder.addPack("temporary", pack);
 		}
+		//Test pack
+		{
+			List<String> models = List.of(
+					"redrain0o0"
+			);
+			LegacySkinPack legacySkinPack = new LegacySkinPack(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "textures/skin_packs/dev.png"),
+					models.stream().map(a -> new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/dev/%s.cpmmodel".formatted(a)))).toList());
+			builder.addPack("dev", legacySkinPack);
+		}
 	}
 }

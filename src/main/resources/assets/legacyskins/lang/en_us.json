@@ -7,5 +7,7 @@
   "legacyskins.skins.favourite": "Favourite Skins",
   "skin_pack.legacyskins.default": "No Pack: Default Skins",
   "skin_pack.legacyskins.favourite": "Favorite Skins",
-  "skin_pack.legacyskins.temporary": "Temporary"
+  "skin_pack.legacyskins.temporary": "Temporary",
+  "skin_pack.legacyskins.dev": "Dev Pack"
+
 }

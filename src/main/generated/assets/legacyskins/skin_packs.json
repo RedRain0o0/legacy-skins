@@ -58,6 +58,14 @@
       }
     ]
   },
+  "legacyskins:dev": {
+    "icon": "legacyskins:textures/skin_packs/dev.png",
+    "skins": [
+      {
+        "model": "legacyskins:skinpacks/dev/redrain0o0.cpmmodel"
+      }
+    ]
+  },
   "legacyskins:temporary": {
     "icon": "legacyskins:null.png",
     "skins": [
