@@ -32,6 +32,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.LivingEntity;
 import org.joml.Quaternionf;
+import wily.legacy.Legacy4J;
 import wily.legacy.client.ControlType;
 import wily.legacy.client.controller.BindingState;
 import wily.legacy.client.controller.Controller;
@@ -200,6 +201,15 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			RenderSystem.enableBlend();
 			guiGraphics.blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80);
 			guiGraphics.blitSprite(LegacySkinSprites.PACK_NAME_BOX, panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
+			if (this.playerSkinWidgetList != null) {
+				if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getSkin().orElse(null))) {
+					guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
+				}
+				if (Legacyskins.INSTANCE.favorites.contains(this.playerSkinWidgetList.element3.skinRef.get())) {
+					guiGraphics.blit(ResourceLocation.withDefaultNamespace("textures/gui/sprites/hud/heart/container.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
+					guiGraphics.blit(ResourceLocation.withDefaultNamespace("textures/gui/sprites/hud/heart/full.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
+				}
+			}
 			RenderSystem.disableBlend();
 
 			//RenderSystem.enableScissor(panel.x + panel.width - 2, panel.y + 16, tooltipBox.getWidth() - 18, tooltipBox.getHeight() - 80);
