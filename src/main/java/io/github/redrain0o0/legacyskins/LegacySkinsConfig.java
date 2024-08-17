@@ -43,6 +43,11 @@ public class LegacySkinsConfig {
 	}
 
 	public void setSkin(@Nullable SkinReference skin) {
+		if (skin != null && skin.pack().equals(Constants.DEFAULT_PACK) && skin.ordinal() == 0) {
+			this.skin = Optional.empty();
+			LegacySkinUtils.switchSkin(null);
+			return;
+		}
 		this.skin = Optional.ofNullable(skin);
 		LegacySkinUtils.switchSkin(skin != null ? LegacySkinPack.list.get(skin.pack()).skins().get(skin.ordinal()) : null);
 	}

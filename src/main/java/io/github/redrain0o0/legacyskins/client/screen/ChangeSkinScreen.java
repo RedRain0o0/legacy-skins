@@ -7,6 +7,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
+import io.github.redrain0o0.legacyskins.Constants;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
@@ -40,9 +41,7 @@ import wily.legacy.util.LegacySprites;
 import wily.legacy.util.ModInfo;
 import wily.legacy.util.ScreenUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
@@ -68,6 +67,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	});
 	private Pair<ResourceLocation, LegacySkinPack> focusedPack;
 	private PlayerSkinWidgetList playerSkinWidgetList;
+	private final Map<ResourceLocation, Button> buttons = new HashMap<>();
 
 	private boolean queuedChangeSkinPack = false;
 	public ChangeSkinScreen(Screen parent) {
@@ -75,17 +75,23 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		renderableVList.layoutSpacing(l -> 0);
 		minecraft = Minecraft.getInstance();
 		//int[] index = new int[]{0};
-		LegacySkinPack.list.forEach((id, pack) -> renderableVList.addRenderable(new Button(0, 0, 260, 20, Component.translatable(Util.makeDescriptionId("skin_pack", id)), b -> {}, Supplier::get){
-			@Override
-			protected void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
-				super.renderWidget(guiGraphics, i, j, f);
-				if (this.isFocused()) {
-					if (focusedPack != null && focusedPack.getSecond() == pack) return;
-					ChangeSkinScreen.this.focusedPack = Pair.of(id, pack);
-					queuedChangeSkinPack = true;
+		LegacySkinPack.list.forEach((id, pack) -> {
+			Button button = new Button(0, 0, 260, 20, Component.translatable(Util.makeDescriptionId("skin_pack", id)), b -> {}, Supplier::get){
+				@Override
+				protected void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
+					super.renderWidget(guiGraphics, i, j, f);
+					if (this.isFocused()) {
+						if (focusedPack != null && focusedPack.getSecond() == pack) return;
+						ChangeSkinScreen.this.focusedPack = Pair.of(id, pack);
+						System.out.println("We are " + focusedPack + " and we are changing it to this");
+						queuedChangeSkinPack = true;
+					}
 				}
-			}
-		}));
+			};
+			buttons.put(id, button);
+			renderableVList.addRenderable(button);
+		});
+		openToCurrentSkin();
 		// this.focusedPack = Pair.of(id, pack);
 		//				skinPack();
 //		for (LegacySkinPack legacySkinPack : LegacySkinPack.list.entrySet()) {
@@ -107,10 +113,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 //                defaultButtonNarrationText(narrationElementOutput);
 //            }
 //        }));
-	}
-
-	private static void renderDolls(GuiGraphics guiGraphics, int mouseX, int mouseY, float tickDelta) {
-
 	}
 
 	@Override
@@ -176,6 +178,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		// Stop concurrent modification
 		if (queuedChangeSkinPack) {
 			queuedChangeSkinPack = false;
+			System.out.println("LOL RESETED SKIN");
 			skinPack();
 		}
 		ScreenUtil.renderDefaultBackground(guiGraphics, false);
@@ -249,10 +252,34 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	}
 
 
+	void openToCurrentSkin() {
+		Optional<SkinReference> currentSkin = Legacyskins.INSTANCE.getSkin();
+		if (currentSkin.isEmpty()) {
+			// No skin
+			Pair<ResourceLocation, LegacySkinPack> pack = Pair.of(Constants.DEFAULT_PACK, LegacySkinPack.list.get(Constants.DEFAULT_PACK));
+			this.focusedPack = pack;
+			this.queuedChangeSkinPack = true;
+			this.setFocused(this.buttons.get(focusedPack.getFirst()));
+			skinPack(0);
+			System.out.println("Opened to " + focusedPack + ", " + 0 + " as this is the default skin.");
+		} else {
+			SkinReference skinReference = currentSkin.get();
+			Pair<ResourceLocation, LegacySkinPack> pack = Pair.of(skinReference.pack(), LegacySkinPack.list.get(skinReference.pack()));
+			this.focusedPack = pack;
+			this.queuedChangeSkinPack = true;
+			this.setFocused(this.buttons.get(focusedPack.getFirst()));
+			skinPack(skinReference.ordinal());
+			System.out.println("Opened to " + focusedPack + ", " + skinReference.ordinal() + " as this is a custom skin.");
+		}
+	}
 
+	void skinPack() {
+		skinPack(0);
+	}
 	Renderable f;
 	Renderable g;
-	void skinPack() {
+	void skinPack(int index) {
+		this.queuedChangeSkinPack = false;
 		if (f != null) {
 			((ScreenAccessor)this).getRenderables().remove(f);
 		}
@@ -293,7 +320,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
 			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
 			playerSkinWidgetList = PlayerSkinWidgetList.of(x + width / 2 - 85 / 2, y + (height) / 2 - 120 / 2, skins.stream().map(a -> this.addRenderableWidget(new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> a))).toArray(PlayerSkinWidget[]::new));
-			playerSkinWidgetList.sortForIndex(0);
+			playerSkinWidgetList.sortForIndex(index);
 			addRenderableOnly(g = new Renderable() {
 
 				@Override
@@ -309,7 +336,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		panel.height = Math.min(height, 290);
 		super.init();
 		panel.y = panel.y - 15;
-		skinPack();
+		openToCurrentSkin();
 	}
 
 	//@Override public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float tickDelta) {

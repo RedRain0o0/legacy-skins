@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.redrain0o0.legacyskins.Constants;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
@@ -17,10 +18,7 @@ import wily.legacy.util.JsonUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -28,7 +26,7 @@ public record LegacySkinPack(ResourceLocation icon, List<LegacySkin> skins) {
 	public static final Map<ResourceLocation, LegacySkinPack> list = new LinkedHashMap<>();
 	public static final Codec<LegacySkinPack> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ResourceLocation.CODEC.fieldOf("icon").forGetter(LegacySkinPack::icon),
-			Codec.list(LegacySkin.CODEC).fieldOf("skins").forGetter(LegacySkinPack::skins)
+			Codec.list(LegacySkin.CODEC).fieldOf("skins").xmap(a -> (List<LegacySkin>) new ArrayList<>(a), a -> a).forGetter(LegacySkinPack::skins)
 	).apply(instance, LegacySkinPack::new));
 	public static final Codec<Map<ResourceLocation, LegacySkinPack>> MAP_CODEC = Codec.unboundedMap(ResourceLocation.CODEC, LegacySkinPack.CODEC);
 	private static final String PACKS = "skin_packs.json";
@@ -59,6 +57,8 @@ public record LegacySkinPack(ResourceLocation icon, List<LegacySkin> skins) {
 		public CompletableFuture<Void> apply(Map<ResourceLocation, LegacySkinPack> data, ResourceManager manager, ProfilerFiller profiler, Executor executor) {
 			LegacySkinUtils.cleanup();
 			list.clear();
+			// The default skin
+			data.get(Constants.DEFAULT_PACK).skins().addFirst(null);
 			list.putAll(data);
 			Optional<SkinReference> skin = Legacyskins.INSTANCE.skin;
 			if (skin.isPresent()) {

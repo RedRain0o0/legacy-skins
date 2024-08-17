@@ -21,6 +21,7 @@ import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -34,6 +35,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.client.resources.SkinManager;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
@@ -245,29 +247,44 @@ public class PlayerSkinWidget extends AbstractWidget {
 			guiGraphics.pose().translate(0.0F, -1.5F, 0.0F);
 
 			PlayerModel<?> playerModel = this.wideModel;// playerSkin.model() == PlayerSkin.Model.SLIM ? this.slimModel : this.wideModel;
-			IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> renderer = rendererHashMap.computeIfAbsent(playerSkin.hashCode() + "-temp", c -> {
-				IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> renderer1 = CPMCompat.createRenderer();
-				IClientAPI.LocalModel localModel = null;
-				try (var f = LegacySkinUtils.from(playerSkin);){
-					localModel = CPMCompat.loadModel(playerSkin.hashCode() + "-temp", f);
-					renderer1.setLocalModel(localModel);
-					//Files.write(Path.of("whyyounotwork.cpmmodel"), LegacySkinUtils.from(playerSkin).readAllBytes());
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-				//System.out.println("Figured out stuff! "+ renderer1 + ", " + localModel);
-				return renderer1;
-			});
 
-			renderer.setRenderModel(playerModel);
-			renderer.setRenderType(RenderType::entityTranslucent);
+			IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> renderer = null;
+			if (playerSkin != null) {
+				renderer = rendererHashMap.computeIfAbsent(playerSkin.hashCode() + "-temp", c -> {
+					IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> renderer1 = CPMCompat.createRenderer();
+					IClientAPI.LocalModel localModel = null;
+					try (var f = LegacySkinUtils.from(playerSkin);) {
+						localModel = CPMCompat.loadModel(playerSkin.hashCode() + "-temp", f);
+						renderer1.setLocalModel(localModel);
+						//Files.write(Path.of("whyyounotwork.cpmmodel"), LegacySkinUtils.from(playerSkin).readAllBytes());
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+					//System.out.println("Figured out stuff! "+ renderer1 + ", " + localModel);
+					return renderer1;
+				});
+			}
+
+			if (renderer != null) {
+				renderer.setRenderModel(playerModel);
+				renderer.setRenderType(RenderType::entityTranslucent);
+			}
 			setupAnim(playerModel);
-			renderer.preRender(guiGraphics.bufferSource(), AnimationEngine.AnimationMode.PLAYER);
-			if(renderer.getDefaultTexture() != null) {
-				RenderType renderType = playerModel.renderType(renderer.getDefaultTexture());// playerSkin.texture());
+			if (renderer != null) {
+				renderer.preRender(guiGraphics.bufferSource(), AnimationEngine.AnimationMode.PLAYER);
+			}
+			if(renderer == null || renderer.getDefaultTexture() != null) {
+				RenderType renderType = null;
+				if (renderer != null) {
+					renderType = playerModel.renderType(renderer.getDefaultTexture());// playerSkin.texture());
+				} else {
+					renderType = playerModel.renderType(Minecraft.getInstance().getSkinManager().getInsecureSkin(Minecraft.getInstance().getGameProfile()).texture());
+				}
 				playerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
 			}
-			renderer.postRender();
+			if (renderer != null) {
+				renderer.postRender();
+			}
 			guiGraphics.pose().popPose();
 		}
 
