@@ -351,7 +351,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			// tooltipBox.getWidth() - 18, 40
 			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
 			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
-			if (quota >= 0) {
+			if (quota > 0) {
 				playerSkinWidgetList = null;
 			} else {
 				playerSkinWidgetList = PlayerSkinWidgetList.of(x + width / 2 - 85 / 2, y + (height) / 2 - 120 / 2, skins.stream().map(a -> this.addRenderableWidget(new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> a))).toArray(PlayerSkinWidget[]::new));
