@@ -8,6 +8,7 @@ import io.github.redrain0o0.legacyskins.Constants;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
+import io.github.redrain0o0.legacyskins.util.SkinTextureToCustomPlayerModel;
 import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -70,6 +71,7 @@ public record LegacySkinPack(ResourceLocation icon, List<LegacySkin> skins) {
 					Legacyskins.LOGGER.error("Failed to load skin from pack: %s".formatted(skinReference.pack()), t);
 				}
 			}
+			SkinTextureToCustomPlayerModel.convert(ResourceLocation.parse("minecraft:textures/entity/player/wide/alex.png"), false);
 			return CompletableFuture.completedFuture(null);
 		}
 
