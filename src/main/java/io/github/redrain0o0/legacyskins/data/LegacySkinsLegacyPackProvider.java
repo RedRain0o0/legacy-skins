@@ -20,11 +20,6 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 	public void addPacks(PackBuilder builder) {
 		// Default pack
 		{
-			LegacySkinPack pack = new LegacySkinPack(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "textures/skin_packs/default.png"), List.of(new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/default/b.cpmmodel"))));
-			builder.addPack("default", pack);
-		}
-		// Temp pack
-		{
 			List<String> models = List.of(
 					"steve",
 					"tennissteve",
@@ -45,9 +40,14 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 					"devsteve",
 					"devalex"
 			);
-			LegacySkinPack legacySkinPack = new LegacySkinPack(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "null.png"),
+			LegacySkinPack legacySkinPack = new LegacySkinPack(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "textures/skin_packs/default.png"),
 					models.stream().map(a -> new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/temporary/%s.cpmmodel".formatted(a)))).toList());
-			builder.addPack("temporary", legacySkinPack);
+			builder.addPack("default", legacySkinPack);
+		}
+		// Temporary pack
+		{
+			LegacySkinPack pack = new LegacySkinPack(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "null.png"), List.of(new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/default/b.cpmmodel"))));
+			builder.addPack("temporary", pack);
 		}
 	}
 }

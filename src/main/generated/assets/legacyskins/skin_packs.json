@@ -3,14 +3,6 @@
     "icon": "legacyskins:textures/skin_packs/default.png",
     "skins": [
       {
-        "model": "legacyskins:skinpacks/default/b.cpmmodel"
-      }
-    ]
-  },
-  "legacyskins:temporary": {
-    "icon": "legacyskins:null.png",
-    "skins": [
-      {
         "model": "legacyskins:skinpacks/temporary/steve.cpmmodel"
       },
       {
@@ -63,6 +55,14 @@
       },
       {
         "model": "legacyskins:skinpacks/temporary/devalex.cpmmodel"
+      }
+    ]
+  },
+  "legacyskins:temporary": {
+    "icon": "legacyskins:null.png",
+    "skins": [
+      {
+        "model": "legacyskins:skinpacks/default/b.cpmmodel"
       }
     ]
   }
