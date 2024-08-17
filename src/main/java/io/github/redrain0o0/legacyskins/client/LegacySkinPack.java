@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
+import org.jetbrains.annotations.NotNull;
 import wily.legacy.Legacy4J;
 import wily.legacy.util.JsonUtil;
 
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 public record LegacySkinPack(ResourceLocation icon, List<LegacySkin> skins) {
 	public static final Map<ResourceLocation, LegacySkinPack> list = new LinkedHashMap<>();
@@ -37,21 +39,27 @@ public record LegacySkinPack(ResourceLocation icon, List<LegacySkin> skins) {
 		public CompletableFuture<Map<ResourceLocation, LegacySkinPack>> load(ResourceManager resourceManager, ProfilerFiller profiler, Executor executor) {
 			return CompletableFuture.supplyAsync(() -> {
 				Map<ResourceLocation, LegacySkinPack> packs = new LinkedHashMap<>();
-				JsonUtil.getOrderedNamespaces(resourceManager).forEach(name -> {
-					resourceManager.getResource(ResourceLocation.tryBuild(name, PACKS)).ifPresent(r -> {
-						try {
-							BufferedReader bufferedReader = r.openAsReader();
-							JsonObject obj = GsonHelper.parse(bufferedReader);
-							Map<ResourceLocation, LegacySkinPack> map = MAP_CODEC.parse(JsonOps.INSTANCE, obj).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
-							packs.putAll(map);
-							bufferedReader.close();
-						} catch (IOException var8) {
-							Legacy4J.LOGGER.warn(var8.getMessage());
-						}
-					});
-				});
+				List<String> allNamespaces = JsonUtil.getOrderedNamespaces(resourceManager).toList();
+				allNamespaces.stream().filter(Legacyskins.MOD_ID::equals).forEach(loadPackData(resourceManager, packs));
+				allNamespaces.stream().filter(a -> !Legacyskins.MOD_ID.equals(a)).forEach(loadPackData(resourceManager, packs));
 				return packs;
 			});
+		}
+
+		private static @NotNull Consumer<String> loadPackData(ResourceManager resourceManager, Map<ResourceLocation, LegacySkinPack> packs) {
+			return name -> {
+				resourceManager.getResource(ResourceLocation.tryBuild(name, PACKS)).ifPresent(r -> {
+					try {
+						BufferedReader bufferedReader = r.openAsReader();
+						JsonObject obj = GsonHelper.parse(bufferedReader);
+						Map<ResourceLocation, LegacySkinPack> map = MAP_CODEC.parse(JsonOps.INSTANCE, obj).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+						packs.putAll(map);
+						bufferedReader.close();
+					} catch (IOException var8) {
+						Legacy4J.LOGGER.warn(var8.getMessage());
+					}
+				});
+			};
 		}
 
 		@Override
