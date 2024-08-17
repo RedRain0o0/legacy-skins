@@ -83,7 +83,7 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 		builder.addPack(Constants.FAVORITES_PACK, new LegacySkinPack(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "textures/skin_packs/default.png"), List.of(), LegacyPackType.DEFAULT));
 		// Temporary pack
 		{
-			LegacySkinPack pack = new LegacySkinPack(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "null.png"), List.of(new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/default/b.cpmmodel"))), LegacyPackType.DEFAULT);
+			LegacySkinPack pack = new LegacySkinPack(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "textures/skin_packs/temporary.png"), List.of(new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/default/b.cpmmodel"))), LegacyPackType.DEFAULT);
 			builder.addPack("temporary", pack);
 		}
 		//Test pack

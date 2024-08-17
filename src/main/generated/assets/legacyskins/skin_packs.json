@@ -63,7 +63,7 @@
     "skins": []
   },
   "legacyskins:temporary": {
-    "icon": "legacyskins:null.png",
+    "icon": "legacyskins:textures/skin_packs/temporary.png",
     "skins": [
       {
         "model": "legacyskins:skinpacks/default/b.cpmmodel"
