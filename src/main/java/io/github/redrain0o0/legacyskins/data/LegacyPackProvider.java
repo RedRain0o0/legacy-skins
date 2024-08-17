@@ -11,6 +11,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.LinkedHashMap;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 
@@ -26,7 +27,7 @@ public abstract class LegacyPackProvider implements DataProvider {
 
 	@Override
 	public CompletableFuture<?> run(CachedOutput cachedOutput) {
-		TreeMap<ResourceLocation, LegacySkinPack> packs = new TreeMap<>();
+		LinkedHashMap<ResourceLocation, LegacySkinPack> packs = new LinkedHashMap<>();
 		return registryLookup.thenCompose(v -> {
 			addPacks(new InternalPackBuilder(packs));
 			JsonElement element = LegacySkinPack.MAP_CODEC.encodeStart(JsonOps.INSTANCE, packs).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
@@ -53,9 +54,9 @@ public abstract class LegacyPackProvider implements DataProvider {
 	}
 
 	private final class InternalPackBuilder implements PackBuilder {
-		private final TreeMap<ResourceLocation, LegacySkinPack> packs;
+		private final LinkedHashMap<ResourceLocation, LegacySkinPack> packs;
 
-		public InternalPackBuilder(TreeMap<ResourceLocation, LegacySkinPack> packs) {
+		public InternalPackBuilder(LinkedHashMap<ResourceLocation, LegacySkinPack> packs) {
 			this.packs = packs;
 		}
 
