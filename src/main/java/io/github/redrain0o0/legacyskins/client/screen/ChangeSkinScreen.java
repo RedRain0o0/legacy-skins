@@ -38,6 +38,7 @@ import wily.legacy.client.controller.BindingState;
 import wily.legacy.client.controller.Controller;
 import wily.legacy.client.controller.ControllerBinding;
 import wily.legacy.client.screen.*;
+import wily.legacy.init.LegacyRegistries;
 import wily.legacy.util.LegacySprites;
 import wily.legacy.util.ModInfo;
 import wily.legacy.util.ScreenUtil;
@@ -149,6 +150,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				if (left) offset--;
 				if (right) offset++;
 				this.playerSkinWidgetList.sortForIndex(this.playerSkinWidgetList.index + offset);
+				ScreenUtil.playSimpleUISound(LegacyRegistries.SCROLL.get(), 1.0f);
 				return true;
 			}
 		}
