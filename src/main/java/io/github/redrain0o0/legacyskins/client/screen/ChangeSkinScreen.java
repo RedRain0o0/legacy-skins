@@ -32,6 +32,7 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.LivingEntity;
 import org.joml.Quaternionf;
 import wily.legacy.client.ControlType;
+import wily.legacy.client.controller.BindingState;
 import wily.legacy.client.controller.Controller;
 import wily.legacy.client.controller.ControllerBinding;
 import wily.legacy.client.screen.*;
@@ -114,6 +115,10 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 	@Override
 	public boolean keyPressed(int keyCode, int j, int k) {
+		if (keyCode == InputConstants.KEY_F) {
+			favorite();
+			return true;
+		}
 		if (control(keyCode == InputConstants.KEY_LBRACKET, keyCode == InputConstants.KEY_RBRACKET)) return true;
 		if (control(keyCode == InputConstants.KEY_LEFT, keyCode == InputConstants.KEY_RIGHT)) return true;
 		return super.keyPressed(keyCode,j,k);
@@ -132,6 +137,28 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public void bindingStateTick(BindingState state) {
+		if (state.is(ControllerBinding.UP_BUTTON) && state.released) {
+			favorite();
+		}
+	}
+
+	private void favorite() {
+		if (this.playerSkinWidgetList != null) {
+			PlayerSkinWidget element3 = this.playerSkinWidgetList.element3;
+			if (element3 != null) {
+				SkinReference skinReference = element3.skinRef.get();
+				ArrayList<SkinReference> favorites = Legacyskins.INSTANCE.favorites;
+				if (favorites.contains(skinReference)) {
+					favorites.removeIf(skinReference::equals);
+				} else {
+					favorites.add(skinReference);
+				}
+			}
+		}
 	}
 
 	@Override
