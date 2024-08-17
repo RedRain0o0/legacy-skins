@@ -71,7 +71,7 @@ public record LegacySkinPack(ResourceLocation icon, List<LegacySkin> skins) {
 					Legacyskins.LOGGER.error("Failed to load skin from pack: %s".formatted(skinReference.pack()), t);
 				}
 			}
-			SkinTextureToCustomPlayerModel.convert(ResourceLocation.parse("minecraft:textures/entity/player/wide/alex.png"), false);
+			//SkinTextureToCustomPlayerModel.convert(ResourceLocation.parse("minecraft:textures/entity/player/wide/alex.png"), false);
 			return CompletableFuture.completedFuture(null);
 		}
 
