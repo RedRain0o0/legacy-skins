@@ -8,5 +8,6 @@ public class LegacySkinsDataGenerator implements DataGeneratorEntrypoint {
 	public void onInitializeDataGenerator(FabricDataGenerator generator) {
 		FabricDataGenerator.Pack pack = generator.createPack();
 		pack.addProvider(LegacySkinsLegacyPackProvider::new);
+		pack.addProvider(LegacySkinsLanguageProvider::new);
 	}
 }

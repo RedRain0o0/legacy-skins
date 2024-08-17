@@ -86,7 +86,11 @@ public abstract class LegacyPackProvider implements DataProvider {
 		void addPack(ResourceLocation id, LegacySkinPack pack);
 
 		default void addPack(String id, LegacySkinPack pack) {
-			this.addPack(!id.contains(":") ? ResourceLocation.fromNamespaceAndPath(getOutput().getModId(), id) : ResourceLocation.parse(id), pack);
+			this.addPack(id(id), pack);
+		}
+
+		default ResourceLocation id(String id) {
+			return !id.contains(":") ? ResourceLocation.fromNamespaceAndPath(getOutput().getModId(), id) : ResourceLocation.parse(id);
 		}
 
 		FabricDataOutput getOutput();
