@@ -174,6 +174,10 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 					favorites.add(skinReference);
 				}
 			}
+			// this is definitely unfavorite
+			if (Constants.FAVORITES_PACK.equals(this.focusedPack.getFirst())) {
+				skinPack(playerSkinWidgetList.element4.skinRef.get().ordinal());
+			}
 		}
 	}
 
