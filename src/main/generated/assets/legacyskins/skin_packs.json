@@ -1,7 +1,6 @@
 {
   "legacyskins:default": {
     "icon": "legacyskins:textures/skin_packs/default.png",
-    "type": "mashup",
     "skins": [
       {
         "model": "legacyskins:skinpacks/temporary/steve.cpmmodel"
