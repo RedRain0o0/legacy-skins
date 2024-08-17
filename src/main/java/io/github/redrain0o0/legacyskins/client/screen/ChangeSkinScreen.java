@@ -206,7 +206,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			guiGraphics.blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80);
 			guiGraphics.blitSprite(LegacySkinSprites.PACK_NAME_BOX, panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
 			if (this.playerSkinWidgetList != null) {
-				if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getSkin().orElse(null))) {
+				if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
 					guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
 				}
 				if (Legacyskins.INSTANCE.favorites.contains(this.playerSkinWidgetList.element3.skinRef.get())) {
