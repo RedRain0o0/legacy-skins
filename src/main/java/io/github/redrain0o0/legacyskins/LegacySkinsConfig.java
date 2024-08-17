@@ -14,16 +14,32 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class LegacySkinsConfig {
-	public static final Codec<LegacySkinsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(SkinReference.CODEC.optionalFieldOf("skin").forGetter(a -> a.skin)).apply(instance, LegacySkinsConfig::new));
+	public static final Codec<LegacySkinsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			SkinReference.CODEC.optionalFieldOf("skin").forGetter(LegacySkinsConfig::getSkin),
+			Codec.list(SkinReference.CODEC).xmap(ArrayList::new, c -> c).fieldOf("favorites").forGetter(LegacySkinsConfig::getFavorites)
+	).apply(instance, LegacySkinsConfig::new));
 	// selected skin
 	public Optional<SkinReference> skin;
+	// Note: American English
+	public ArrayList<SkinReference> favorites;
 
-	public LegacySkinsConfig(Optional<SkinReference> skin) {
+	public Optional<SkinReference> getSkin() {
+		return skin;
+	}
+
+	public ArrayList<SkinReference> getFavorites() {
+		return favorites;
+	}
+
+	public LegacySkinsConfig(Optional<SkinReference> skin, ArrayList<SkinReference> favorites) {
 		this.skin = skin;
+		this.favorites = favorites;
 	}
 
 	public void setSkin(@Nullable SkinReference skin) {

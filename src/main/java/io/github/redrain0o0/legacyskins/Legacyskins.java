@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class Legacyskins implements ModInitializer {
@@ -44,7 +45,7 @@ public class Legacyskins implements ModInitializer {
 						break configLoad;
 					}
 				}
-				LegacySkinsConfig config = new LegacySkinsConfig(Optional.empty());
+				LegacySkinsConfig config = new LegacySkinsConfig(Optional.empty(), new ArrayList<>());
 				Optional<JsonElement> element = LegacySkinsConfig.CODEC.encodeStart(JsonOps.INSTANCE, config).resultOrPartial(LOGGER::error);
 				if (element.isEmpty()) throw new RuntimeException("Config not serialized!");
 				Files.writeString(configFile, new GsonBuilder().setPrettyPrinting().create().toJson(element.get()));
