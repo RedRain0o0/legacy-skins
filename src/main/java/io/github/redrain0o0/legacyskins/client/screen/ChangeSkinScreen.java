@@ -86,6 +86,12 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 						queuedChangeSkinPack = true;
 					}
 				}
+
+				@Override
+				public boolean isHoveredOrFocused() {
+					if (focusedPack != null && focusedPack.getSecond() == pack) return true;
+					return super.isHoveredOrFocused();
+				}
 			};
 			buttons.put(id, button);
 			renderableVList.addRenderable(button);
