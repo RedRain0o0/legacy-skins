@@ -9,7 +9,6 @@
     "EditorGuiAccessor",
     "GeneratorsAccessor",
     "HelpOptionsMixin",
-    "HideSkinEditorButtonMixin",
     "ScreenAccessor"
   ],
   "injectors": {
