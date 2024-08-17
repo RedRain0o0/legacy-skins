@@ -114,9 +114,10 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 	@Override
 	public boolean keyPressed(int keyCode, int j, int k) {
+		if (control(keyCode == InputConstants.KEY_LBRACKET, keyCode == InputConstants.KEY_RBRACKET)) return true;
 		if (control(keyCode == InputConstants.KEY_LEFT, keyCode == InputConstants.KEY_RIGHT)) return true;
 		return super.keyPressed(keyCode,j,k);
-	}
+	} // 91 93
 
 	boolean control(boolean left, boolean right) {
 		if ((left || right)) {
