@@ -66,6 +66,10 @@
       }
     ]
   },
+  "legacyskins:favorites": {
+    "icon": "legacyskins:null.png",
+    "skins": []
+  },
   "legacyskins:temporary": {
     "icon": "legacyskins:null.png",
     "skins": [

@@ -1,5 +1,6 @@
 package io.github.redrain0o0.legacyskins.data;
 
+import io.github.redrain0o0.legacyskins.Constants;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
@@ -44,6 +45,8 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 					models.stream().map(a -> new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/temporary/%s.cpmmodel".formatted(a)))).toList());
 			builder.addPack("default", legacySkinPack);
 		}
+		// hardcoded
+		builder.addPack(Constants.FAVORITES_PACK, new LegacySkinPack(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "null.png"), List.of()));
 		// Temporary pack
 		{
 			LegacySkinPack pack = new LegacySkinPack(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "null.png"), List.of(new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/default/b.cpmmodel"))));
