@@ -1,8 +1,8 @@
 {
   "legacyskins.menu.select_skin": "Select Skin",
   "legacyskins.menu.cancel": "Cancel",
-  "legacyskins.menu.favourite": "Add Favourite",
-  "legacyskins.menu.unfavourite": "Remove Favourite",
+  "legacyskins.menu.favorite": "Add Favorite",
+  "legacyskins.menu.unfavorite": "Remove Favorite",
   "legacyskins.menu.navigate": "Navigate",
   "legacyskins.skins.favourite": "Favourite Skins",
   "skin_pack.legacyskins.default": "No Pack: Default Skins",
