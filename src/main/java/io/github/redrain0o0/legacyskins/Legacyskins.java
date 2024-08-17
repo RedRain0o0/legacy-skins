@@ -53,6 +53,7 @@ public class Legacyskins implements ModInitializer {
 		} catch (Throwable t) {
 			LOGGER.error("Failed to load configs", t);
 		}
+		//noinspection SpellCheckingInspection
 		LOGGER.debug("Loaded Legacy Skins's config.");
 	}
 }
