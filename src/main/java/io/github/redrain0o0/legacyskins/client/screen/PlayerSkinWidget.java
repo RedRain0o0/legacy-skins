@@ -15,7 +15,9 @@ import com.tom.cpm.shared.MinecraftClientAccess;
 import com.tom.cpm.shared.animation.AnimationEngine;
 import com.tom.cpm.shared.animation.AnimationHandler;
 import io.github.redrain0o0.legacyskins.CPMCompat;
+import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
+import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -47,7 +49,8 @@ public class PlayerSkinWidget extends AbstractWidget {
 	private static final float DEFAULT_ROTATION_Y = 30.0F;
 	private static final float ROTATION_X_LIMIT = 50.0F;
 	private final PlayerSkinWidget.Model model;
-	private final Supplier<LegacySkin> skin;
+	final Supplier<SkinReference> skinRef;
+	final Supplier<LegacySkin> skin;
 	private final int originalWidth;
 	private final int originalHeight;
 	private float rotationX = 0.0F;//-5.0F;
@@ -66,12 +69,13 @@ public class PlayerSkinWidget extends AbstractWidget {
 	private float targetScale = Float.NEGATIVE_INFINITY;
 	private float prevScale = 0;
 
-	public PlayerSkinWidget(int width, int height, EntityModelSet entityModelSet, Supplier<LegacySkin> supplier) {
+	public PlayerSkinWidget(int width, int height, EntityModelSet entityModelSet, Supplier<SkinReference> supplier) {
 		super(0, 0, width, height, CommonComponents.EMPTY);
 		originalWidth = width;
 		originalHeight = height;
 		this.model = PlayerSkinWidget.Model.bake(entityModelSet);
-		this.skin = supplier;
+		this.skinRef = supplier;
+		this.skin = () -> LegacySkinPack.list.get(this.skinRef.get().pack()).skins().get(this.skinRef.get().ordinal());
 	}
 
 	public boolean isInterpolating() {

@@ -7,8 +7,11 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
+import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
+import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import io.github.redrain0o0.legacyskins.mixin.ScreenAccessor;
 import io.github.redrain0o0.legacyskins.util.LegacySkinSprites;
 import net.minecraft.Util;
@@ -123,6 +126,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				if (left) offset--;
 				if (right) offset++;
 				this.playerSkinWidgetList.sortForIndex(this.playerSkinWidgetList.index + offset);
+				Legacyskins.INSTANCE.setSkin(this.playerSkinWidgetList.element3.skinRef.get());
 				return true;
 			}
 		}
@@ -246,10 +250,12 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 					guiGraphics.enableScissor(x, y, x+width, y+height);
 				}
 			});
-			List<LegacySkin> skins = new ArrayList<>();
+			List<SkinReference> skins = new ArrayList<>();
 			while (quota > 0) {
+				int i = 0;
 				for (LegacySkin skin : this.focusedPack.getSecond().skins()) {
-					skins.add(skin);
+					skins.add(new SkinReference(this.focusedPack.getFirst(), i));
+					i++;
 					quota--;
 				}
 			}
