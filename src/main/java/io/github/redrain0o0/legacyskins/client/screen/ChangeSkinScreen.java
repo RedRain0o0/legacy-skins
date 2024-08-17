@@ -204,18 +204,20 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 			//RenderSystem.enableScissor(panel.x + panel.width - 2, panel.y + 16, tooltipBox.getWidth() - 18, tooltipBox.getHeight() - 80);
 
-			LayerDefinition layerDefinition = LayerDefinitions.createRoots().get(ModelLayers.PLAYER);
-			PlayerModel<LivingEntity> livingEntityPlayerModel = new PlayerModel<>(layerDefinition.bakeRoot(), false);
-			RenderType renderType = livingEntityPlayerModel.renderType(ResourceLocation.parse("minecraft:textures/entity/player/wide/steve.png"));
-			guiGraphics.pose().pushPose();
-			guiGraphics.pose().scale(100, 100, 100);
-			guiGraphics.pose().scale(1, 1, -1);
-			guiGraphics.pose().mulPose(new Quaternionf().rotationXYZ((float) Math.toRadians(180), 0, 0));
-			guiGraphics.pose().mulPose((new Quaternionf()).rotationXYZ(0.43633232F, (float) Math.toRadians(System.currentTimeMillis() % 360), 3.1415927F));
-			Lighting.setupForEntityInInventory();
-			livingEntityPlayerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY/*, 1, 1, 1, 1*/);
-			Lighting.setupFor3DItems();
-			guiGraphics.pose().popPose();
+			if (false) {
+				LayerDefinition layerDefinition = LayerDefinitions.createRoots().get(ModelLayers.PLAYER);
+				PlayerModel<LivingEntity> livingEntityPlayerModel = new PlayerModel<>(layerDefinition.bakeRoot(), false);
+				RenderType renderType = livingEntityPlayerModel.renderType(ResourceLocation.parse("minecraft:textures/entity/player/wide/steve.png"));
+				guiGraphics.pose().pushPose();
+				guiGraphics.pose().scale(100, 100, 100);
+				guiGraphics.pose().scale(1, 1, -1);
+				guiGraphics.pose().mulPose(new Quaternionf().rotationXYZ((float) Math.toRadians(180), 0, 0));
+				guiGraphics.pose().mulPose((new Quaternionf()).rotationXYZ(0.43633232F, (float) Math.toRadians(System.currentTimeMillis() % 360), 3.1415927F));
+				Lighting.setupForEntityInInventory();
+				livingEntityPlayerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY/*, 1, 1, 1, 1*/);
+				Lighting.setupFor3DItems();
+				guiGraphics.pose().popPose();
+			}
 
 			//RenderSystem.disableScissor();
 
