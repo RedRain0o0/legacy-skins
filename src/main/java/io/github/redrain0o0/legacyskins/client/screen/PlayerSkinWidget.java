@@ -246,8 +246,8 @@ public class PlayerSkinWidget extends AbstractWidget {
 			guiGraphics.pose().scale(1.0F, 1.0F, -1.0F);
 			guiGraphics.pose().translate(0.0F, -1.5F, 0.0F);
 
-			PlayerModel<?> playerModel = this.wideModel;// playerSkin.model() == PlayerSkin.Model.SLIM ? this.slimModel : this.wideModel;
-
+			PlayerSkin insecureSkin = playerSkin != null ? null : Minecraft.getInstance().getSkinManager().getInsecureSkin(Minecraft.getInstance().getGameProfile());
+			PlayerModel<?> playerModel = playerSkin == null ? insecureSkin.model() == PlayerSkin.Model.SLIM ? slimModel : wideModel : this.wideModel;// playerSkin.model() == PlayerSkin.Model.SLIM ? this.slimModel : this.wideModel;
 			IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> renderer = null;
 			if (playerSkin != null) {
 				renderer = rendererHashMap.computeIfAbsent(playerSkin.hashCode() + "-temp", c -> {
@@ -278,7 +278,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 				if (renderer != null) {
 					renderType = playerModel.renderType(renderer.getDefaultTexture());// playerSkin.texture());
 				} else {
-					renderType = playerModel.renderType(Minecraft.getInstance().getSkinManager().getInsecureSkin(Minecraft.getInstance().getGameProfile()).texture());
+					renderType = playerModel.renderType(insecureSkin.texture());
 				}
 				playerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
 			}
