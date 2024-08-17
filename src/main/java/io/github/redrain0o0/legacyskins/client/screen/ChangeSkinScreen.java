@@ -332,18 +332,31 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			List<SkinReference> skins = new ArrayList<>();
 			while (quota > 0) {
 				int i = 0;
-				for (LegacySkin skin : this.focusedPack.getSecond().skins()) {
-					skins.add(new SkinReference(this.focusedPack.getFirst(), i));
-					i++;
-					quota--;
+				if (Constants.FAVORITES_PACK.equals(this.focusedPack.getFirst())) {
+					if (Legacyskins.INSTANCE.favorites.isEmpty()) break;
+					for (SkinReference favorite : Legacyskins.INSTANCE.favorites) {
+						skins.add(favorite);
+						i++;
+						quota--;
+					}
+				} else {
+					for (LegacySkin skin : this.focusedPack.getSecond().skins()) {
+						skins.add(new SkinReference(this.focusedPack.getFirst(), i));
+						i++;
+						quota--;
+					}
 				}
 			}
 			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
 			// tooltipBox.getWidth() - 18, 40
 			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
 			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
-			playerSkinWidgetList = PlayerSkinWidgetList.of(x + width / 2 - 85 / 2, y + (height) / 2 - 120 / 2, skins.stream().map(a -> this.addRenderableWidget(new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> a))).toArray(PlayerSkinWidget[]::new));
-			playerSkinWidgetList.sortForIndex(index);
+			if (quota >= 0) {
+				playerSkinWidgetList = null;
+			} else {
+				playerSkinWidgetList = PlayerSkinWidgetList.of(x + width / 2 - 85 / 2, y + (height) / 2 - 120 / 2, skins.stream().map(a -> this.addRenderableWidget(new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> a))).toArray(PlayerSkinWidget[]::new));
+				playerSkinWidgetList.sortForIndex(index);
+			}
 			addRenderableOnly(g = new Renderable() {
 
 				@Override
