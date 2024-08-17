@@ -8,6 +8,7 @@
   "skin_pack.legacyskins.default": "No Pack: Default Skins",
   "skin_pack.legacyskins.favorites": "Favorite Skins",
   "skin_pack.legacyskins.temporary": "Temporary",
-  "skin_pack.legacyskins.dev": "Dev Pack"
-
+  "skin_pack.legacyskins.dev": "Dev Pack",
+  "legacyskins.packType.default": "Skin pack",
+  "legacyskins.packType.mashup": "Mash-up pack"
 }

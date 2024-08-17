@@ -25,11 +25,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
-public record LegacySkinPack(ResourceLocation icon, List<LegacySkin> skins) {
+public record LegacySkinPack(ResourceLocation icon, List<LegacySkin> skins, LegacyPackType type) {
 	public static final Map<ResourceLocation, LegacySkinPack> list = new LinkedHashMap<>();
 	public static final Codec<LegacySkinPack> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ResourceLocation.CODEC.fieldOf("icon").forGetter(LegacySkinPack::icon),
-			Codec.list(LegacySkin.CODEC).fieldOf("skins").xmap(a -> (List<LegacySkin>) new ArrayList<>(a), a -> a).forGetter(LegacySkinPack::skins)
+			Codec.list(LegacySkin.CODEC).fieldOf("skins").xmap(a -> (List<LegacySkin>) new ArrayList<>(a), a -> a).forGetter(LegacySkinPack::skins),
+			LegacyPackType.CODEC.optionalFieldOf("type", LegacyPackType.DEFAULT).forGetter(LegacySkinPack::type)
 	).apply(instance, LegacySkinPack::new));
 	public static final Codec<Map<ResourceLocation, LegacySkinPack>> MAP_CODEC = Codec.unboundedMap(ResourceLocation.CODEC, LegacySkinPack.CODEC);
 	private static final String PACKS = "skin_packs.json";

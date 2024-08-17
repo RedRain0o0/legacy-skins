@@ -10,6 +10,7 @@ import com.mojang.datafixers.util.Pair;
 import io.github.redrain0o0.legacyskins.Constants;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.SkinReference;
+import io.github.redrain0o0.legacyskins.client.LegacyPackType;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
@@ -27,6 +28,7 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -220,28 +222,58 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 					guiGraphics.blit(ResourceLocation.withDefaultNamespace("textures/gui/sprites/hud/heart/full.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
 				}
 
-				guiGraphics.pose().pushPose();
-				// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
-				int x = panel.x + panel.width - 5;
-				int width = tooltipBox.getWidth() - 18;
-				int middle = x + width / 2;
-				guiGraphics.pose().translate(middle, panel.y + tooltipBox.getHeight() - 59 + 10, 0);
-				guiGraphics.pose().scale(1.5f, 1.5f, 1);
+				{
+					guiGraphics.pose().pushPose();
+					// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
+					int x = panel.x + panel.width - 5;
+					int width = tooltipBox.getWidth() - 18;
+					int middle = x + width / 2;
+					guiGraphics.pose().translate(middle, panel.y + tooltipBox.getHeight() - 59 + 10, 0);
+					guiGraphics.pose().scale(1.5f, 1.5f, 1);
+					SkinReference reference = playerSkinWidgetList.element3.skinRef.get();
+					ResourceLocation rl = reference.pack();
+					guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable("skin_pack.%s.%s".formatted(rl.toLanguageKey(), reference.ordinal())), 0, 0, 0xffffffff);
+					guiGraphics.pose().popPose();
+				}
+
 				SkinReference reference = playerSkinWidgetList.element3.skinRef.get();
 				ResourceLocation rl = reference.pack();
-				guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable("skin_pack.%s.%s".formatted(rl.toLanguageKey(), reference.ordinal())), 0, 0, 0xffffffff);
-				guiGraphics.pose().popPose();
+				if (I18n.exists("skin_pack.%s.%s.desc".formatted(rl.toLanguageKey(), reference.ordinal())))
+				{
+					guiGraphics.pose().pushPose();
+					// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
+					int x = panel.x + panel.width - 5;
+					int width = tooltipBox.getWidth() - 18;
+					int middle = x + width / 2;
+					guiGraphics.pose().translate(middle, panel.y + tooltipBox.getHeight() - 59 + 35, 0);
+					guiGraphics.pose().scale(1.5f, 1.5f, 1);
+					guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable("skin_pack.%s.%s.desc".formatted(rl.toLanguageKey(), reference.ordinal())), 0, 0, 0xffffffff);
+					guiGraphics.pose().popPose();
+				}
 			}
 			if (this.focusedPack != null) {
-				guiGraphics.pose().pushPose();
-				// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
-				int x = panel.x + panel.width - 5;
-				int width = tooltipBox.getWidth() - 18;
-				int middle = x + width / 2;
-				guiGraphics.pose().translate(middle, panel.y + 16 + 4 + 10, 0);
-				guiGraphics.pose().scale(1.5f, 1.5f, 1);
-				guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable(Util.makeDescriptionId("skin_pack", focusedPack.getFirst())), 0, 0, 0xffffffff);
-				guiGraphics.pose().popPose();
+				{
+					guiGraphics.pose().pushPose();
+					// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
+					int x = panel.x + panel.width - 5;
+					int width = tooltipBox.getWidth() - 18;
+					int middle = x + width / 2;
+					guiGraphics.pose().translate(middle, panel.y + 16 + 4 + 7, 0);
+					guiGraphics.pose().scale(1.5f, 1.5f, 1);
+					guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable(Util.makeDescriptionId("skin_pack", focusedPack.getFirst())), 0, 0, 0xffffffff);
+					guiGraphics.pose().popPose();
+				}
+				if (this.focusedPack.getSecond().type() != LegacyPackType.DEFAULT) {
+					guiGraphics.pose().pushPose();
+					// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
+					int x = panel.x + panel.width - 5;
+					int width = tooltipBox.getWidth() - 18;
+					int middle = x + width / 2;
+					guiGraphics.pose().translate(middle, panel.y + 16 + 4 + 25, 0);
+					guiGraphics.pose().scale(1f, 1f, 1);
+					guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable(this.focusedPack.getSecond().type().translationKey()), 0, 0, 0xffffffff);
+					guiGraphics.pose().popPose();
+				}
 			}
 			RenderSystem.disableBlend();
 

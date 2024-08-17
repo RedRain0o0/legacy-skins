@@ -4,6 +4,8 @@
   "legacyskins.menu.navigate": "Navigate",
   "legacyskins.menu.select_skin": "Select Skin",
   "legacyskins.menu.unfavorite": "Remove Favorite",
+  "legacyskins.packType.default": "Skin pack",
+  "legacyskins.packType.mashup": "Mash-up pack",
   "legacyskins.skins.favorite": "Favorite Skins",
   "skin_pack.legacyskins.default": "No Pack: Default Skins",
   "skin_pack.legacyskins.default.0": "Auto Selected",
