@@ -58,14 +58,6 @@
       }
     ]
   },
-  "legacyskins:dev": {
-    "icon": "legacyskins:textures/skin_packs/dev.png",
-    "skins": [
-      {
-        "model": "legacyskins:skinpacks/dev/redrain0o0.cpmmodel"
-      }
-    ]
-  },
   "legacyskins:favorites": {
     "icon": "legacyskins:null.png",
     "skins": []
@@ -75,6 +67,14 @@
     "skins": [
       {
         "model": "legacyskins:skinpacks/default/b.cpmmodel"
+      }
+    ]
+  },
+  "legacyskins:dev": {
+    "icon": "legacyskins:textures/skin_packs/dev.png",
+    "skins": [
+      {
+        "model": "legacyskins:skinpacks/dev/redrain0o0.cpmmodel"
       }
     ]
   }
