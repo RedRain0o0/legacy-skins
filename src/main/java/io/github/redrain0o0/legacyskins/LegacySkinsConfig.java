@@ -81,7 +81,7 @@ public class LegacySkinsConfig {
 
 	@VisibleForTesting
 	public  <T> Dynamic<T> toDynamic(DynamicOps<T> ops) {
-		Dynamic<T> dynamic = new Dynamic<>(ops, ops.emptyMap());
+		Dynamic<T> dynamic = new Dynamic<>(ops, CODEC.encodeStart(ops, this).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow());
 		return Migrator.CONFIG_FIXER.addSchemaVersion(dynamic);
 	}
 
