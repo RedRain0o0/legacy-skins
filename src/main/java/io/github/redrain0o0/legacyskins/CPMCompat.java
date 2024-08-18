@@ -4,6 +4,8 @@ import com.mojang.authlib.GameProfile;
 import com.tom.cpm.api.ICPMPlugin;
 import com.tom.cpm.api.IClientAPI;
 import com.tom.cpm.api.ICommonAPI;
+import com.tom.cpm.shared.config.ConfigKeys;
+import com.tom.cpm.shared.config.ModConfig;
 import io.github.redrain0o0.legacyskins.util.SkinTextureToCustomPlayerModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -29,6 +31,8 @@ public class CPMCompat implements ICPMPlugin {
 
 	@Override
 	public void initClient(IClientAPI api) {
+		// TODO add a config option for this?
+		ModConfig.getCommonConfig().setBoolean(ConfigKeys.TITLE_SCREEN_BUTTON, false);
 		Legacyskins.LOGGER.info("CPMCompat client initialized.");
 		loadModel = (name, b) -> {
 			// why does java require this
@@ -43,7 +47,6 @@ public class CPMCompat implements ICPMPlugin {
 
 	@Override
 	public void initCommon(ICommonAPI api) {
-
 	}
 
 	@Override
