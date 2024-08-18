@@ -7,11 +7,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.MapLike;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
-import io.github.redrain0o0.legacyskins.schema.LegacySkinsDataFixer;
+import io.github.redrain0o0.legacyskins.schema.Migrator;
 import net.fabricmc.loader.api.FabricLoader;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.VisibleForTesting;
@@ -58,15 +57,14 @@ public class LegacySkinsConfig {
 
 	@VisibleForTesting
 	public static <T> LegacySkinsConfig fromDynamic(Dynamic<T> dynamic) {
-		Dynamic<T> fix = LegacySkinsDataFixer.CONFIG_FIXER.fix(dynamic);
+		Dynamic<T> fix = Migrator.CONFIG_FIXER.fix(dynamic);
 		return LegacySkinsConfig.CODEC.parse(fix).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
 	}
 
 	@VisibleForTesting
 	public  <T> Dynamic<T> toDynamic(DynamicOps<T> ops) {
 		Dynamic<T> dynamic = new Dynamic<>(ops, ops.emptyMap());
-		dynamic = dynamic.set("schemaVersion", dynamic.createInt(LegacySkinsDataFixer.SCHEMA_VERSION));
-		return LegacySkinsDataFixer.CONFIG_FIXER.addSchemaVersion(dynamic);
+		return Migrator.CONFIG_FIXER.addSchemaVersion(dynamic);
 	}
 
 	public static void load() {
