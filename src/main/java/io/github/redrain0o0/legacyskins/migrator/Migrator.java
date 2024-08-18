@@ -44,7 +44,7 @@ public class Migrator {
 		int schemaVersion = element.get("schemaVersion").asInt(defaultValue);
 		if (schemaVersion < oldestSupportedVersion) throw new UnsupportedOperationException();
 		element.remove("schemaVersion");
-		if (schemaVersion > oldestSupportedVersion) throw new UnsupportedOperationException();
+		if (schemaVersion > this.schemaVersion) throw new UnsupportedOperationException();
 		if (schemaVersion == this.schemaVersion) return element;
 		Dynamic<T> dynamic = element;
 		for (Fixer fixer : fixers) {
