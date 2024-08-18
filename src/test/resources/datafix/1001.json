@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1001,
+  "skin": {
+    "pack": "legacyskins:default",
+    "ordinal": 1
+  },
+  "favorites": [
+    {
+      "pack": "legacyskins:default",
+      "ordinal": 0
+    }
+  ]
+}

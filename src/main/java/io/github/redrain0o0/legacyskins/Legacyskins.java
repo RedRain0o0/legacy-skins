@@ -32,29 +32,7 @@ public class Legacyskins implements ModInitializer {
 		LOGGER.info("Hello Fabric world!");
 
 		// TODO this is too complicated
-		try {
-			configLoad:
-			{
-				Path configFile = FabricLoader.getInstance().getConfigDir().resolve("legacyskins.json");
-				configFromFile:
-				{
-					if (configFile.toFile().isFile()) {
-						JsonElement s = new Gson().fromJson(Files.readString(configFile), JsonElement.class);
-						Optional<LegacySkinsConfig> legacySkinsConfig = LegacySkinsConfig.CODEC.parse(JsonOps.INSTANCE, s).resultOrPartial(LOGGER::error);
-						if (legacySkinsConfig.isEmpty()) break configFromFile;
-						INSTANCE = legacySkinsConfig.get();
-						break configLoad;
-					}
-				}
-				LegacySkinsConfig config = new LegacySkinsConfig(Optional.empty(), new ArrayList<>());
-				Optional<JsonElement> element = LegacySkinsConfig.CODEC.encodeStart(JsonOps.INSTANCE, config).resultOrPartial(LOGGER::error);
-				if (element.isEmpty()) throw new RuntimeException("Config not serialized!");
-				Files.writeString(configFile, new GsonBuilder().setPrettyPrinting().create().toJson(element.get()));
-			}
-
-		} catch (Throwable t) {
-			LOGGER.error("Failed to load configs", t);
-		}
+		LegacySkinsConfig.load();
 		//noinspection SpellCheckingInspection
 		LOGGER.debug("Loaded Legacy Skins's config.");
 	}
