@@ -366,6 +366,10 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	}
 
 	void skinPack() {
+		// TODO
+		if (this.focusedPack.getFirst().equals(Constants.FAVORITES_PACK) && Legacyskins.INSTANCE.favorites.contains(Legacyskins.INSTANCE.getSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
+			skinPack(0);
+		}
 		skinPack(0);
 	}
 	Renderable f;
