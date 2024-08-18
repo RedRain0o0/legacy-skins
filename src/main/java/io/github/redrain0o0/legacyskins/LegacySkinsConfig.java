@@ -27,7 +27,7 @@ public class LegacySkinsConfig {
 	public static final Codec<LegacySkinsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			SkinReference.CODEC.optionalFieldOf("currentSkin").forGetter(LegacySkinsConfig::getCurrentSkin),
 			Codec.list(SkinReference.CODEC).xmap(ArrayList::new, c -> c).fieldOf("favorites").forGetter(LegacySkinsConfig::getFavorites),
-			SkinsScreen.CODEC.optionalFieldOf("skinsScreen", SkinsScreen.DEFAULT).forGetter(LegacySkinsConfig::getSkinsScreen),
+			SkinsScreen.CODEC.fieldOf("skinsScreen").forGetter(LegacySkinsConfig::getSkinsScreen),
 			Codec.BOOL.optionalFieldOf("showDevPacks", false).forGetter(LegacySkinsConfig::showDevPacks)
 	).apply(instance, LegacySkinsConfig::new));
 	private final SkinsScreen screen;
