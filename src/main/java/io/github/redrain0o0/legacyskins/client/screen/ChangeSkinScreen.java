@@ -366,11 +366,13 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	}
 
 	void skinPack() {
-		// TODO
 		if (this.focusedPack.getFirst().equals(Constants.FAVORITES_PACK) && Legacyskins.INSTANCE.favorites.contains(Legacyskins.INSTANCE.getSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
+			skinPack(Legacyskins.INSTANCE.getFavorites().indexOf(Legacyskins.INSTANCE.getSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0))));
+		} else if (Legacyskins.INSTANCE.getSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).pack().equals(this.focusedPack.getFirst())) {
+			skinPack(Legacyskins.INSTANCE.getSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).ordinal());
+		} else {
 			skinPack(0);
 		}
-		skinPack(0);
 	}
 	Renderable f;
 	Renderable g;
