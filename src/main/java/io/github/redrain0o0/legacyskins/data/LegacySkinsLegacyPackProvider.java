@@ -67,7 +67,7 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 			);
 			System.out.println(models);
 			LegacySkinPack legacySkinPack = new LegacySkinPack(LegacyPackType.DEFAULT, ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "textures/skin_packs/default.png"),
-					models.keySet().stream().map(a -> new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/temporary/%s.cpmmodel".formatted(a)))).toList());
+					models.keySet().stream().map(a -> new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/default/%s.cpmmodel".formatted(a)))).toList());
 			int i = 1;
 			LegacySkinsLanguageProvider.addQueuedTranslation(b -> b.add("skin_pack.%s.%s".formatted(builder.id("default").toLanguageKey(), 0), "Auto Selected"));
 			for (LegacySkin skin : legacySkinPack.skins()) {
