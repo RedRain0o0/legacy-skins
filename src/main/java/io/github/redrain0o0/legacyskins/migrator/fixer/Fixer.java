@@ -15,8 +15,7 @@ public abstract class Fixer {
 	/**
 	 * @param element The input {@link Dynamic<T>}
 	 * @return The fixed {@link Dynamic<T>}
-	 * @param T The {@link Dynamic<T>}'s underlying value's type.
+	 * @param <T> The {@link Dynamic<T>}'s underlying value's type.
 	 */
-	@SuppressWarnings("JavadocReference") // IntelliJ bug, where it doesn't display Javadoc correctly
 	public abstract <T> Dynamic<T> fix(Dynamic<T> element);
 }
