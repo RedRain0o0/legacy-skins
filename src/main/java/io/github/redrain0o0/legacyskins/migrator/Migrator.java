@@ -16,25 +16,32 @@ public class Migrator {
 			List.of(
 					new ScreenTypeFixer(),
 					new SkinToCurrentSkinFixer()
-			), 1001, 1002
+			),
+			1001,
+			1001,
+			1002
 	);
 
 	public static final Migrator SKIN_PACKS_FIXER = new Migrator(
 			List.of(),
-			1, 1
+			1,
+			1,
+			1
 	);
 
 	private final int oldestSupportedVersion;
 	private final int schemaVersion;
+	private final int defaultValue;
 
-	public Migrator(List<Fixer> fixers, int oldestSupportedVersion, int schemaVersion) {
+	public Migrator(List<Fixer> fixers, int defaultValue, int oldestSupportedVersion, int schemaVersion) {
 		this.fixers = fixers;
+		this.defaultValue = defaultValue;
 		this.oldestSupportedVersion = oldestSupportedVersion;
 		this.schemaVersion = schemaVersion;
 	}
 
 	public <T> Dynamic<T> fix(Dynamic<T> element) {
-		int schemaVersion = element.get("schemaVersion").asInt(1001);
+		int schemaVersion = element.get("schemaVersion").asInt(defaultValue);
 		if (schemaVersion < oldestSupportedVersion) throw new UnsupportedOperationException();
 		element.remove("schemaVersion");
 		if (schemaVersion > oldestSupportedVersion) throw new UnsupportedOperationException();
