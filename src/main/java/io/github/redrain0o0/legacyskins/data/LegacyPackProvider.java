@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonWriter;
 import com.mojang.serialization.JsonOps;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
+import io.github.redrain0o0.legacyskins.schema.Migrator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.Util;
 import net.minecraft.core.HolderLookup;
@@ -41,7 +42,7 @@ public abstract class LegacyPackProvider implements DataProvider {
 		return registryLookup.thenCompose(v -> {
 			addPacks(new InternalPackBuilder(packs));
 			JsonElement element = LegacySkinPack.MAP_CODEC.encodeStart(JsonOps.INSTANCE, packs).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
-			System.out.println(element);
+			element = Migrator.SKIN_PACKS_FIXER.addSchemaVersion(JsonOps.INSTANCE, element);
 			return saveNotStable(cachedOutput, element, dataOutput.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(dataOutput.getModId()).resolve("skin_packs.json"));
 		});
 	}

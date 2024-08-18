@@ -1,5 +1,6 @@
 package io.github.redrain0o0.legacyskins.client;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
@@ -8,6 +9,7 @@ import io.github.redrain0o0.legacyskins.Constants;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
+import io.github.redrain0o0.legacyskins.schema.Migrator;
 import io.github.redrain0o0.legacyskins.util.SkinTextureToCustomPlayerModel;
 import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 import net.minecraft.resources.ResourceLocation;
@@ -52,7 +54,8 @@ public record LegacySkinPack(ResourceLocation icon, List<LegacySkin> skins, Lega
 				resourceManager.getResource(ResourceLocation.tryBuild(name, PACKS)).ifPresent(r -> {
 					try {
 						BufferedReader bufferedReader = r.openAsReader();
-						JsonObject obj = GsonHelper.parse(bufferedReader);
+						JsonElement obj = GsonHelper.parse(bufferedReader);
+						obj = Migrator.SKIN_PACKS_FIXER.fix(JsonOps.INSTANCE, obj);
 						Map<ResourceLocation, LegacySkinPack> map = MAP_CODEC.parse(JsonOps.INSTANCE, obj).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
 						packs.putAll(map);
 						bufferedReader.close();
