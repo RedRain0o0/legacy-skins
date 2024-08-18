@@ -1,12 +1,12 @@
-package io.github.redrain0o0.legacyskins.schema;
+package io.github.redrain0o0.legacyskins.migrator;
 
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
 import io.github.redrain0o0.legacyskins.Legacyskins;
-import io.github.redrain0o0.legacyskins.schema.fixer.Fixer;
-import io.github.redrain0o0.legacyskins.schema.fixer.ScreenTypeFixer;
-import io.github.redrain0o0.legacyskins.schema.fixer.SkinToCurrentSkinFixer;
+import io.github.redrain0o0.legacyskins.migrator.fixer.Fixer;
+import io.github.redrain0o0.legacyskins.migrator.fixer.ScreenTypeFixer;
+import io.github.redrain0o0.legacyskins.migrator.fixer.SkinToCurrentSkinFixer;
 
 import java.util.List;
 

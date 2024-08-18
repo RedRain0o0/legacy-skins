@@ -10,7 +10,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
-import io.github.redrain0o0.legacyskins.schema.Migrator;
+import io.github.redrain0o0.legacyskins.migrator.Migrator;
 import net.fabricmc.loader.api.FabricLoader;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.VisibleForTesting;

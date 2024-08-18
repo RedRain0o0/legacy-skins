@@ -1,4 +1,4 @@
-package io.github.redrain0o0.legacyskins.schema.fixer;
+package io.github.redrain0o0.legacyskins.migrator.fixer;
 
 import com.mojang.serialization.Dynamic;
 

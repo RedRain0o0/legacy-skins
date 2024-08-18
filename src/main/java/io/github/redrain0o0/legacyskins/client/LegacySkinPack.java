@@ -1,7 +1,6 @@
 package io.github.redrain0o0.legacyskins.client;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -9,8 +8,7 @@ import io.github.redrain0o0.legacyskins.Constants;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
-import io.github.redrain0o0.legacyskins.schema.Migrator;
-import io.github.redrain0o0.legacyskins.util.SkinTextureToCustomPlayerModel;
+import io.github.redrain0o0.legacyskins.migrator.Migrator;
 import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;

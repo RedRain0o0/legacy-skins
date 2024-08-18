@@ -7,7 +7,7 @@ import com.google.gson.stream.JsonWriter;
 import com.mojang.serialization.JsonOps;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
-import io.github.redrain0o0.legacyskins.schema.Migrator;
+import io.github.redrain0o0.legacyskins.migrator.Migrator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.Util;
 import net.minecraft.core.HolderLookup;
@@ -23,7 +23,6 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
-import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class LegacyPackProvider implements DataProvider {
