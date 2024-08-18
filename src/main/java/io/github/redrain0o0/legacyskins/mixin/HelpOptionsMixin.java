@@ -24,7 +24,7 @@ public class HelpOptionsMixin extends RenderableVListScreen {
 	//@ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;translatable(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 0), index = 0)
 	@Inject(method = "lambda$new$1(Lnet/minecraft/client/gui/components/Button;)V", at = @At(value = "HEAD"), cancellable = true)
 	private void ChangeSkinButton(Button b, CallbackInfo ci) {
-		this.minecraft.setScreen(new ClassicChangeSkinScreen(this));
+		this.minecraft.setScreen(new ChangeSkinScreen(this));
 		ci.cancel();
 		//return Button.builder(Component.translatable("legacy.menu.change_skin"),(b)-> minecraft.getToasts().addToast(new LegacyTip(Component.literal("Work is progressing!!"), 80, 40).disappearTime(960))).build();
 		//return openScreenButton(Component.translatable("legacy.menu.change_skin"),()->new ChangeSkinScreen(this)).build();
