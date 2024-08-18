@@ -62,8 +62,8 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 					"prisoneralex", "Prisoner Alex",
 					"cyclistalex", "Cyclist Alex",
 					"boxeralex", "Boxer Alex",
-					"devsteve", "Dev Steve",
-					"devalex", "Dev Alex"
+					"devsteve", "Developer Steve",
+					"devalex", "Developer Alex"
 			);
 			System.out.println(models);
 			LegacySkinPack legacySkinPack = new LegacySkinPack(LegacyPackType.DEFAULT, ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "textures/skin_packs/default.png"),
@@ -81,12 +81,7 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 		}
 		// hardcoded
 		builder.addPack(Constants.FAVORITES_PACK, new LegacySkinPack(LegacyPackType.DEFAULT, ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "textures/skin_packs/default.png"), List.of()));
-		// Temporary pack
-		{
-			LegacySkinPack pack = new LegacySkinPack(LegacyPackType.DEFAULT, ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "textures/skin_packs/temporary.png"), List.of(new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/default/b.cpmmodel"))));
-			builder.addPack("temporary", pack);
-		}
-		//Test pack
+		//Dev pack
 		{
 			Map<String, String> models = of(
 					"redrain0o0", "RedRain0o0"

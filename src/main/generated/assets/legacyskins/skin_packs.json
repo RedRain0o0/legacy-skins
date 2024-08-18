@@ -63,14 +63,6 @@
     "icon": "legacyskins:textures/skin_packs/default.png",
     "skins": []
   },
-  "legacyskins:temporary": {
-    "icon": "legacyskins:textures/skin_packs/temporary.png",
-    "skins": [
-      {
-        "model": "legacyskins:skinpacks/default/b.cpmmodel"
-      }
-    ]
-  },
   "legacyskins:dev": {
     "type": "dev",
     "icon": "legacyskins:textures/skin_packs/dev.png",
