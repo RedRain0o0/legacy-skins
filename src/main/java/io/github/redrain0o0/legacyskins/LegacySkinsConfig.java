@@ -58,7 +58,7 @@ public class LegacySkinsConfig {
 
 	@VisibleForTesting
 	public static <T> LegacySkinsConfig fromDynamic(Dynamic<T> dynamic) {
-		Dynamic<T> fix = LegacySkinsDataFixer.fix(dynamic);
+		Dynamic<T> fix = LegacySkinsDataFixer.CONFIG_FIXER.fix(dynamic);
 		return LegacySkinsConfig.CODEC.parse(fix).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
 	}
 
@@ -66,12 +66,7 @@ public class LegacySkinsConfig {
 	public  <T> Dynamic<T> toDynamic(DynamicOps<T> ops) {
 		Dynamic<T> dynamic = new Dynamic<>(ops, ops.emptyMap());
 		dynamic = dynamic.set("schemaVersion", dynamic.createInt(LegacySkinsDataFixer.SCHEMA_VERSION));
-		Optional<T> optionalValue = LegacySkinsConfig.CODEC.encodeStart(ops, this).resultOrPartial(Legacyskins.LOGGER::error);
-		if (optionalValue.isEmpty()) throw new RuntimeException("Config failed to serialize!");
-		T value = optionalValue.get();
-		MapLike<T> map = ops.getMap(value).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
-		T t = ops.mergeToMap(dynamic.getValue(), map).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
-		return new Dynamic<>(ops, t);
+		return LegacySkinsDataFixer.CONFIG_FIXER.addSchemaVersion(dynamic);
 	}
 
 	public static void load() {

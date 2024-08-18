@@ -14,18 +14,18 @@ public class LegacySkinsDataFixerTest {
 
 		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
 			Dynamic<JsonElement> jsonElementDynamic = new Dynamic<>(JsonOps.INSTANCE, load("999.json"));
-			LegacySkinsDataFixer.fix(jsonElementDynamic);
+			LegacySkinsDataFixer.CONFIG_FIXER.fix(jsonElementDynamic);
 		});
 		{
 			Dynamic<JsonElement> jsonElementDynamic = new Dynamic<>(JsonOps.INSTANCE, load("1001.json"));
-			jsonElementDynamic = LegacySkinsDataFixer.fix(jsonElementDynamic);
+			jsonElementDynamic = LegacySkinsDataFixer.CONFIG_FIXER.fix(jsonElementDynamic);
 			Assertions.assertEquals("default", jsonElementDynamic.get("skinsScreen").asString().result().orElse(null));
 			Assertions.assertFalse(jsonElementDynamic.getValue().getAsJsonObject().has("skin"));
 			Assertions.assertTrue(jsonElementDynamic.getValue().getAsJsonObject().has("currentSkin"));
 		}
 		{
 			Dynamic<JsonElement> jsonElementDynamic = new Dynamic<>(JsonOps.INSTANCE, load("1001-without-skin.json"));
-			jsonElementDynamic = LegacySkinsDataFixer.fix(jsonElementDynamic);
+			jsonElementDynamic = LegacySkinsDataFixer.CONFIG_FIXER.fix(jsonElementDynamic);
 			Assertions.assertFalse(jsonElementDynamic.getValue().getAsJsonObject().has("skin"));
 			Assertions.assertFalse(jsonElementDynamic.getValue().getAsJsonObject().has("currentSkin"));
 		}
