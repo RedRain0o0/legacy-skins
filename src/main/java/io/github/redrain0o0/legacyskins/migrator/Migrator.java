@@ -5,7 +5,7 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.migrator.fixer.Fixer;
-import io.github.redrain0o0.legacyskins.migrator.fixer.ScreenTypeFixer;
+import io.github.redrain0o0.legacyskins.migrator.fixer.SkinsScreenFixer;
 import io.github.redrain0o0.legacyskins.migrator.fixer.SkinToCurrentSkinFixer;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class Migrator {
 	private final List<Fixer> fixers;
 	public static final Migrator CONFIG_FIXER = new Migrator(
 			List.of(
-					new ScreenTypeFixer(),
+					new SkinsScreenFixer(),
 					new SkinToCurrentSkinFixer()
 			),
 			1001,

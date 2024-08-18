@@ -2,9 +2,9 @@ package io.github.redrain0o0.legacyskins.migrator.fixer;
 
 import com.mojang.serialization.Dynamic;
 
-public class ScreenTypeFixer extends Fixer {
+public class SkinsScreenFixer extends Fixer {
 
-	public ScreenTypeFixer() {
+	public SkinsScreenFixer() {
 		super(1001);
 	}
 
