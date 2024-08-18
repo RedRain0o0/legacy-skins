@@ -33,6 +33,13 @@ public class Migrator {
 	private final int schemaVersion;
 	private final int defaultValue;
 
+	/**
+	 *
+	 * @param fixers A list of {@link Fixer}s
+	 * @param defaultValue The default schema value, if it is not set
+	 * @param oldestSupportedVersion The oldest supported schema version
+	 * @param schemaVersion The current schema version
+	 */
 	public Migrator(List<Fixer> fixers, int defaultValue, int oldestSupportedVersion, int schemaVersion) {
 		this.fixers = fixers;
 		this.defaultValue = defaultValue;
@@ -40,6 +47,12 @@ public class Migrator {
 		this.schemaVersion = schemaVersion;
 	}
 
+	/**
+	 * @param element The input {@link Dynamic<T>}
+	 * @return The fixed {@link Dynamic<T>}
+	 * @param T The {@link Dynamic<T>}'s underlying value's type.
+	 */
+	@SuppressWarnings("JavadocReference")
 	public <T> Dynamic<T> fix(Dynamic<T> element) {
 		int schemaVersion = element.get("schemaVersion").asInt(defaultValue);
 		if (schemaVersion < oldestSupportedVersion) throw new UnsupportedOperationException();
@@ -55,10 +68,23 @@ public class Migrator {
 		return dynamic;
 	}
 
+	/**
+	 * @param ops {@link DynamicOps<T>}
+	 * @param value The input {@link T}
+	 * @return A fixed {@link T}.
+	 * @param T the input type of the {@code value}
+	 */
+	@SuppressWarnings("JavadocReference")
 	public <T> T fix(DynamicOps<T> ops, T value) {
 		return fix(new Dynamic<>(ops, value)).getValue();
 	}
 
+	/**
+	 * @param dynamic The input {@link Dynamic<T>}
+	 * @return A {@link Dynamic<T>} that has a {@code schemaVersion} key added to it.
+	 * @param T The {@link Dynamic<T>}'s underlying value's type.
+	 */
+	@SuppressWarnings("JavadocReference")
 	public <T> Dynamic<T> addSchemaVersion(Dynamic<T> dynamic) {
 		DynamicOps<T> ops = dynamic.getOps();
 		Dynamic<T> newDynamic = new Dynamic<>(ops, ops.emptyMap());
@@ -68,6 +94,13 @@ public class Migrator {
 		return new Dynamic<>(ops, t);
 	}
 
+	/**
+	 * @param ops {@link DynamicOps<T>}
+	 * @param value The input {@link T}
+	 * @return A {@link T} that has a {@code schemaVersion} key added to it.
+	 * @param T the input type of the {@code value}
+	 */
+	@SuppressWarnings("JavadocReference")
 	public <T> T addSchemaVersion(DynamicOps<T> ops, T value) {
 		return addSchemaVersion(new Dynamic<>(ops, value)).getValue();
 	}
