@@ -19,17 +19,24 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Optional;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class LegacySkinsConfig {
 	public static final Codec<LegacySkinsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			SkinReference.CODEC.optionalFieldOf("currentSkin").forGetter(LegacySkinsConfig::getCurrentSkin),
-			Codec.list(SkinReference.CODEC).xmap(ArrayList::new, c -> c).fieldOf("favorites").forGetter(LegacySkinsConfig::getFavorites)
+			Codec.list(SkinReference.CODEC).xmap(ArrayList::new, c -> c).fieldOf("favorites").forGetter(LegacySkinsConfig::getFavorites),
+			SkinsScreen.CODEC.optionalFieldOf("skinsScreen", SkinsScreen.DEFAULT).forGetter(LegacySkinsConfig::getSkinsScreen)
 	).apply(instance, LegacySkinsConfig::new));
+	private final SkinsScreen screen;
 	// selected skin
 	public Optional<SkinReference> skin;
 	// Note: American English
+	/**
+	 * @deprecated Use {@link LegacySkinsConfig#getFavorites()}
+	 */
+	@Deprecated
 	public ArrayList<SkinReference> favorites;
 
 	public Optional<SkinReference> getCurrentSkin() {
@@ -40,9 +47,20 @@ public class LegacySkinsConfig {
 		return favorites;
 	}
 
-	public LegacySkinsConfig(Optional<SkinReference> skin, ArrayList<SkinReference> favorites) {
+	public SkinsScreen getSkinsScreen() {
+		return screen;
+	}
+
+	public enum SkinsScreen {
+		DEFAULT,
+		CLASSIC;
+		public static final Codec<SkinsScreen> CODEC = Codec.STRING.xmap(a -> SkinsScreen.valueOf(a.toUpperCase(Locale.ROOT)), a -> a.name().toLowerCase(Locale.ROOT));
+	}
+
+	public LegacySkinsConfig(Optional<SkinReference> skin, ArrayList<SkinReference> favorites, SkinsScreen screen) {
 		this.skin = skin;
 		this.favorites = favorites;
+		this.screen = screen;
 	}
 
 	public void setSkin(@Nullable SkinReference skin) {
@@ -80,7 +98,7 @@ public class LegacySkinsConfig {
 			Legacyskins.INSTANCE = fromDynamic(jsonElementDynamic);
 
 		} else {
-			new LegacySkinsConfig(Optional.empty(), new ArrayList<>()).save();
+			new LegacySkinsConfig(Optional.empty(), new ArrayList<>(), SkinsScreen.DEFAULT).save();
 		}
 	}
 

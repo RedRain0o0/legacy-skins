@@ -1,5 +1,7 @@
 package io.github.redrain0o0.legacyskins.mixin;
 
+import io.github.redrain0o0.legacyskins.LegacySkinsConfig;
+import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.client.screen.ChangeSkinScreen;
 import io.github.redrain0o0.legacyskins.client.screen.ClassicChangeSkinScreen;
 import net.minecraft.client.gui.components.Button;
@@ -24,7 +26,7 @@ public class HelpOptionsMixin extends RenderableVListScreen {
 	//@ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;translatable(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 0), index = 0)
 	@Inject(method = "lambda$new$1(Lnet/minecraft/client/gui/components/Button;)V", at = @At(value = "HEAD"), cancellable = true)
 	private void ChangeSkinButton(Button b, CallbackInfo ci) {
-		this.minecraft.setScreen(new ChangeSkinScreen(this));
+		this.minecraft.setScreen(Legacyskins.INSTANCE.getSkinsScreen() == LegacySkinsConfig.SkinsScreen.DEFAULT ? new ChangeSkinScreen(this) : new ClassicChangeSkinScreen(this));
 		ci.cancel();
 		//return Button.builder(Component.translatable("legacy.menu.change_skin"),(b)-> minecraft.getToasts().addToast(new LegacyTip(Component.literal("Work is progressing!!"), 80, 40).disappearTime(960))).build();
 		//return openScreenButton(Component.translatable("legacy.menu.change_skin"),()->new ChangeSkinScreen(this)).build();
