@@ -81,6 +81,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		minecraft = Minecraft.getInstance();
 		//int[] index = new int[]{0};
 		LegacySkinPack.list.forEach((id, pack) -> {
+			if (pack.type() == LegacyPackType.DEV && !Legacyskins.INSTANCE.showDevPacks() && !Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).pack().equals(id)) return;
 			Button button = new Button(0, 0, 260, 20, Component.translatable(Util.makeDescriptionId("skin_pack", id)), b -> {}, Supplier::get){
 				@Override
 				protected void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {

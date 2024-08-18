@@ -72,6 +72,7 @@
     ]
   },
   "legacyskins:dev": {
+    "type": "dev",
     "icon": "legacyskins:textures/skin_packs/dev.png",
     "skins": [
       {

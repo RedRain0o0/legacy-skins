@@ -10,5 +10,6 @@
   "skin_pack.legacyskins.temporary": "Temporary",
   "skin_pack.legacyskins.dev": "Dev Pack",
   "legacyskins.packType.default": "Skin pack",
-  "legacyskins.packType.mashup": "Mash-up pack"
+  "legacyskins.packType.mashup": "Mash-up pack",
+  "legacyskins.packType.dev": "Dev pack"
 }
