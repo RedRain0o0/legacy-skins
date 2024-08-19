@@ -1,8 +1,5 @@
 package io.github.redrain0o0.legacyskins.client.screen;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -30,7 +27,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.LivingEntity;
 import org.joml.Quaternionf;
 import wily.legacy.Legacy4J;
@@ -38,20 +34,21 @@ import wily.legacy.client.ControlType;
 import wily.legacy.client.controller.BindingState;
 import wily.legacy.client.controller.Controller;
 import wily.legacy.client.controller.ControllerBinding;
-import wily.legacy.client.screen.*;
+import wily.legacy.client.screen.ControlTooltip;
+import wily.legacy.client.screen.LegacyScrollRenderer;
+import wily.legacy.client.screen.Panel;
+import wily.legacy.client.screen.PanelVListScreen;
+import wily.legacy.client.screen.ScrollableRenderer;
 import wily.legacy.init.LegacyRegistries;
 import wily.legacy.util.LegacySprites;
-import wily.legacy.util.ModInfo;
 import wily.legacy.util.ScreenUtil;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import static wily.legacy.client.screen.ControlTooltip.COMPOUND_ICON_FUNCTION;
 
 public class ChangeSkinScreen extends PanelVListScreen implements Controller.Event, ControlTooltip.Event {
-	protected final Map<ModInfo, SizedLocation> modLogosCache = new ConcurrentHashMap<>();
 	protected final Minecraft minecraft;
 	protected final Panel tooltipBox = Panel.tooltipBoxOf(panel, 350);
 	protected ScrollableRenderer scrollableRenderer = new ScrollableRenderer(new LegacyScrollRenderer());
@@ -156,7 +153,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			PlayerSkinWidget element3 = this.playerSkinWidgetList.element3;
 			if (element3 != null) {
 				SkinReference skinReference = element3.skinRef.get();
-				ArrayList<SkinReference> favorites = Legacyskins.INSTANCE.favorites;
+				ArrayList<SkinReference> favorites = Legacyskins.INSTANCE.getFavorites();
 				if (favorites.contains(skinReference)) {
 					favorites.removeIf(skinReference::equals);
 				} else {
@@ -175,7 +172,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		super.addControlTooltips(renderer);
 		renderer.set(0, () -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_RETURN) : ControllerBinding.DOWN_BUTTON.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.select_skin"));
 		renderer.set(1, () -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_ESCAPE) : ControllerBinding.RIGHT_BUTTON.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.cancel"));
-		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.UP_BUTTON.bindingState.getIcon(), () -> Component.translatable(this.playerSkinWidgetList != null && Legacyskins.INSTANCE.favorites.contains(this.playerSkinWidgetList.element3.skinRef.get()) ? "legacyskins.menu.unfavorite" : "legacyskins.menu.favorite"));
+		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.UP_BUTTON.bindingState.getIcon(), () -> Component.translatable(this.playerSkinWidgetList != null && Legacyskins.INSTANCE.getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get()) ? "legacyskins.menu.unfavorite" : "legacyskins.menu.favorite"));
 		renderer.add(() -> ControlType.getActiveType().isKbm() ? COMPOUND_ICON_FUNCTION.apply(new ControlTooltip.Icon[]{ControlTooltip.getKeyIcon(InputConstants.KEY_LEFT),ControlTooltip.SPACE_ICON,ControlTooltip.getKeyIcon(InputConstants.KEY_RIGHT)})  : ControllerBinding.LEFT_STICK.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.navigate"));
 		//renderer.add(()-> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.LEFT_STICK.bindingState.getIcon(), ()-> null);
 	}
@@ -202,7 +199,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
 					guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
 				}
-				if (Legacyskins.INSTANCE.favorites.contains(this.playerSkinWidgetList.element3.skinRef.get())) {
+				if (Legacyskins.INSTANCE.getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get())) {
 					guiGraphics.blit(ResourceLocation.withDefaultNamespace("textures/gui/sprites/hud/heart/container.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
 					guiGraphics.blit(ResourceLocation.withDefaultNamespace("textures/gui/sprites/hud/heart/full.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
 				}
@@ -264,6 +261,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 			//RenderSystem.enableScissor(panel.x + panel.width - 2, panel.y + 16, tooltipBox.getWidth() - 18, tooltipBox.getHeight() - 80);
 
+			//noinspection ConstantValue
 			if (false) {
 				LayerDefinition layerDefinition = LayerDefinitions.createRoots().get(ModelLayers.PLAYER);
 				PlayerModel<LivingEntity> livingEntityPlayerModel = new PlayerModel<>(layerDefinition.bakeRoot(), false);
@@ -278,9 +276,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				Lighting.setupFor3DItems();
 				guiGraphics.pose().popPose();
 			}
-
-			//RenderSystem.disableScissor();
-			
 		}
 	}
 
@@ -313,24 +308,22 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	void openToCurrentSkin() {
 		Optional<SkinReference> currentSkin = Legacyskins.INSTANCE.getCurrentSkin();
 		SkinReference ref = currentSkin.orElse(new SkinReference(Constants.DEFAULT_PACK, 0));
-		if (Legacyskins.INSTANCE.favorites.contains(ref)) {
+		if (Legacyskins.INSTANCE.getFavorites().contains(ref)) {
 			this.focusedPack = Pair.of(Constants.FAVORITES_PACK, LegacySkinPack.list.get(Constants.FAVORITES_PACK));
 			this.queuedChangeSkinPack = true;
 			this.setFocused(this.buttons.get(focusedPack.getFirst()));
-			skinPack(Legacyskins.INSTANCE.favorites.indexOf(ref));
+			skinPack(Legacyskins.INSTANCE.getFavorites().indexOf(ref));
 			return;
 		}
 		if (currentSkin.isEmpty()) {
 			// No skin
-			Pair<ResourceLocation, LegacySkinPack> pack = Pair.of(Constants.DEFAULT_PACK, LegacySkinPack.list.get(Constants.DEFAULT_PACK));
-			this.focusedPack = pack;
+			this.focusedPack = Pair.of(Constants.DEFAULT_PACK, LegacySkinPack.list.get(Constants.DEFAULT_PACK));
 			this.queuedChangeSkinPack = true;
 			this.setFocused(this.buttons.get(focusedPack.getFirst()));
 			skinPack(0);
 		} else {
 			SkinReference skinReference = currentSkin.get();
-			Pair<ResourceLocation, LegacySkinPack> pack = Pair.of(skinReference.pack(), LegacySkinPack.list.get(skinReference.pack()));
-			this.focusedPack = pack;
+			this.focusedPack = Pair.of(skinReference.pack(), LegacySkinPack.list.get(skinReference.pack()));
 			this.queuedChangeSkinPack = true;
 			this.setFocused(this.buttons.get(focusedPack.getFirst()));
 			skinPack(skinReference.ordinal());
@@ -338,7 +331,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	}
 
 	void skinPack() {
-		if (this.focusedPack.getFirst().equals(Constants.FAVORITES_PACK) && Legacyskins.INSTANCE.favorites.contains(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
+		if (this.focusedPack.getFirst().equals(Constants.FAVORITES_PACK) && Legacyskins.INSTANCE.getFavorites().contains(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
 			skinPack(Legacyskins.INSTANCE.getFavorites().indexOf(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0))));
 		} else if (Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).pack().equals(this.focusedPack.getFirst())) {
 			skinPack(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).ordinal());
@@ -368,49 +361,35 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			int width = (tooltipBox.getWidth() - 23);
 			int height = tooltipBox.getHeight() - 80 - 50 + 40;
 			// wedge the skins between 2 scissor renderables
-			addRenderableOnly(f = new Renderable() {
-
-				@Override
-				public void render(GuiGraphics guiGraphics, int i, int j, float f) {
-					//guiGraphics.fill(x, y, x+width, y+height, 0x7fffffff);
-					guiGraphics.enableScissor(x, y, x+width, y+height);
-				}
+			addRenderableOnly(f = (guiGraphics, i, j, f) -> {
+				guiGraphics.enableScissor(x, y, x+width, y+height);
 			});
 			List<SkinReference> skins = new ArrayList<>();
 			while (quota > 0) {
 				int i = 0;
 				if (Constants.FAVORITES_PACK.equals(this.focusedPack.getFirst())) {
-					if (Legacyskins.INSTANCE.favorites.isEmpty()) break;
-					for (SkinReference favorite : Legacyskins.INSTANCE.favorites) {
+					if (Legacyskins.INSTANCE.getFavorites().isEmpty()) break;
+					for (SkinReference favorite : Legacyskins.INSTANCE.getFavorites()) {
 						skins.add(favorite);
 						i++;
 						quota--;
 					}
 				} else {
-					for (LegacySkin skin : this.focusedPack.getSecond().skins()) {
+					for (LegacySkin ignored : this.focusedPack.getSecond().skins()) {
 						skins.add(new SkinReference(this.focusedPack.getFirst(), i));
 						i++;
 						quota--;
 					}
 				}
 			}
-			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
-			// tooltipBox.getWidth() - 18, 40
-			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
-			// panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80
+			
 			if (quota > 0) {
 				playerSkinWidgetList = null;
 			} else {
 				playerSkinWidgetList = PlayerSkinWidgetList.of(x + width / 2 - 85 / 2, y + (height) / 2 - 120 / 2, skins.stream().map(a -> this.addRenderableWidget(new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> a))).toArray(PlayerSkinWidget[]::new));
 				playerSkinWidgetList.sortForIndex(index);
 			}
-			addRenderableOnly(g = new Renderable() {
-
-				@Override
-				public void render(GuiGraphics guiGraphics, int i, int j, float f) {
-					guiGraphics.disableScissor();
-				}
-			});
+			addRenderableOnly(g = (guiGraphics, i, j, f) -> guiGraphics.disableScissor());
 		}
 	}
 
@@ -420,30 +399,5 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		super.init();
 		panel.y = panel.y - 15;
 		openToCurrentSkin();
-	}
-
-	//@Override public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float tickDelta) {
-	//    super.render();
-	//    if (focusedMod != null) {
-	//        SizedLocation logo = modLogosCache.get(focusedMod);
-	//        if (logo != null)
-	//            guiGraphics.blit(logo.location, panel.x + panel.width - 5, panel.y + 0, 0.0f, 0.0f, logo.getScaledWidth(28), 28, logo.getScaledWidth(28), 28);
-	//    }
-	//}
-
-//	// TODO whose left and whose right?
-//	// translate the pose before calling renderDoll
-//	// pos < 0 -> faces left
-//	// pos = 0 -> faces forwards
-//	// pos > 0 -> faces right
-//	public void renderDoll(GuiGraphics graphics, double pos, LegacySkin skin) {
-//		//CPMCompat.createRenderer().setRenderModel();
-//		CPMCompat.createRenderer().setRenderModel(new PlayerModel<>());
-//	}
-
-	public record SizedLocation(ResourceLocation location, int width, int height) {
-		public int getScaledWidth(int height) {
-			return (int) (height * ((float) width / height()));
-		}
 	}
 }
