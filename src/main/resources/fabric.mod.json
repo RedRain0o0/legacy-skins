@@ -10,6 +10,7 @@
   ],
   "contact": {
     "homepage": "https://modrinth.com/mod/legacy-skins",
+    "issues": "https://github.com/RedRain0o0/legacy-skins/issues",
     "sources": "https://github.com/RedRain0o0/legacy-skins"
   },
   "license": "MIT",
