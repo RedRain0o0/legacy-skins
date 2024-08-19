@@ -76,6 +76,14 @@ public class LegacySkinsConfig {
 			LegacySkinUtils.switchSkin(null);
 			return;
 		}
+		if (skin != null && LegacySkinPack.list.get(skin.pack()) == null) {
+			try {
+				throw new NullPointerException("Cannot set skin " + skin.pack() + ":" + skin.ordinal() + " because " + skin.pack() + " is null!");
+			} catch (Throwable t) {
+				Legacyskins.LOGGER.error("Attempted to set a skin that has no pack!", t);
+				return;
+			}
+		}
 		this.skin = Optional.ofNullable(skin);
 		LegacySkinUtils.switchSkin(skin != null ? LegacySkinPack.list.get(skin.pack()).skins().get(skin.ordinal()) : null);
 	}

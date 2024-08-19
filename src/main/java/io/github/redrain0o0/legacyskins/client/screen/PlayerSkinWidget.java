@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.tom.cpm.api.IClientAPI;
@@ -15,6 +16,7 @@ import com.tom.cpm.shared.MinecraftClientAccess;
 import com.tom.cpm.shared.animation.AnimationEngine;
 import com.tom.cpm.shared.animation.AnimationHandler;
 import io.github.redrain0o0.legacyskins.CPMCompat;
+import io.github.redrain0o0.legacyskins.Constants;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
@@ -77,7 +79,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 		originalHeight = height;
 		this.model = PlayerSkinWidget.Model.bake(entityModelSet);
 		this.skinRef = supplier;
-		this.skin = () -> LegacySkinPack.list.get(this.skinRef.get().pack()).skins().get(this.skinRef.get().ordinal());
+		this.skin = () -> Optional.ofNullable(LegacySkinPack.list.get(this.skinRef.get().pack())).map(LegacySkinPack::skins).map(a -> a.get(this.skinRef.get().ordinal())).orElse(this.skinRef.get().equals(new SkinReference(Constants.DEFAULT_PACK, 0)) ? null : Constants.FALLBACK_SKIN);
 	}
 
 	public boolean isInterpolating() {
