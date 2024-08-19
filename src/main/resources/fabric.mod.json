@@ -1,43 +1,43 @@
 {
-	"schemaVersion": 1,
-	"id": "legacyskins",
-	"version": "${version}",
-	"name": "Legacy Skins",
-	"description": "An addon for Legacy4J and Customizable Player Models that brings back the ability to choose skins!",
-	"authors": [
-		"RedRain0o0",
-		"Jab125"
-	],
-	"contact": {
-		"homepage": "https://modrinth.com/mod/legacy-skins",
-		"sources": "https://github.com/RedRain0o0/legacy-skins"
-	},
-	"license": "MIT",
-	"icon": "assets/legacyskins/icon.png",
-	"environment": "*",
-	"entrypoints": {
-      "main": [
-        "io.github.redrain0o0.legacyskins.Legacyskins"
-      ],
-      "client": [
-        "io.github.redrain0o0.legacyskins.client.LegacySkinsClient"
-      ],
-      "cpmapi": [
-        "io.github.redrain0o0.legacyskins.CPMCompat"
-      ],
-      "fabric-datagen": [
-        "io.github.redrain0o0.legacyskins.data.LegacySkinsDataGenerator"
-      ]
-	},
-	"mixins": [
-		"legacyskins.mixins.json"
-	],
-	"depends": {
-		"fabricloader": ">=0.15.11",
-		"minecraft": "~1.21",
-		"java": ">=21",
-		"fabric-api": "*",
-		"legacy": "*",
-		"cpm": "*"
-	}
+  "schemaVersion": 1,
+  "id": "legacyskins",
+  "version": "${version}",
+  "name": "Legacy Skins",
+  "description": "An addon for Legacy4J and Customizable Player Models that brings back the ability to choose skins!",
+  "authors": [
+    "RedRain0o0",
+    "Jab125"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/legacy-skins",
+    "sources": "https://github.com/RedRain0o0/legacy-skins"
+  },
+  "license": "MIT",
+  "icon": "assets/legacyskins/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.redrain0o0.legacyskins.Legacyskins"
+    ],
+    "client": [
+      "io.github.redrain0o0.legacyskins.client.LegacySkinsClient"
+    ],
+    "cpmapi": [
+      "io.github.redrain0o0.legacyskins.CPMCompat"
+    ],
+    "fabric-datagen": [
+      "io.github.redrain0o0.legacyskins.data.LegacySkinsDataGenerator"
+    ]
+  },
+  "mixins": [
+    "legacyskins.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": "~1.21",
+    "java": ">=21",
+    "fabric-api": "*",
+    "legacy": "*",
+    "cpm": "*"
+  }
 }
