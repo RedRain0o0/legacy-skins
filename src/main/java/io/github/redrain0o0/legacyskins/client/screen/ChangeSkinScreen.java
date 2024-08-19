@@ -55,21 +55,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	protected final Minecraft minecraft;
 	protected final Panel tooltipBox = Panel.tooltipBoxOf(panel, 350);
 	protected ScrollableRenderer scrollableRenderer = new ScrollableRenderer(new LegacyScrollRenderer());
-	protected ModInfo focusedMod;
-	protected final LoadingCache<ModInfo, List<FormattedCharSequence>> modLabelsCache = CacheBuilder.newBuilder().build(new CacheLoader<>() {
-		@Override
-		public List<FormattedCharSequence> load(ModInfo key) {
-			List<Component> components = new ArrayList<>();
-			SizedLocation logo = modLogosCache.get(key);
-			if (logo != null && logo.getScaledWidth(28) >= 120) {
-				components.add(Component.literal(focusedMod.getName()));
-				components.add(Component.translatable("legacy.menu.mods.id", focusedMod.getId()));
-			}
-
-			MultilineTooltip tooltip = new MultilineTooltip(components, tooltipBox.getWidth() - 16);
-			return tooltip.toCharSequence(minecraft);
-		}
-	});
 	private Pair<ResourceLocation, LegacySkinPack> focusedPack;
 	private PlayerSkinWidgetList playerSkinWidgetList;
 	private final Map<ResourceLocation, Button> buttons = new HashMap<>();
@@ -295,20 +280,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			}
 
 			//RenderSystem.disableScissor();
-
-			if (focusedMod != null) {
-				List<FormattedCharSequence> label = modLabelsCache.getUnchecked(focusedMod);
-				scrollableRenderer.scrolled.max = Math.max(0, label.size() - (tooltipBox.getHeight() - 50) / 12);
-				SizedLocation logo = modLogosCache.get(focusedMod);
-				int x = panel.x + panel.width + (logo == null ? 5 : logo.getScaledWidth(28) + 10);
-				if (logo != null)
-					guiGraphics.blit(logo.location, panel.x + panel.width - 5, panel.y, 0.0f, 0.0f, logo.getScaledWidth(28), 28, logo.getScaledWidth(28), 28);
-				if (logo == null || logo.getScaledWidth(28) < 120) {
-					//ScreenUtil.renderScrollingString(guiGraphics, font, Component.translatable("legacy.menu.mods.id", focusedMod.getId()), x, panel.y + 12, panel.x + panel.width + 185, panel.y + 24, 0xFFFFFF, true);
-					//ScreenUtil.renderScrollingString(guiGraphics, font, Component.translatable("legacy.menu.mods.version",focusedMod.getVersion()), x, panel.y + 24, panel.x + panel.width + 185, panel.y + 36, 0xFFFFFF, true);
-				}
-				scrollableRenderer.render(guiGraphics, panel.x + panel.width + 5, panel.y + 38, tooltipBox.getWidth() - 16, tooltipBox.getHeight() - 50, () -> label.forEach(c -> guiGraphics.drawString(font, c, panel.x + panel.width + 5, panel.y + 41 + label.indexOf(c) * 12, 0xFFFFFF)));
-			}
+			
 		}
 	}
 
