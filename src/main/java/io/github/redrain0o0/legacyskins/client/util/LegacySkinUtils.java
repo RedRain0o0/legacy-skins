@@ -42,7 +42,7 @@ public class LegacySkinUtils {
 			Resource resource = Minecraft.getInstance().getResourceManager().getResource(texture).orElseThrow();
 			return resource.open();
 		} catch (Throwable t) {
-			return from(new LegacySkin(ResourceLocation.fromNamespaceAndPath("legacyskins", "skinpacks/temporary/alex.cpmmodel")));
+			return from(new LegacySkin(ResourceLocation.fromNamespaceAndPath("legacyskins", "fallback.cpmmodel")));
 		}
 	}
 
