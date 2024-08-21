@@ -7,6 +7,7 @@ import java.util.Locale;
 
 public enum LegacyPackType {
 	DEFAULT,
+	SKIN,
 	MASHUP,
 	DEV;
 	public static final Codec<LegacyPackType> CODEC = Codec.STRING.xmap(a -> LegacyPackType.valueOf(a.toUpperCase(Locale.ROOT)), a -> a.name().toLowerCase(Locale.ROOT));
