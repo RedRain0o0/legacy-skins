@@ -25,8 +25,11 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.client.resources.sounds.Sound;
+import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import org.joml.Quaternionf;
 import wily.legacy.Legacy4J;
@@ -114,6 +117,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		if (keyCode == InputConstants.KEY_RETURN) {
 			if (this.playerSkinWidgetList != null) {
 				Legacyskins.INSTANCE.setSkin(this.playerSkinWidgetList.element3.skinRef.get());
+				ScreenUtil.playSimpleUISound(SoundEvents.UI_BUTTON_CLICK.value(), 1.0f);
 			}
 			return true;
 		}
@@ -172,6 +176,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			if (Constants.FAVORITES_PACK.equals(this.focusedPack.getFirst())) {
 				skinPack(playerSkinWidgetList.element4.skinRef.get().ordinal());
 			}
+			ScreenUtil.playSimpleUISound(SoundEvents.UI_BUTTON_CLICK.value(), 1.0f);
 		}
 	}
 
