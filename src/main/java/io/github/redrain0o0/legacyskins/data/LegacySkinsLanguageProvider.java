@@ -1,16 +1,31 @@
 package io.github.redrain0o0.legacyskins.data;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-import net.minecraft.core.HolderLookup;
+import io.github.redrain0o0.legacyskins.util.PlatformUtils;
+
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+//? if fabric {
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.minecraft.core.HolderLookup;
+import java.util.concurrent.CompletableFuture;
+//?} if neoforge {
+/*import net.neoforged.neoforge.common.data.LanguageProvider;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import net.minecraft.data.PackOutput;
+import java.io.Reader;
+import java.nio.file.Files;
+*///?}
 
+//? if fabric
 public class LegacySkinsLanguageProvider extends FabricLanguageProvider {
+//? if neoforge
+/*public class LegacySkinsLanguageProvider extends LanguageProvider {*/
+	//? if fabric {
 	protected LegacySkinsLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
 		super(dataOutput, registryLookup);
 	}
@@ -18,22 +33,54 @@ public class LegacySkinsLanguageProvider extends FabricLanguageProvider {
 	protected LegacySkinsLanguageProvider(FabricDataOutput dataOutput, String languageCode, CompletableFuture<HolderLookup.Provider> registryLookup) {
 		super(dataOutput, languageCode, registryLookup);
 	}
+	//?} else if neoforge {
+	/*protected LegacySkinsLanguageProvider(PackOutput dataOutput) {
+		super(dataOutput, "legacyskins", "en_us");
+	}
+	*///?}
 
 	@Override
+	//? if fabric
 	public void generateTranslations(HolderLookup.Provider registryLookup, TranslationBuilder translationBuilder) {
-		Path existingFilePath = dataOutput.getModContainer().findPath("assets/legacyskins/lang/en_us.existing.json").get();
+	//? if neoforge
+	/*public void addTranslations() {*/
+		Path existingFilePath = PlatformUtils.findInMod("assets/legacyskins/lang/en_us.existing.json");
 		try {
+			//? if fabric {
 			translationBuilder.add(existingFilePath);
+			//?} else if neoforge {
+			/*try (Reader reader = Files.newBufferedReader(existingFilePath)) {
+				JsonObject translations = JsonParser.parseReader(reader).getAsJsonObject();
+
+				for (String key : translations.keySet()) {
+					add(key, translations.get(key).getAsString());
+				}
+			}
+			*///?}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		for (Consumer<TranslationBuilder> translationBuilderConsumer : queued) {
-			translationBuilderConsumer.accept(translationBuilder);
+		//? if !fabric {
+		/*DeferredTranslation deferredTranslation = new DeferredTranslation() {
+			@Override
+			public void add(String key, String value) {
+				LegacySkinsLanguageProvider.this.add(key, value);
+			}
+		};
+		*///?}
+		for (Consumer</*? if fabric {*/TranslationBuilder/*?} else {*//*DeferredTranslation*//*?}*/> translationBuilderConsumer : queued) {
+			translationBuilderConsumer.accept(/*? if fabric {*/translationBuilder/*?} else {*//*deferredTranslation*//*?}*/);
 		}
 	}
 
-	public static final ArrayList<Consumer<TranslationBuilder>> queued = new ArrayList<>();
-	public static void addQueuedTranslation(Consumer<TranslationBuilder> builder) {
+	public static final ArrayList<Consumer</*? if fabric {*/TranslationBuilder/*?} else {*//*DeferredTranslation*//*?}*/>> queued = new ArrayList<>();
+	public static void addQueuedTranslation(Consumer</*? if fabric {*/TranslationBuilder/*?} else {*//*DeferredTranslation*//*?}*/> builder) {
 		queued.add(builder);
 	}
+
+	//? if !fabric {
+	/*public interface DeferredTranslation {
+		void add(String key, String value);
+	}
+	*///?}
 }

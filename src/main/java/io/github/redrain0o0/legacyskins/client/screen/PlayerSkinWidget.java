@@ -13,11 +13,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.tom.cpm.api.IClientAPI;
-import com.tom.cpm.mixin.CapeLayerMixin;
-import com.tom.cpm.shared.MinecraftClientAccess;
 import com.tom.cpm.shared.animation.AnimationEngine;
-import com.tom.cpm.shared.animation.AnimationHandler;
-import com.tom.cpm.shared.model.TextureSheetType;
 import io.github.redrain0o0.legacyskins.CPMCompat;
 import io.github.redrain0o0.legacyskins.Constants;
 import io.github.redrain0o0.legacyskins.Legacyskins;
@@ -26,29 +22,31 @@ import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import io.github.redrain0o0.legacyskins.mixin.PlayerRendererImplAccessor;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
-import net.minecraft.client.model.Model;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.layers.CapeLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.PlayerSkin;
-import net.minecraft.client.resources.SkinManager;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
+//? if fabric {
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+//?} else if neoforge {
+/*import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+*///?}
 
 public class PlayerSkinWidget extends AbstractWidget {
 	private static final float MODEL_OFFSET = 0.0625F;
@@ -241,7 +239,10 @@ public class PlayerSkinWidget extends AbstractWidget {
 
 	private static final HashMap<String, IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile>> rendererHashMap = new HashMap<>();
 
+	//? if fabric
 	@Environment(EnvType.CLIENT)
+	//? if neoforge
+	/*@OnlyIn(Dist.CLIENT)*/
 	static record Model(PlayerModel<?> wideModel, PlayerModel<?> slimModel) {
 		public static PlayerSkinWidget.Model bake(EntityModelSet entityModelSet) {
 			PlayerModel<?> playerModel = new PlayerModel<>(entityModelSet.bakeLayer(ModelLayers.PLAYER), false);

@@ -1,32 +1,45 @@
 package io.github.redrain0o0.legacyskins;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
-import io.github.redrain0o0.legacyskins.util.SkinTextureToCustomPlayerModel;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Optional;
+//? if neoforge {
+/*import net.neoforged.fml.common.Mod;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.InterModComms;
+import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
+*///?}
 
-public class Legacyskins implements ModInitializer {
+import java.util.function.Supplier;
+
+//? if neoforge
+/*@Mod(Legacyskins.MOD_ID)*/
+public class Legacyskins {
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final String MOD_ID = "legacyskins";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static LegacySkinsConfig INSTANCE;
-	static {
-		// Load earlier, so nothing bad happens if CPM loads earlier.
-		LegacySkinsConfig.load();
+
+	public static LegacySkinsConfig lazyInstance() {
+		if (INSTANCE == null) LegacySkinsConfig.load();
+		return INSTANCE;
 	}
-	@Override
+
+	//? if neoforge {
+	/*public Legacyskins(IEventBus bus) {
+		onInitialize();
+		bus.addListener(InterModEnqueueEvent.class, this::event);
+	}
+
+
+	private void event(InterModEnqueueEvent event) {
+		InterModComms.sendTo("cpm", "api", () -> (Supplier<?>) () -> new CPMCompat());
+	}
+	*///?}
+
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.

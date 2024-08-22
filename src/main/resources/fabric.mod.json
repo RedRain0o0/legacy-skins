@@ -18,16 +18,16 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.redrain0o0.legacyskins.Legacyskins"
+      "io.github.redrain0o0.legacyskins.Legacyskins::onInitialize"
     ],
     "client": [
-      "io.github.redrain0o0.legacyskins.client.LegacySkinsClient"
+      "io.github.redrain0o0.legacyskins.client.LegacySkinsClient::onInitializeClient"
     ],
     "cpmapi": [
       "io.github.redrain0o0.legacyskins.CPMCompat"
     ],
     "fabric-datagen": [
-      "io.github.redrain0o0.legacyskins.data.LegacySkinsDataGenerator"
+      "io.github.redrain0o0.legacyskins.data.LegacySkinsDataGenerator::onInitializeDataGenerator"
     ]
   },
   "mixins": [

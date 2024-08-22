@@ -1,3 +1,4 @@
+//? if fabric {
 package io.github.redrain0o0.legacyskins.migrator;
 
 import com.google.gson.Gson;
@@ -79,3 +80,4 @@ public class MigratorTest {
 		}
 	}
 }
+//?}

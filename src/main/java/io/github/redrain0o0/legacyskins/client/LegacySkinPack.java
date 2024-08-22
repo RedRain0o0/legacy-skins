@@ -9,7 +9,6 @@ import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import io.github.redrain0o0.legacyskins.migrator.Migrator;
-import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
@@ -20,10 +19,19 @@ import wily.legacy.util.JsonUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
+//? if fabric {
+import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.function.Consumer;
+//?} else if neoforge {
+/*import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+*///?}
 
 public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<LegacySkin> skins) {
 	public static final Map<ResourceLocation, LegacySkinPack> list = new LinkedHashMap<>();
@@ -35,16 +43,27 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 	public static final Codec<Map<ResourceLocation, LegacySkinPack>> MAP_CODEC = Codec.unboundedMap(ResourceLocation.CODEC, LegacySkinPack.CODEC);
 	private static final String PACKS = "skin_packs.json";
 
+	//? if fabric
 	public static class Manager implements SimpleResourceReloadListener<Map<ResourceLocation, LegacySkinPack>> {
+	//? else if neoforge
+	/*public static class Manager extends SimplePreparableReloadListener<Map<ResourceLocation, LegacySkinPack>> {*/
 		@Override
-		public CompletableFuture<Map<ResourceLocation, LegacySkinPack>> load(ResourceManager resourceManager, ProfilerFiller profiler, Executor executor) {
+		public /*? if fabric {*/ CompletableFuture< /*?}*/ Map<ResourceLocation, LegacySkinPack> /*? if fabric {*/ > load /*?} else if neoforge {*/ /*prepare *//*?}*/(ResourceManager resourceManager, ProfilerFiller profiler /*? if fabric {*/, Executor executor /*?}*/) {
+			//? if fabric {
 			return CompletableFuture.supplyAsync(() -> {
-				Map<ResourceLocation, LegacySkinPack> packs = new LinkedHashMap<>();
-				List<String> allNamespaces = JsonUtil.getOrderedNamespaces(resourceManager).toList();
-				allNamespaces.stream().filter(Legacyskins.MOD_ID::equals).forEach(loadPackData(resourceManager, packs));
-				allNamespaces.stream().filter(a -> !Legacyskins.MOD_ID.equals(a)).forEach(loadPackData(resourceManager, packs));
-				return packs;
+				return loadPacksFromResourceManager(resourceManager);
 			});
+			//?} else if neoforge {
+			/*return loadPacksFromResourceManager(resourceManager);
+			*///?}
+		}
+
+		private static @NotNull Map<ResourceLocation, LegacySkinPack> loadPacksFromResourceManager(ResourceManager resourceManager) {
+			Map<ResourceLocation, LegacySkinPack> packs = new LinkedHashMap<>();
+			List<String> allNamespaces = JsonUtil.getOrderedNamespaces(resourceManager).toList();
+			allNamespaces.stream().filter(Legacyskins.MOD_ID::equals).forEach(loadPackData(resourceManager, packs));
+			allNamespaces.stream().filter(a -> !Legacyskins.MOD_ID.equals(a)).forEach(loadPackData(resourceManager, packs));
+			return packs;
 		}
 
 		private static @NotNull Consumer<String> loadPackData(ResourceManager resourceManager, Map<ResourceLocation, LegacySkinPack> packs) {
@@ -65,13 +84,14 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 		}
 
 		@Override
-		public CompletableFuture<Void> apply(Map<ResourceLocation, LegacySkinPack> data, ResourceManager manager, ProfilerFiller profiler, Executor executor) {
+		public /*? if fabric {*/ CompletableFuture<Void> /*?} else if neoforge {*/ /*void *//*?}*/ apply(Map<ResourceLocation, LegacySkinPack> data, ResourceManager manager, ProfilerFiller profiler /*? if fabric {*/ , Executor executor /*?}*/) {
+			System.out.println(data);
 			LegacySkinUtils.cleanup();
 			list.clear();
 			// The default skin
 			data.get(Constants.DEFAULT_PACK).skins().addFirst(null);
 			list.putAll(data);
-			Optional<SkinReference> skin = Legacyskins.INSTANCE.skin;
+			Optional<SkinReference> skin = Legacyskins.lazyInstance().skin;
 			if (skin.isPresent()) {
 				SkinReference skinReference = skin.get();
 				try {
@@ -81,13 +101,15 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 					Legacyskins.LOGGER.error("Failed to load skin from pack: %s".formatted(skinReference.pack()), t);
 				}
 			}
-			//SkinTextureToCustomPlayerModel.convert(ResourceLocation.parse("minecraft:textures/entity/player/wide/alex.png"), false);
+			//? if fabric
 			return CompletableFuture.completedFuture(null);
 		}
 
+		//? if fabric {
 		@Override
 		public ResourceLocation getFabricId() {
 			return ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "manager");
 		}
+		//?}
 	}
 }

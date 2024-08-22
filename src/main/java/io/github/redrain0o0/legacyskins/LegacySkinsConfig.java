@@ -11,7 +11,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import io.github.redrain0o0.legacyskins.migrator.Migrator;
-import net.fabricmc.loader.api.FabricLoader;
+import io.github.redrain0o0.legacyskins.util.PlatformUtils;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.VisibleForTesting;
 
@@ -108,7 +108,7 @@ public class LegacySkinsConfig {
 	}
 
 	public static void load() {
-		Path configFile = FabricLoader.getInstance().getConfigDir().resolve("legacyskins.json");
+		Path configFile = PlatformUtils.getConfigDir().resolve("legacyskins.json");
 		if (configFile.toFile().isFile()) {
 			JsonElement s = null;
 			try {
@@ -120,12 +120,12 @@ public class LegacySkinsConfig {
 			Legacyskins.INSTANCE = fromDynamic(jsonElementDynamic);
 
 		} else {
-			new LegacySkinsConfig(Optional.empty(), new ArrayList<>(), SkinsScreen.DEFAULT, FabricLoader.getInstance().isDevelopmentEnvironment() /*TODO make loader agnostic */, false).save();
+			new LegacySkinsConfig(Optional.empty(), new ArrayList<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment() /*TODO make loader agnostic */, false).save();
 		}
 	}
 
 	public void save() {
-		Path configFile = FabricLoader.getInstance().getConfigDir().resolve("legacyskins.json");
+		Path configFile = PlatformUtils.getConfigDir().resolve("legacyskins.json");
 		try {
 			JsonOps instance = JsonOps.INSTANCE;
 			Dynamic<JsonElement> dynamic = toDynamic(instance);

@@ -8,6 +8,7 @@ import com.mojang.serialization.JsonOps;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.migrator.Migrator;
+//? if fabric
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.Util;
 import net.minecraft.core.HolderLookup;
@@ -27,10 +28,10 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class LegacyPackProvider implements DataProvider {
 
-	private final FabricDataOutput dataOutput;
+	private final PackOutput dataOutput;
 	private final CompletableFuture<HolderLookup.Provider> registryLookup;
 
-	public LegacyPackProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
+	public LegacyPackProvider(PackOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
 		this.dataOutput = dataOutput;
 		this.registryLookup = registryLookup;
 	}
@@ -39,10 +40,11 @@ public abstract class LegacyPackProvider implements DataProvider {
 	public CompletableFuture<?> run(CachedOutput cachedOutput) {
 		LinkedHashMap<ResourceLocation, LegacySkinPack> packs = new LinkedHashMap<>();
 		return registryLookup.thenCompose(v -> {
-			addPacks(new InternalPackBuilder(packs));
+			InternalPackBuilder internalPackBuilder = new InternalPackBuilder(packs);
+			addPacks(internalPackBuilder);
 			JsonElement element = LegacySkinPack.MAP_CODEC.encodeStart(JsonOps.INSTANCE, packs).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
 			element = Migrator.SKIN_PACKS_FIXER.addSchemaVersion(JsonOps.INSTANCE, element);
-			return saveNotStable(cachedOutput, element, dataOutput.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(dataOutput.getModId()).resolve("skin_packs.json"));
+			return saveNotStable(cachedOutput, element, dataOutput.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(internalPackBuilder.getModId()).resolve("skin_packs.json"));
 		});
 	}
 
@@ -79,7 +81,7 @@ public abstract class LegacyPackProvider implements DataProvider {
 
 	@Override
 	public String getName() {
-		return "Legacy Packs: %s".formatted(dataOutput.getModId());
+		return "Legacy Packs";
 	}
 
 	public sealed interface PackBuilder {
@@ -90,10 +92,12 @@ public abstract class LegacyPackProvider implements DataProvider {
 		}
 
 		default ResourceLocation id(String id) {
-			return !id.contains(":") ? ResourceLocation.fromNamespaceAndPath(getOutput().getModId(), id) : ResourceLocation.parse(id);
+			return !id.contains(":") ? ResourceLocation.fromNamespaceAndPath(getModId(), id) : ResourceLocation.parse(id);
 		}
 
-		FabricDataOutput getOutput();
+		PackOutput getOutput();
+
+		String getModId();
 	}
 
 	private final class InternalPackBuilder implements PackBuilder {
@@ -109,8 +113,16 @@ public abstract class LegacyPackProvider implements DataProvider {
 		}
 
 		@Override
-		public FabricDataOutput getOutput() {
+		public PackOutput getOutput() {
 			return dataOutput;
+		}
+
+		@Override
+		public String getModId() {
+			//? if fabric
+			return ((FabricDataOutput) getOutput()).getModId();
+			//? if !fabric
+			/*return "legacyskins";*/ // TODO
 		}
 	}
 }

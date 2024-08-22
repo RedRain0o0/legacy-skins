@@ -1,13 +1,31 @@
+import io.github.redrain0o0.legacyskins.buildscript.ModLoader
+
+import static io.github.redrain0o0.legacyskins.buildscript.ModLoader.*
+import io.github.redrain0o0.legacyskins.buildscript.ProjectInfo
 plugins {
-	id 'fabric-loom' version '1.7-SNAPSHOT'
 	id 'maven-publish'
 }
 
-version = project.mod_version
+ProjectInfo info = ProjectInfo.from(project)
+String minecraftVersion = info.minecraftVersion()
+ModLoader loader = info.loader()
+
+project.ext["loom.platform"] = loader.friendlyName
+
+version = project.mod_version + "+" + loader.friendlyName + "+" + minecraftVersion
 group = project.maven_group
+
+apply plugin: 'dev.architectury.loom'
+stonecutter.const("fabric", loader == FABRIC)
+stonecutter.const("forge", loader == FORGE)
+stonecutter.const("neoforge", loader == NEOFORGE)
 
 base {
 	archivesName = project.archives_base_name
+}
+
+def packageJar = tasks.create("packageJar", Copy.class) {
+	into("${rootProject.layout.buildDirectory.get()}/libs/$mod_version")
 }
 
 repositories {
@@ -18,6 +36,14 @@ repositories {
 	}
 	maven {
 		url "https://maven.isxander.dev/releases"
+	}
+	if (loader == NEOFORGE) {
+		maven {
+			url "https://maven.neoforged.net/releases"
+		}
+	}
+	maven {
+		url "https://maven.minecraftforge.net/"
 	}
 	exclusiveContent {
 		forRepository {
@@ -36,25 +62,66 @@ dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	compileOnly "com.tom5454.cpm:CustomPlayerModels-API:${project.cpm_api_version}"
-	modImplementation "com.tom5454.cpm:CustomPlayerModels-${project.cpm_loader}-${project.cpm_mc_version}:${project.cpm_runtime_version}"
+	modImplementation "com.tom5454.cpm:CustomPlayerModels-${loader == NEOFORGE ? "" : "${project.cpm_loader}-"}${project.cpm_mc_version}:${project.cpm_runtime_version}"
 	modImplementation "maven.modrinth:legacy4j:${project.legacy4j_version}"
-	localRuntime "dev.isxander:libsdl4j:${project.libsdl4j_version}"
-	implementation include("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")
+	api "dev.isxander:libsdl4j:${project.libsdl4j_version}"
+	if (loader.isForgeLike()) {forgeRuntimeLibrary "dev.isxander:libsdl4j:${project.libsdl4j_version}"}
 
-	testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+	// Fabric exclusive dependencies:
+	if (loader == FABRIC) {
+		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+		implementation include("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")
+		testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+		// Save download time by only depending on Fabric API when it's needed, otherwise just depending on a few modules required to compile Legacy Skins. {
+		if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:$project.fabric_api_version")
+		for (String module in project.properties.fabric_api_modules.split(",") as String[]) {
+			modApi fabricApi.module(module, "$project.properties.fabric_api_version")
+		}
+		// }
+	} else if (loader == NEOFORGE) {
+		neoForge "net.neoforged:neoforge:$project.properties.neoforge_version"
+	}
 }
 
 test {
 	useJUnitPlatform()
 }
 
-fabricApi {
-	configureDataGeneration()
+if (loader == FABRIC) {
+	fabricApi {
+		configureDataGeneration()
+	}
+} else if (loader == NEOFORGE) {
+	loom {
+		afterEvaluate {
+			runs {
+				datagen {
+					data()
+					programArg "--mod"
+					programArg "legacyskins"
+					programArg "--output"
+					programArg getProject().file("src/main/generated").toPath().toAbsolutePath().toString()
+				}
+			}
+		}
+		sourceSets {
+			main {
+				resources {
+					srcDirs += [getProject().file("src/main/generated")]
+				}
+			}
+		}
+	}
+}
+
+loom {
+	runConfigs.all {
+		ideConfigGenerated(true) // Run configurations are not created for subprojects by default
+		runDir = "../../run" // Use a shared run folder and just create separate worlds
+	}
 }
 
 processResources {
@@ -102,4 +169,10 @@ publishing {
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
 	}
+}
+
+afterEvaluate {
+	packageJar.dependsOn(remapJar)
+	packageJar.from(remapJar.archiveFile)
+	build.finalizedBy(packageJar)
 }

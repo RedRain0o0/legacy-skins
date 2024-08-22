@@ -9,6 +9,7 @@
     "EditorGuiAccessor",
     "GeneratorsAccessor",
     "HelpOptionsMixin",
+    "Legacy4JForgeMixin",
     "PlayerRendererImplAccessor",
     "ScreenAccessor"
   ],

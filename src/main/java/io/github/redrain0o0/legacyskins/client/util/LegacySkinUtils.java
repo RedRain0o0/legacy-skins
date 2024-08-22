@@ -5,7 +5,7 @@ import com.tom.cpm.shared.config.ConfigKeys;
 import com.tom.cpm.shared.config.ModConfig;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
-import net.fabricmc.loader.api.FabricLoader;
+import io.github.redrain0o0.legacyskins.util.PlatformUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -47,7 +47,7 @@ public class LegacySkinUtils {
 	}
 
 	public static void cleanup() {
-		Path playerModels = FabricLoader.getInstance().getGameDir().resolve("player_models").resolve("legacyskins-models");
+		Path playerModels = PlatformUtils.getGameDir().resolve("player_models").resolve("legacyskins-models");
 		try {
 			FileUtils.deleteDirectory(playerModels.toFile());
 		} catch (IOException e) {
@@ -57,7 +57,7 @@ public class LegacySkinUtils {
 	}
 
 	public static String temp(ResourceLocation location, byte[] bytes) {
-		Path gameDir = FabricLoader.getInstance().getGameDir();
+		Path gameDir = PlatformUtils.getGameDir();
 		Path playerModels = gameDir.resolve("player_models");
 		Path resolve = playerModels.resolve(Legacyskins.MOD_ID + "-models");
 		Path resolve1 = resolve.resolve(location.hashCode() + ".cpmmodel");
