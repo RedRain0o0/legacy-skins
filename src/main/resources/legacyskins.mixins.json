@@ -9,6 +9,7 @@
     "EditorGuiAccessor",
     "GeneratorsAccessor",
     "HelpOptionsMixin",
+    "PlayerRendererImplAccessor",
     "ScreenAccessor"
   ],
   "injectors": {

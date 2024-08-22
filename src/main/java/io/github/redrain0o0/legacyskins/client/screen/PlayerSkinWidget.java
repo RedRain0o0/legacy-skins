@@ -2,6 +2,7 @@ package io.github.redrain0o0.legacyskins.client.screen;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 
 import java.io.IOException;
@@ -12,15 +13,19 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.tom.cpm.api.IClientAPI;
+import com.tom.cpm.mixin.CapeLayerMixin;
 import com.tom.cpm.shared.MinecraftClientAccess;
 import com.tom.cpm.shared.animation.AnimationEngine;
 import com.tom.cpm.shared.animation.AnimationHandler;
+import com.tom.cpm.shared.model.TextureSheetType;
 import io.github.redrain0o0.legacyskins.CPMCompat;
 import io.github.redrain0o0.legacyskins.Constants;
+import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
+import io.github.redrain0o0.legacyskins.mixin.PlayerRendererImplAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -35,6 +40,7 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.layers.CapeLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.client.resources.SkinManager;
@@ -273,7 +279,11 @@ public class PlayerSkinWidget extends AbstractWidget {
 			}
 			setupAnim(playerModel);
 			if (renderer != null) {
-				renderer.preRender(guiGraphics.bufferSource(), AnimationEngine.AnimationMode.PLAYER);
+				try {
+					renderer.preRender(guiGraphics.bufferSource(), AnimationEngine.AnimationMode.GUI);
+				} catch (Throwable t) {
+					Legacyskins.LOGGER.error("Error!", t);
+				}
 			}
 			if(renderer == null || renderer.getDefaultTexture() != null) {
 				RenderType renderType = null;
@@ -283,6 +293,22 @@ public class PlayerSkinWidget extends AbstractWidget {
 					renderType = playerModel.renderType(insecureSkin.texture());
 				}
 				playerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
+				l:
+				if (renderer != null && renderer.getDefaultTexture() != null) {
+					//CapeLayerMixin
+					renderer.prepareSubModel(playerModel, IClientAPI.SubModelType.CAPE, renderer.getDefaultTexture());
+					if (renderer.getDefaultTexture().equals(((PlayerRendererImplAccessor) renderer).getTextureMap().get(playerModel))) break l;
+					RenderType capeRenderType = renderer.<net.minecraft.client.model.Model>getRenderTypeForSubModel(playerModel); //RenderType.entitySolid(playerSkin.cape().get().texture());
+					guiGraphics.pose().pushPose();
+					guiGraphics.pose().translate(0.0F, 0.0F, 0.125F);
+					PoseStack poseStack = guiGraphics.pose();
+					poseStack.mulPose(Axis.XP.rotationDegrees(6.0F + 0 / 2.0F + 0));
+					poseStack.mulPose(Axis.ZP.rotationDegrees(0 / 2.0F));
+					poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - 0 / 2.0F));
+					poseStack.mulPose(Axis.XP.rotation((float) Math.sin(System.currentTimeMillis() / 500d) / 10f));
+					playerModel.renderCloak(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(capeRenderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
+					guiGraphics.pose().popPose();
+				}
 			}
 			if (renderer != null) {
 				renderer.postRender();
