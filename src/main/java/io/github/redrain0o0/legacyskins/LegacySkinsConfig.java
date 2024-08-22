@@ -28,10 +28,12 @@ public class LegacySkinsConfig {
 			SkinReference.CODEC.optionalFieldOf("currentSkin").forGetter(LegacySkinsConfig::getCurrentSkin),
 			Codec.list(SkinReference.CODEC).xmap(ArrayList::new, c -> c).fieldOf("favorites").forGetter(LegacySkinsConfig::getFavorites),
 			SkinsScreen.CODEC.fieldOf("skinsScreen").forGetter(LegacySkinsConfig::getSkinsScreen),
-			Codec.BOOL.optionalFieldOf("showDevPacks", false).forGetter(LegacySkinsConfig::showDevPacks)
+			Codec.BOOL.optionalFieldOf("showDevPacks", false).forGetter(LegacySkinsConfig::showDevPacks),
+			Codec.BOOL.fieldOf("showSkinEditorButton").forGetter(LegacySkinsConfig::showSkinEditorButton)
 	).apply(instance, LegacySkinsConfig::new));
 	private final SkinsScreen screen;
 	private final boolean showDevPacks;
+	private final boolean showEditorButton;
 	// selected skin
 	public Optional<SkinReference> skin;
 	// Note: American English
@@ -57,17 +59,22 @@ public class LegacySkinsConfig {
 		return showDevPacks;
 	}
 
+	public boolean showSkinEditorButton() {
+		return showEditorButton;
+	}
+
 	public enum SkinsScreen {
 		DEFAULT,
 		CLASSIC;
 		public static final Codec<SkinsScreen> CODEC = Codec.STRING.xmap(a -> SkinsScreen.valueOf(a.toUpperCase(Locale.ROOT)), a -> a.name().toLowerCase(Locale.ROOT));
 	}
 
-	public LegacySkinsConfig(Optional<SkinReference> skin, ArrayList<SkinReference> favorites, SkinsScreen screen, boolean showDevPacks) {
+	public LegacySkinsConfig(Optional<SkinReference> skin, ArrayList<SkinReference> favorites, SkinsScreen screen, boolean showDevPacks, boolean showEditorButton) {
 		this.skin = skin;
 		this.favorites = favorites;
 		this.screen = screen;
 		this.showDevPacks = showDevPacks;
+		this.showEditorButton = showEditorButton;
 	}
 
 	public void setSkin(@Nullable SkinReference skin) {
@@ -113,7 +120,7 @@ public class LegacySkinsConfig {
 			Legacyskins.INSTANCE = fromDynamic(jsonElementDynamic);
 
 		} else {
-			new LegacySkinsConfig(Optional.empty(), new ArrayList<>(), SkinsScreen.DEFAULT, FabricLoader.getInstance().isDevelopmentEnvironment() /*TODO make loader agnostic */).save();
+			new LegacySkinsConfig(Optional.empty(), new ArrayList<>(), SkinsScreen.DEFAULT, FabricLoader.getInstance().isDevelopmentEnvironment() /*TODO make loader agnostic */, false).save();
 		}
 	}
 

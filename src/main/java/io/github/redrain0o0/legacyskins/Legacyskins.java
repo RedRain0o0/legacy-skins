@@ -22,13 +22,15 @@ public class Legacyskins implements ModInitializer {
 	public static final String MOD_ID = "legacyskins";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static LegacySkinsConfig INSTANCE;
-
+	static {
+		// Load earlier, so nothing bad happens if CPM loads earlier.
+		LegacySkinsConfig.load();
+	}
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
-		LegacySkinsConfig.load();
 		//noinspection SpellCheckingInspection
 		LOGGER.debug("Loaded Legacy Skins's config.");
 	}
