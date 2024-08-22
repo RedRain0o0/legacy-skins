@@ -9,27 +9,26 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.DataGenerator;
 
 import java.io.IOException;
-//? else if fabric {
-/^import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
+*///?} else if fabric {
+import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-^///?}
+//?}
 
 //? if neoforge
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Legacyskins.MOD_ID)
+/*@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Legacyskins.MOD_ID)*/
 public class LegacySkinsDataGenerator {
 	//? if fabric {
-	/^public void onInitializeDataGenerator(FabricDataGenerator generator) {
+	public void onInitializeDataGenerator(FabricDataGenerator generator) {
 		FabricDataGenerator.Pack pack = generator.createPack();
 		pack.addProvider(LegacySkinsLegacyPackProvider::new);
 		pack.addProvider(LegacySkinsLanguageProvider::new);
 	}
-	^///?} else if neoforge {
-	@SubscribeEvent
+	//?} else if neoforge {
+	/*@SubscribeEvent
 	public static void event(GatherDataEvent event) throws IOException {
 		DataGenerator generator = event.getGenerator();
 		generator.addProvider(true, (DataProvider.Factory<LegacySkinsLegacyPackProvider>) p -> new LegacySkinsLegacyPackProvider(p, event.getLookupProvider()));
 		generator.addProvider(true, (DataProvider.Factory<LegacySkinsLanguageProvider>) LegacySkinsLanguageProvider::new);
 	}
-	//?}
+	*///?}
 }
-*/
