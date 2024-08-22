@@ -29,6 +29,11 @@ public class MigratorTest {
 			Assertions.assertFalse(jsonElementDynamic.getValue().getAsJsonObject().has("skin"));
 			Assertions.assertFalse(jsonElementDynamic.getValue().getAsJsonObject().has("currentSkin"));
 		}
+		{
+			Dynamic<JsonElement> jsonElementDynamic = new Dynamic<>(JsonOps.INSTANCE, load("1002.json"));
+			jsonElementDynamic = Migrator.CONFIG_FIXER.fix(jsonElementDynamic);
+			System.out.println(jsonElementDynamic.getValue());
+		}
 	}
 
 	private JsonElement load(String str) throws Throwable {

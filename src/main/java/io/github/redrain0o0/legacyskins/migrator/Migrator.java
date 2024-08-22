@@ -4,6 +4,7 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
 import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.migrator.fixer.AddSkinEditorOptionFixer;
 import io.github.redrain0o0.legacyskins.migrator.fixer.Fixer;
 import io.github.redrain0o0.legacyskins.migrator.fixer.SkinsScreenFixer;
 import io.github.redrain0o0.legacyskins.migrator.fixer.SkinToCurrentSkinFixer;
@@ -15,11 +16,12 @@ public class Migrator {
 	public static final Migrator CONFIG_FIXER = new Migrator(
 			List.of(
 					new SkinsScreenFixer(),
-					new SkinToCurrentSkinFixer()
+					new SkinToCurrentSkinFixer(),
+					new AddSkinEditorOptionFixer()
 			),
 			1001,
 			1001,
-			1002
+			1003
 	);
 
 	public static final Migrator SKIN_PACKS_FIXER = new Migrator(
@@ -60,7 +62,8 @@ public class Migrator {
 		if (schemaVersion == this.schemaVersion) return element;
 		Dynamic<T> dynamic = element;
 		for (Fixer fixer : fixers) {
-			if (fixer.minApplicable >= schemaVersion) {
+			System.out.println(fixer.maxApplicable);
+			if (fixer.maxApplicable > schemaVersion) {
 				dynamic = fixer.fix(dynamic);
 			}
 		}

@@ -3,13 +3,13 @@ package io.github.redrain0o0.legacyskins.migrator.fixer;
 import com.mojang.serialization.Dynamic;
 
 public abstract class Fixer {
-	public final int minApplicable;
+	public final int maxApplicable;
 
 	/**
-	 * @param minApplicable The minimum applicable schema version to apple the fix to.
+	 * @param maxApplicable The maximum applicable schema version (-1) to apply the fix to.
 	 */
-	public Fixer(int minApplicable) {
-		this.minApplicable = minApplicable;
+	public Fixer(int maxApplicable) {
+		this.maxApplicable = maxApplicable;
 	}
 
 	/**

@@ -5,7 +5,7 @@ import com.mojang.serialization.Dynamic;
 public class SkinsScreenFixer extends Fixer {
 
 	public SkinsScreenFixer() {
-		super(1001);
+		super(1002);
 	}
 
 	@Override

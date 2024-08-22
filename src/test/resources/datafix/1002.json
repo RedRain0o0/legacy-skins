@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1002,
+  "favorites": [
+    {
+      "pack": "legacyskins:dev",
+      "ordinal": 0
+    },
+    {
+      "pack": "legacyskins:default",
+      "ordinal": 0
+    }
+  ],
+  "skinsScreen": "default",
+  "showDevPacks": true
+}
