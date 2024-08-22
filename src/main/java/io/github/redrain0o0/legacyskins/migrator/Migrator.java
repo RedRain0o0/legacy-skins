@@ -62,7 +62,6 @@ public class Migrator {
 		if (schemaVersion == this.schemaVersion) return element;
 		Dynamic<T> dynamic = element;
 		for (Fixer fixer : fixers) {
-			System.out.println(fixer.maxApplicable);
 			if (fixer.maxApplicable > schemaVersion) {
 				dynamic = fixer.fix(dynamic);
 			}
