@@ -85,7 +85,6 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 
 		@Override
 		public /*? if fabric {*/ CompletableFuture<Void> /*?} else if neoforge {*/ /*void *//*?}*/ apply(Map<ResourceLocation, LegacySkinPack> data, ResourceManager manager, ProfilerFiller profiler /*? if fabric {*/ , Executor executor /*?}*/) {
-			System.out.println(data);
 			LegacySkinUtils.cleanup();
 			list.clear();
 			// The default skin
