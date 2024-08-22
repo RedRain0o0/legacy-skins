@@ -1,17 +1,17 @@
 modLoader = "javafml"
 loaderVersion = "*"
 license = "MIT"
-issueTrackerURL = "https://"
+issueTrackerURL = "https://github.com/RedRain0o0/legacy-skins/issues"
 
 [[mods]]
 logoFile="assets/legacyskins/icon.png"
 modId = "legacyskins"
-version = "0.0.0"
+version = "${version}"
 displayName = "Legacy Skins"
 authors = 'RedRain0o0, Jab125'
 credits = ''
-displayURL = "https://"
-description = "l4j+cpm"
+displayURL = "https://modrinth.com/mod/legacy-skins"
+description = "An addon for Legacy4J and Customizable Player Models that brings back the ability to choose skins!"
 
 [[dependencies.legacyskins]]
 modId = "neoforge"
@@ -30,6 +30,7 @@ ordering = "NONE"
 side = "BOTH"
 
 [modproperties.legacyskins]
-catalogueImageIcon="icon.png"
+# Note, Catalogue's screen never opens, why is this here
+catalogueImageIcon="assets/legacyskins/icon.png"
 [[mixins]]
 config="legacyskins.mixins.json"

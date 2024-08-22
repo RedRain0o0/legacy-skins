@@ -127,9 +127,12 @@ loom {
 processResources {
 	inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
+	filesMatching(["fabric.mod.json", "META-INF/neoforge.mods.toml"]) {
 		expand "version": project.version
 	}
+
+	if (loader != NEOFORGE) exclude "META-INF/neoforge.mods.toml"
+	if (loader != FABRIC) exclude "fabric.mod.json"
 }
 
 tasks.withType(JavaCompile).configureEach {
