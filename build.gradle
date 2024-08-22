@@ -41,10 +41,10 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	compileOnly "com.tom5454.cpm:CustomPlayerModels-API:${project.cpm_api_version}"
-	modImplementation "com.tom5454.cpm:CustomPlayerModels-Fabric-${project.cpm_mc_version}:${project.cpm_runtime_version}"
-	modImplementation "maven.modrinth:legacy4j:1.21-1.7.2+fabric"
-	localRuntime "dev.isxander:libsdl4j:3.693c75e-36"
-	implementation include("io.github.llamalad7:mixinextras-fabric:0.5.0-beta.2")
+	modImplementation "com.tom5454.cpm:CustomPlayerModels-${project.cpm_loader}-${project.cpm_mc_version}:${project.cpm_runtime_version}"
+	modImplementation "maven.modrinth:legacy4j:${project.legacy4j_version}"
+	localRuntime "dev.isxander:libsdl4j:${project.libsdl4j_version}"
+	implementation include("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")
 
 	testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
 }
