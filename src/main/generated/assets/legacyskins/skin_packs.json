@@ -69,6 +69,9 @@
     "skins": [
       {
         "model": "legacyskins:skinpacks/dev/redrain0o0.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/dev/jab125.cpmmodel"
       }
     ]
   }
