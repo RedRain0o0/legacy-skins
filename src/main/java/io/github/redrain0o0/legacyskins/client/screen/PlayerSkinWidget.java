@@ -308,7 +308,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 					poseStack.mulPose(Axis.XP.rotationDegrees(6.0F + 0 / 2.0F + 0));
 					poseStack.mulPose(Axis.ZP.rotationDegrees(0 / 2.0F));
 					poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - 0 / 2.0F));
-					poseStack.mulPose(Axis.XP.rotation((float) Math.sin(System.currentTimeMillis() / 500d) / 10f));
+					poseStack.mulPose(Axis.XP.rotation((float) ((Math.sin(System.currentTimeMillis() / 1000d) - 1) / 10f)));
 					playerModel.renderCloak(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(capeRenderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
 					guiGraphics.pose().popPose();
 				}
