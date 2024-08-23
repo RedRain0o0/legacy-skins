@@ -45,6 +45,6 @@ public class Legacyskins {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 		//noinspection SpellCheckingInspection
-		LOGGER.debug("Loaded Legacy Skins's config.");
+		/* TODO ??? */LOGGER.debug("Loaded Legacy Skins's config.");
 	}
 }
