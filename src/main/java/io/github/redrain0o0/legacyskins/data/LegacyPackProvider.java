@@ -52,6 +52,7 @@ public abstract class LegacyPackProvider implements DataProvider {
 		return CompletableFuture.runAsync(() -> {
 			try {
 				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+				// noinspection UnstableApiUsage
 				HashingOutputStream hashingOutputStream = new HashingOutputStream(Hashing.sha1(), byteArrayOutputStream);
 				JsonWriter jsonWriter = new JsonWriter(new OutputStreamWriter(hashingOutputStream, StandardCharsets.UTF_8));
 
