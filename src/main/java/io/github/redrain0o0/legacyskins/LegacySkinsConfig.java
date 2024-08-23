@@ -28,7 +28,7 @@ public class LegacySkinsConfig {
 			SkinReference.CODEC.optionalFieldOf("currentSkin").forGetter(LegacySkinsConfig::getCurrentSkin),
 			Codec.list(SkinReference.CODEC).xmap(ArrayList::new, c -> c).fieldOf("favorites").forGetter(LegacySkinsConfig::getFavorites),
 			SkinsScreen.CODEC.fieldOf("skinsScreen").forGetter(LegacySkinsConfig::getSkinsScreen),
-			Codec.BOOL.optionalFieldOf("showDevPacks", false).forGetter(LegacySkinsConfig::showDevPacks),
+			Codec.BOOL.fieldOf("showDevPacks").forGetter(LegacySkinsConfig::showDevPacks),
 			Codec.BOOL.fieldOf("showSkinEditorButton").forGetter(LegacySkinsConfig::showSkinEditorButton)
 	).apply(instance, LegacySkinsConfig::new));
 	private final SkinsScreen screen;

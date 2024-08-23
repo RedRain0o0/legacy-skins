@@ -4,10 +4,7 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
 import io.github.redrain0o0.legacyskins.Legacyskins;
-import io.github.redrain0o0.legacyskins.migrator.fixer.AddSkinEditorOptionFixer;
-import io.github.redrain0o0.legacyskins.migrator.fixer.Fixer;
-import io.github.redrain0o0.legacyskins.migrator.fixer.SkinsScreenFixer;
-import io.github.redrain0o0.legacyskins.migrator.fixer.SkinToCurrentSkinFixer;
+import io.github.redrain0o0.legacyskins.migrator.fixer.*;
 
 import java.util.List;
 
@@ -17,11 +14,12 @@ public class Migrator {
 			List.of(
 					new SkinsScreenFixer(),
 					new SkinToCurrentSkinFixer(),
-					new AddSkinEditorOptionFixer()
+					new AddSkinEditorOptionFixer(),
+					new To1004Fixer()
 			),
 			1001,
 			1001,
-			1003
+			1004
 	);
 
 	public static final Migrator SKIN_PACKS_FIXER = new Migrator(
