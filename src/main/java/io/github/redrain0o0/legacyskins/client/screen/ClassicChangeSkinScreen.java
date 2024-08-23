@@ -449,25 +449,6 @@ public class ClassicChangeSkinScreen extends PanelVListScreen implements Control
 		openToCurrentSkin();
 	}
 
-	//@Override public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float tickDelta) {
-	//    super.render();
-	//    if (focusedMod != null) {
-	//        SizedLocation logo = modLogosCache.get(focusedMod);
-	//        if (logo != null)
-	//            guiGraphics.blit(logo.location, panel.x + panel.width - 5, panel.y + 0, 0.0f, 0.0f, logo.getScaledWidth(28), 28, logo.getScaledWidth(28), 28);
-	//    }
-	//}
-
-//	// TODO whose left and whose right?
-//	// translate the pose before calling renderDoll
-//	// pos < 0 -> faces left
-//	// pos = 0 -> faces forwards
-//	// pos > 0 -> faces right
-//	public void renderDoll(GuiGraphics graphics, double pos, LegacySkin skin) {
-//		//CPMCompat.createRenderer().setRenderModel();
-//		CPMCompat.createRenderer().setRenderModel(new PlayerModel<>());
-//	}
-
 	public record SizedLocation(ResourceLocation location, int width, int height) {
 		public int getScaledWidth(int height) {
 			return (int) (height * ((float) width / height()));

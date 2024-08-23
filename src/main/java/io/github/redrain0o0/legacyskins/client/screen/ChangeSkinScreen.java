@@ -153,7 +153,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		if (state.is(ControllerBinding.RIGHT_STICK) && state instanceof BindingState.Axis stick) {
 			if (this.playerSkinWidgetList != null) {
 				PlayerSkinWidget element3 = this.playerSkinWidgetList.element3;
-				// TODO what is d and e (they don't matter, they're never referenced in onDrag)
 				double sensitivity = 0.3d;
 				element3.onDrag(0, 0, stick.getDeadZone() > Math.abs(stick.x) ? 0 : (double)stick.x * ((double)this.minecraft.getWindow().getScreenWidth() / (double)this.minecraft.getWindow().getGuiScaledWidth()) * ScreenUtil.getLegacyOptions().interfaceSensitivity().get() / 2.0 * sensitivity, stick.getDeadZone() > Math.abs(stick.y) ? 0 : (double)stick.y * ((double)this.minecraft.getWindow().getScreenWidth() / (double)this.minecraft.getWindow().getGuiScaledWidth()) * ScreenUtil.getLegacyOptions().interfaceSensitivity().get() / 2.0 * sensitivity);
 			}

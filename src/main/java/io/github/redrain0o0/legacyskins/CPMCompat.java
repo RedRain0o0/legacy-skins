@@ -31,7 +31,6 @@ public class CPMCompat implements ICPMPlugin {
 
 	@Override
 	public void initClient(IClientAPI api) {
-		// TODO add a config option for this?
 		ModConfig.getCommonConfig().setBoolean(ConfigKeys.TITLE_SCREEN_BUTTON, Legacyskins.lazyInstance().showSkinEditorButton());
 		Legacyskins.LOGGER.info("CPMCompat client initialized.");
 		loadModel = (name, b) -> {

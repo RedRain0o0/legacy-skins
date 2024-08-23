@@ -202,11 +202,11 @@ public class PlayerSkinWidget extends AbstractWidget {
 	}
 
 	@Override
-	protected void onDrag(double d, double e, double f, double g) {
+	protected void onDrag(double mouseX, double mouseY, double deltaX, double deltaY) {
 		if (isInterpolating()) return;
 		if (!interactable) return;
-		this.rotationX = Mth.clamp(this.rotationX - (float)g * 2.5F, -ROTATION_X_LIMIT, ROTATION_X_LIMIT);
-		this.rotationY += (float)f * ROTATION_SENSITIVITY;
+		this.rotationX = Mth.clamp(this.rotationX - (float)deltaX * 2.5F, -ROTATION_X_LIMIT, ROTATION_X_LIMIT);
+		this.rotationY += (float)deltaY * ROTATION_SENSITIVITY;
 		while (this.rotationY < 0) this.rotationY += 360;
 		this.rotationY = (this.rotationY + 180) % 360 - 180;
 	}
