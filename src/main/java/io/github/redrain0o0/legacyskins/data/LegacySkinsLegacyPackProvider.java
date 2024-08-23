@@ -85,7 +85,8 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 			Map<String, String> models = of(
 					"redrain0o0", "RedRain0o0",
 					"jab125", "Jab125",
-					"wilyicaro", "WilyIcaro"
+					"wilyicaro", "WilyIcaro",
+					"tom5454", "tom5454"
 			);
 			LegacySkinPack legacySkinPack = new LegacySkinPack(LegacyPackType.DEV, ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "textures/skin_packs/dev.png"),
 					models.keySet().stream().map(a -> new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/dev/%s.cpmmodel".formatted(a)))).toList());
