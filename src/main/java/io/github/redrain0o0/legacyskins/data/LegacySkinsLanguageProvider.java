@@ -12,7 +12,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.core.HolderLookup;
 import java.util.concurrent.CompletableFuture;
-//?} if neoforge {
+//?} else if neoforge {
 /*import net.neoforged.neoforge.common.data.LanguageProvider;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
