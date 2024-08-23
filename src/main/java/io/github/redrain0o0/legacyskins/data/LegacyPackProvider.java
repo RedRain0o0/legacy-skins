@@ -30,10 +30,20 @@ public abstract class LegacyPackProvider implements DataProvider {
 
 	private final PackOutput dataOutput;
 	private final CompletableFuture<HolderLookup.Provider> registryLookup;
+	//? if !fabric
+	/*private String modid;*/
 
-	public LegacyPackProvider(PackOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
+	//? if !fabric {
+	/*public LegacyPackProvider(PackOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
+		this(dataOutput, registryLookup, "minecraft");
+	}
+	*///?}
+
+	public LegacyPackProvider(PackOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup /*? if !fabric {*//*, String modid *//*?}*/) {
 		this.dataOutput = dataOutput;
 		this.registryLookup = registryLookup;
+		//? if !fabric
+		/*this.modid = modid;*/
 	}
 
 	@Override
@@ -123,7 +133,7 @@ public abstract class LegacyPackProvider implements DataProvider {
 			//? if fabric
 			return ((FabricDataOutput) getOutput()).getModId();
 			//? if !fabric
-			/*return "legacyskins";*/ // TODO
+			/*return modid;*/ // TODO
 		}
 	}
 }
