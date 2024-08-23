@@ -1,8 +1,9 @@
 package io.github.redrain0o0.legacyskins.data;
 
-import io.github.redrain0o0.legacyskins.Legacyskins;
 //? if neoforge {
-/*import net.neoforged.bus.api.SubscribeEvent;
+/*import io.github.redrain0o0.legacyskins.Legacyskins;
+
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.minecraft.data.DataProvider;
@@ -10,7 +11,6 @@ import net.minecraft.data.DataGenerator;
 
 import java.io.IOException;
 *///?} else if fabric {
-import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 //?}
 
