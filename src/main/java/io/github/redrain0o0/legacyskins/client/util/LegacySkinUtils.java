@@ -56,6 +56,7 @@ public class LegacySkinUtils {
 		}
 	}
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static String temp(ResourceLocation location, byte[] bytes) {
 		Path gameDir = PlatformUtils.getGameDir();
 		Path playerModels = gameDir.resolve("player_models");
