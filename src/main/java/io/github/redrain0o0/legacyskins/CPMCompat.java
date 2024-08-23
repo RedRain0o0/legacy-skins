@@ -50,6 +50,6 @@ public class CPMCompat implements ICPMPlugin {
 
 	@Override
 	public String getOwnerModId() {
-		return "legacyskins";
+		return Legacyskins.MOD_ID;
 	}
 }
