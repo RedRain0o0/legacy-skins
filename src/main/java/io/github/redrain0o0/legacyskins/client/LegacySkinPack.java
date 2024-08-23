@@ -45,7 +45,7 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 
 	//? if fabric
 	public static class Manager implements SimpleResourceReloadListener<Map<ResourceLocation, LegacySkinPack>> {
-	//? else if neoforge
+	//? if neoforge
 	/*public static class Manager extends SimplePreparableReloadListener<Map<ResourceLocation, LegacySkinPack>> {*/
 		@Override
 		public /*? if fabric {*/ CompletableFuture< /*?}*/ Map<ResourceLocation, LegacySkinPack> /*? if fabric {*/ > load /*?} else if neoforge {*/ /*prepare *//*?}*/(ResourceManager resourceManager, ProfilerFiller profiler /*? if fabric {*/, Executor executor /*?}*/) {
