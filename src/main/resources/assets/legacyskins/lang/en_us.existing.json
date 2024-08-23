@@ -10,5 +10,8 @@
   "skin_pack.legacyskins.dev": "Dev Pack",
   "legacyskins.packType.skin": "Skin Pack",
   "legacyskins.packType.mashup": "Mash-up Pack",
-  "legacyskins.packType.dev": "Dev Pack"
+  "legacyskins.packType.dev": "Dev Pack",
+  "skin_pack.legacyskins.dev.0.desc":  "Created new defaults and UI",
+  "skin_pack.legacyskins.dev.1.desc":  "Created most doll code",
+  "skin_pack.legacyskins.dev.2.desc": "Creator of Legacy4J"
 }
