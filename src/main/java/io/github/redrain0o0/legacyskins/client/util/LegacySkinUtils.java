@@ -42,6 +42,7 @@ public class LegacySkinUtils {
 			Resource resource = Minecraft.getInstance().getResourceManager().getResource(texture).orElseThrow();
 			return resource.open();
 		} catch (Throwable t) {
+			Legacyskins.LOGGER.error("Failed to load skin %s".formatted(texture), t);
 			return from(new LegacySkin(ResourceLocation.fromNamespaceAndPath("legacyskins", "fallback.cpmmodel")));
 		}
 	}
