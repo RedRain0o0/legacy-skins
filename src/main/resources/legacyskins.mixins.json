@@ -10,6 +10,7 @@
     "HelpOptionsMixin",
     "Legacy4JForgeMixin",
     "PlayerRendererImplAccessor",
+    "RenderableVListAccessor",
     "ScreenAccessor"
   ],
   "injectors": {

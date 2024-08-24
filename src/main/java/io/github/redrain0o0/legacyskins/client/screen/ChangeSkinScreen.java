@@ -10,6 +10,7 @@ import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacyPackType;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
+import io.github.redrain0o0.legacyskins.mixin.RenderableVListAccessor;
 import io.github.redrain0o0.legacyskins.mixin.ScreenAccessor;
 import io.github.redrain0o0.legacyskins.util.LegacySkinSprites;
 import net.minecraft.Util;
@@ -323,6 +324,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		if (Legacyskins.INSTANCE.getFavorites().contains(ref)) {
 			this.focusedPack = Pair.of(Constants.FAVORITES_PACK, LegacySkinPack.list.get(Constants.FAVORITES_PACK));
 			this.queuedChangeSkinPack = true;
+			ix();
 			this.setFocused(this.buttons.get(focusedPack.getFirst()));
 			skinPack(Legacyskins.INSTANCE.getFavorites().indexOf(ref));
 			return;
@@ -331,15 +333,25 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			// No skin
 			this.focusedPack = Pair.of(Constants.DEFAULT_PACK, LegacySkinPack.list.get(Constants.DEFAULT_PACK));
 			this.queuedChangeSkinPack = true;
+			ix();
 			this.setFocused(this.buttons.get(focusedPack.getFirst()));
 			skinPack(0);
 		} else {
 			SkinReference skinReference = currentSkin.get();
 			this.focusedPack = Pair.of(skinReference.pack(), LegacySkinPack.list.get(skinReference.pack()));
 			this.queuedChangeSkinPack = true;
+			ix();
 			this.setFocused(this.buttons.get(focusedPack.getFirst()));
 			skinPack(skinReference.ordinal());
 		}
+	}
+
+	// TODO this assumes there's 6 skinpacks displayed.
+	void ix() {
+		int index = new ArrayList<>(LegacySkinPack.list.keySet()).indexOf(this.focusedPack.getFirst());
+		if (index < 6) return;
+		if (index > this.renderableVList.renderables.size() - 6) index = this.renderableVList.renderables.size() - 6;
+		((RenderableVListAccessor) this.renderableVList).getScrolledList().set(index);
 	}
 
 	void skinPack() {
@@ -405,11 +417,18 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		}
 	}
 
+	private boolean firstOpen = false;
+
 	@Override
 	protected void init() {
 		panel.height = Math.min(height, 290);
 		super.init();
 		panel.y = panel.y - 15;
-		openToCurrentSkin();
+		if (firstOpen) {
+			firstOpen = false;
+			openToCurrentSkin();
+		} else {
+			if (playerSkinWidgetList != null && playerSkinWidgetList.element3 != null && playerSkinWidgetList.element3.skinRef.get() != null) skinPack(playerSkinWidgetList.element3.skinRef.get().ordinal());
+		}
 	}
 }
