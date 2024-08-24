@@ -97,7 +97,8 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 					LegacySkin legacySkin = list.get(skinReference.pack()).skins().get(skinReference.ordinal());
 					LegacySkinUtils.switchSkin(legacySkin);
 				} catch (Throwable t) {
-					Legacyskins.LOGGER.error("Failed to load skin from pack: %s".formatted(skinReference.pack()), t);
+					Legacyskins.LOGGER.error("Failed to load skin from pack: %s, resetting skin.".formatted(skinReference.pack()), t);
+					Legacyskins.lazyInstance().setSkin(null);
 				}
 			}
 			//? if fabric
