@@ -86,7 +86,7 @@ dependencies {
 	// Fabric exclusive dependencies:
 	if (loader == FABRIC) {
 		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-		implementation include("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")
+		//implementation include("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")
 		testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
 		// Save download time by only depending on Fabric API when it's needed, otherwise just depending on a few modules required to compile Legacy Skins. {
 		if (stonecutter.current.isActive) {
