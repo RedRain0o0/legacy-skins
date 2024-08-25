@@ -65,7 +65,7 @@ public class MigratorTest {
 
 			@Override
 			public <T> Dynamic<T> fix(Dynamic<T> element) {
-				return renameField(renameField(element, "value1", "value2"), "value2", "newValue2");
+				return renameField(renameField(element, "value1", "newValue1"), "value2", "newValue2");
 			}
 		}
 		private static class S2 extends Fixer {
