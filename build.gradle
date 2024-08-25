@@ -14,6 +14,7 @@ int minecraftIntVersion
 	if (split.length == 2) split = [split[0], split[1], 0]
 	minecraftIntVersion = split[0].toInteger() * 10000 + split[1].toInteger() * 100 + split[2].toInteger()
 }
+int javaVersion = minecraftIntVersion >= 12006 ? 21 : 17
 System.out.println(minecraftIntVersion)
 ModLoader loader = info.loader()
 
@@ -156,7 +157,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+	it.options.release = javaVersion
 }
 
 java {
@@ -166,8 +167,8 @@ java {
 	withSourcesJar()
 	withJavadocJar()
 
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.toVersion(javaVersion)
+	targetCompatibility = JavaVersion.toVersion(javaVersion)
 }
 
 jar {
