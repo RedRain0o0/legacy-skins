@@ -295,7 +295,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 				} else {
 					renderType = playerModel.renderType(insecureSkin.texture());
 				}
-				playerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY/*? if <1.21 {*/, 1.0F, 1.0F, 1.0F, 1.0F/*?}*/);
+				playerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY/*? if <1.21 {*//*, 1.0F, 1.0F, 1.0F, 1.0F*//*?}*/);
 				l:
 				if (renderer != null && renderer.getDefaultTexture() != null) {
 					//CapeLayerMixin
