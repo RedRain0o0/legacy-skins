@@ -25,9 +25,11 @@ public abstract class Fixer {
 		//? if >=1.20.6 {
 		return dynamic.renameField(oldName, newName);
 		//?} else {
-		/*Dynamic<T> newDynamic = dynamic.remove("oldName");
-		Optional<Dynamic<T>> skin = dynamic.get("newName").result();
-		skin.ifPresent(tDynamic -> newDynamic.set("newName", tDynamic));
+		/*Dynamic<T> newDynamic = dynamic.remove(oldName);
+		Optional<Dynamic<T>> value = dynamic.get(newName).result();
+		if (value.isPresent()) {
+			newDynamic = newDynamic.set(newName, value.get());
+		}
 		return newDynamic;
 		*///?}
 	}
