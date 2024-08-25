@@ -14,14 +14,6 @@ public class SkinToCurrentSkinFixer extends Fixer {
 
 	@Override
 	public <T> Dynamic<T> fix(Dynamic<T> element) {
-		//? if >=1.20.6
-		return element.renameField("skin", "currentSkin");
-		// Old versions of DFU don't have renameField
-		//? if <=1.20.4 {
-		/*Dynamic<T> newDynamic = element.remove("skin");
-		Optional<Dynamic<T>> skin = element.get("skin").result();
-		skin.ifPresent(tDynamic -> newDynamic.set("currentSkin", tDynamic));
-		return newDynamic;
-		*///?}
+		return renameField(element, "skin", "currentSkin");
 	}
 }

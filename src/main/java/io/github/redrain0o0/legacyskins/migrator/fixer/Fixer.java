@@ -2,6 +2,8 @@ package io.github.redrain0o0.legacyskins.migrator.fixer;
 
 import com.mojang.serialization.Dynamic;
 
+import java.util.Optional;
+
 public abstract class Fixer {
 	public final int maxApplicable;
 
@@ -18,4 +20,15 @@ public abstract class Fixer {
 	 * @param <T> The {@link Dynamic<T>}'s underlying value's type.
 	 */
 	public abstract <T> Dynamic<T> fix(Dynamic<T> element);
+
+	public static <T> Dynamic<T> renameField(Dynamic<T> dynamic, String oldName, String newName) {
+		//? if >=1.20.6 {
+		return dynamic.renameField(oldName, newName);
+		//?} else {
+		/*Dynamic<T> newDynamic = dynamic.remove("oldName");
+		Optional<Dynamic<T>> skin = dynamic.get("newName").result();
+		skin.ifPresent(tDynamic -> newDynamic.set("newName", tDynamic));
+		return newDynamic;
+		*///?}
+	}
 }
