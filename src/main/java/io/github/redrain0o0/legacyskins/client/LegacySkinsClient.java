@@ -24,8 +24,9 @@ import net.neoforged.neoforge.event.GameShuttingDownEvent;
 
 //? if neoforge && multientrypoints
 /*@Mod(value = Legacyskins.MOD_ID, dist = Dist.CLIENT)*/
-//? if neoforge
-/*@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)*/
+//? if neoforge {
+/*@EventBusSubscriber(/^? if !multientrypoints {^/ modid = Legacyskins.MOD_ID, /^?}^/ bus = EventBusSubscriber.Bus.MOD)
+*///?}
 public class LegacySkinsClient {
 	public void onInitializeClient() {
 		//? if fabric {
