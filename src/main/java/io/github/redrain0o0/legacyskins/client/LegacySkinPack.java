@@ -89,7 +89,7 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 			LegacySkinUtils.cleanup();
 			list.clear();
 			// The default skin
-			data.get(Constants.DEFAULT_PACK).skins().addFirst(null);
+			data.get(Constants.DEFAULT_PACK).skins().add(0, null); // Java 21: addFirst
 			list.putAll(data);
 			Optional<SkinReference> skin = Legacyskins.lazyInstance().skin;
 			if (skin.isPresent()) {

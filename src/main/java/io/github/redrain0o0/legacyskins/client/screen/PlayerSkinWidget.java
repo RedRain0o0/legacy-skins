@@ -194,6 +194,9 @@ public class PlayerSkinWidget extends AbstractWidget {
 		guiGraphics.pose().rotateAround(Axis.XP.rotationDegrees(this.rotationX), 0.0F, -(1 + MODEL_OFFSET), 0.0F);
 		guiGraphics.pose().mulPose(Axis.YP.rotationDegrees(this.rotationY));
 		guiGraphics.flush();
+		//? if <=1.20.4
+		/*Lighting.setupForFlatItems();*/
+		//? if >=1.20.6
 		Lighting.setupForEntityInInventory(Axis.XP.rotationDegrees(this.rotationX));
 		this.model.render(guiGraphics, this.skin.get());
 		guiGraphics.flush();

@@ -4,7 +4,11 @@ package io.github.redrain0o0.legacyskins.data;
 /*import io.github.redrain0o0.legacyskins.Legacyskins;
 
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
+//? if >=1.20.6 {
+/^import net.neoforged.fml.common.EventBusSubscriber;
+^///?} else {
+import net.neoforged.fml.common.Mod.EventBusSubscriber;
+//?}
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.DataGenerator;
@@ -21,7 +25,7 @@ public class LegacySkinsDataGenerator {
 	public void onInitializeDataGenerator(FabricDataGenerator generator) {
 		FabricDataGenerator.Pack pack = generator.createPack();
 		pack.addProvider(LegacySkinsLegacyPackProvider::new);
-		pack.addProvider(LegacySkinsLanguageProvider::new);
+		pack.addProvider(/*? if <=1.20.4 {*//*(FabricDataGenerator.Pack.Factory<LegacySkinsLanguageProvider>) *//*?}*/ LegacySkinsLanguageProvider::new);
 	}
 	//?} else if neoforge {
 	/*@SubscribeEvent

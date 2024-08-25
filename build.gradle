@@ -1,5 +1,8 @@
 import io.github.redrain0o0.legacyskins.buildscript.ModLoader
 
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
 import static io.github.redrain0o0.legacyskins.buildscript.ModLoader.*
 import io.github.redrain0o0.legacyskins.buildscript.ProjectInfo
 plugins {
@@ -143,17 +146,24 @@ loom {
 processResources {
 	def deps = [
 			"version": project.version,
-	        "minecraft": "~" + project.minecraft_version
+	        "minecraft": "~" + project.minecraft_version,
+			"java": javaVersion
 	]
 	inputs.property "version", project.version
 	inputs.property "deps", deps
 
-	filesMatching(["fabric.mod.json", "META-INF/neoforge.mods.toml"]) {
+	filesMatching(["fabric.mod.json", "META-INF/neoforge.mods.toml", "legacyskins.mixins.json"]) {
 		expand "deps": deps
 	}
 
 	if (loader != NEOFORGE) exclude "META-INF/neoforge.mods.toml"
 	if (loader != FABRIC) exclude "fabric.mod.json"
+
+	doLast {
+		fileTree(dir: outputs.files.asPath, include: "META-INF/neoforge.mods.toml").each { File file ->
+			Files.copy(file.toPath(), java.nio.file.Path.of(outputs.files.asPath).resolve("META-INF/mods.toml"), StandardCopyOption.REPLACE_EXISTING)
+		}
+	}
 }
 
 tasks.withType(JavaCompile).configureEach {

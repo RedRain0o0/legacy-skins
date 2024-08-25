@@ -11,6 +11,8 @@ import java.util.function.Consumer;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+
 import java.util.concurrent.CompletableFuture;
 //?} else if neoforge {
 /*import net.neoforged.neoforge.common.data.LanguageProvider;
@@ -26,13 +28,14 @@ public class LegacySkinsLanguageProvider extends FabricLanguageProvider {
 //? if neoforge
 /*public class LegacySkinsLanguageProvider extends LanguageProvider {*/
 	//? if fabric {
-	protected LegacySkinsLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
-		super(dataOutput, registryLookup);
+	protected LegacySkinsLanguageProvider(FabricDataOutput dataOutput /*? if >=1.20.6 {*/, CompletableFuture<HolderLookup.Provider> registryLookup /*?}*/) {
+		super(dataOutput /*? if >=1.20.6 {*/, registryLookup /*?}*/);
 	}
 
-	protected LegacySkinsLanguageProvider(FabricDataOutput dataOutput, String languageCode, CompletableFuture<HolderLookup.Provider> registryLookup) {
-		super(dataOutput, languageCode, registryLookup);
+	protected LegacySkinsLanguageProvider(FabricDataOutput dataOutput, String languageCode /*? if >=1.20.6 {*/, CompletableFuture<HolderLookup.Provider> registryLookup /*?}*/) {
+		super(dataOutput, languageCode /*? if >=1.20.6 {*/, registryLookup /*?}*/);
 	}
+
 	//?} else if neoforge {
 	/*protected LegacySkinsLanguageProvider(PackOutput dataOutput) {
 		super(dataOutput, "legacyskins", "en_us");
@@ -40,9 +43,9 @@ public class LegacySkinsLanguageProvider extends FabricLanguageProvider {
 	*///?}
 
 	@Override
-	//? if fabric
-	public void generateTranslations(HolderLookup.Provider registryLookup, TranslationBuilder translationBuilder) {
-	//? if neoforge
+	//? if fabric {
+	public void generateTranslations(/*? if >=1.20.6 {*/HolderLookup.Provider registryLookup, /*?}*/ TranslationBuilder translationBuilder) {
+	//?} elif neoforge
 	/*public void addTranslations() {*/
 		Path existingFilePath = PlatformUtils.findInMod("assets/legacyskins/lang/en_us.existing.json");
 		try {

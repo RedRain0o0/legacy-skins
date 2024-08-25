@@ -11,7 +11,11 @@ import net.minecraft.server.packs.PackType;
 //? if neoforge {
 /*import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
+//? if >=1.20.6 {
+/^import net.neoforged.fml.common.EventBusSubscriber;
+^///?} else {
+import net.neoforged.fml.common.Mod.EventBusSubscriber;
+//?}
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.common.NeoForge;

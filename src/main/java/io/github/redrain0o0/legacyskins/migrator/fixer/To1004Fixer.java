@@ -10,7 +10,7 @@ public class To1004Fixer extends Fixer {
 
 	@Override
 	public <T> Dynamic<T> fix(Dynamic<T> element) {
-		if (element.getElement("showDevPacks").resultOrPartial().isEmpty()) {
+		if (element.getElement("showDevPacks").result().isEmpty()) {
 			element = element.set("showDevPacks", element.createBoolean(false));
 		}
 		return element;
