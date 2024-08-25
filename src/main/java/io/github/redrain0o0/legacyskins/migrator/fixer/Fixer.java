@@ -26,7 +26,7 @@ public abstract class Fixer {
 		return dynamic.renameField(oldName, newName);
 		//?} else {
 		/*Dynamic<T> newDynamic = dynamic.remove(oldName);
-		Optional<Dynamic<T>> value = dynamic.get(newName).result();
+		Optional<Dynamic<T>> value = dynamic.get(oldName).result();
 		if (value.isPresent()) {
 			newDynamic = newDynamic.set(newName, value.get());
 		}
