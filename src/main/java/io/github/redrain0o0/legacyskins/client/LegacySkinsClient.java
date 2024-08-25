@@ -18,7 +18,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.GameShuttingDownEvent;
 *///?}
 
-//? if neoforge
+//? if neoforge && multientrypoints
 /*@Mod(value = Legacyskins.MOD_ID, dist = Dist.CLIENT)*/
 //? if neoforge
 /*@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)*/

@@ -8,6 +8,13 @@ plugins {
 
 ProjectInfo info = ProjectInfo.from(project)
 String minecraftVersion = info.minecraftVersion()
+int minecraftIntVersion
+{
+	String[] split = minecraftVersion.split("\\.")
+	if (split.length == 2) split = [split[0], split[1], 0]
+	minecraftIntVersion = split[0].toInteger() * 10000 + split[1].toInteger() * 100 + split[2].toInteger()
+}
+System.out.println(minecraftIntVersion)
 ModLoader loader = info.loader()
 
 project.ext["loom.platform"] = loader.friendlyName
@@ -19,6 +26,8 @@ apply plugin: 'dev.architectury.loom'
 stonecutter.const("fabric", loader == FABRIC)
 stonecutter.const("forge", loader == FORGE)
 stonecutter.const("neoforge", loader == NEOFORGE)
+stonecutter.const("multientrypoints", loader == NEOFORGE && minecraftIntVersion >= 1_20_06)
+stonecutter.const("constructorargs", loader == NEOFORGE && minecraftIntVersion >= 1_20_02)
 
 base {
 	archivesName = project.archives_base_name
