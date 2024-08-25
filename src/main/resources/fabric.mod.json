@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "legacyskins",
-  "version": "${version}",
+  "version": "${deps.version}",
   "name": "Legacy Skins",
   "description": "An addon for Legacy4J and Customizable Player Models that brings back the ability to choose skins!",
   "authors": [
@@ -35,7 +35,7 @@
   ],
   "depends": {
     "fabricloader": ">=0.15.11",
-    "minecraft": "~1.21",
+    "minecraft": "${deps.minecraft}",
     "java": ">=21",
     "fabric-api": "*",
     "legacy": "*",

@@ -125,10 +125,15 @@ loom {
 }
 
 processResources {
+	def deps = [
+			"version": project.version,
+	        "minecraft": "~" + project.minecraft_version
+	]
 	inputs.property "version", project.version
+	inputs.property "deps", deps
 
 	filesMatching(["fabric.mod.json", "META-INF/neoforge.mods.toml"]) {
-		expand "version": project.version
+		expand "deps": deps
 	}
 
 	if (loader != NEOFORGE) exclude "META-INF/neoforge.mods.toml"

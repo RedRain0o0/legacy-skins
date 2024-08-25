@@ -6,7 +6,7 @@ issueTrackerURL = "https://github.com/RedRain0o0/legacy-skins/issues"
 [[mods]]
 logoFile="assets/legacyskins/icon.png"
 modId = "legacyskins"
-version = "${version}"
+version = "${deps.version}"
 displayName = "Legacy Skins"
 authors = 'RedRain0o0, Jab125'
 credits = ''

@@ -6,6 +6,7 @@ import com.tom.cpm.shared.config.ModConfig;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.util.PlatformUtils;
+import io.github.redrain0o0.legacyskins.util.VersionUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -43,7 +44,7 @@ public class LegacySkinUtils {
 			return resource.open();
 		} catch (Throwable t) {
 			Legacyskins.LOGGER.error("Failed to load skin %s".formatted(texture), t);
-			return from(new LegacySkin(ResourceLocation.fromNamespaceAndPath("legacyskins", "fallback.cpmmodel")));
+			return from(new LegacySkin(VersionUtils.of("legacyskins", "fallback.cpmmodel")));
 		}
 	}
 

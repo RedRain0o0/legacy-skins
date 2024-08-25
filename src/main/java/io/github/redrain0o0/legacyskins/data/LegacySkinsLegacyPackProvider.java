@@ -5,6 +5,7 @@ import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.client.LegacyPackType;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
+import io.github.redrain0o0.legacyskins.util.VersionUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -65,8 +66,8 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 					"devalex", "Developer Alex"
 			);
 			System.out.println(models);
-			LegacySkinPack legacySkinPack = new LegacySkinPack(LegacyPackType.DEFAULT, ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "textures/skin_packs/default.png"),
-					models.keySet().stream().map(a -> new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/default/%s.cpmmodel".formatted(a)))).toList());
+			LegacySkinPack legacySkinPack = new LegacySkinPack(LegacyPackType.DEFAULT, VersionUtils.of(Legacyskins.MOD_ID, "textures/skin_packs/default.png"),
+					models.keySet().stream().map(a -> new LegacySkin(VersionUtils.of(Legacyskins.MOD_ID, "skinpacks/default/%s.cpmmodel".formatted(a)))).toList());
 			int i = 1;
 			LegacySkinsLanguageProvider.addQueuedTranslation(b -> b.add("skin_pack.%s.%s".formatted(builder.id("default").toLanguageKey(), 0), "Auto Selected"));
 			for (LegacySkin skin : legacySkinPack.skins()) {
@@ -79,7 +80,7 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 			builder.addPack("default", legacySkinPack);
 		}
 		// hardcoded
-		builder.addPack(Constants.FAVORITES_PACK, new LegacySkinPack(LegacyPackType.DEFAULT, ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "textures/skin_packs/default.png"), List.of()));
+		builder.addPack(Constants.FAVORITES_PACK, new LegacySkinPack(LegacyPackType.DEFAULT, VersionUtils.of(Legacyskins.MOD_ID, "textures/skin_packs/default.png"), List.of()));
 		//Dev pack
 		{
 			Map<String, String> models = of(
@@ -88,8 +89,8 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 					"wilyicaro", "WilyIcaro",
 					"tom5454", "tom5454"
 			);
-			LegacySkinPack legacySkinPack = new LegacySkinPack(LegacyPackType.DEV, ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "textures/skin_packs/dev.png"),
-					models.keySet().stream().map(a -> new LegacySkin(ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "skinpacks/dev/%s.cpmmodel".formatted(a)))).toList());
+			LegacySkinPack legacySkinPack = new LegacySkinPack(LegacyPackType.DEV, VersionUtils.of(Legacyskins.MOD_ID, "textures/skin_packs/dev.png"),
+					models.keySet().stream().map(a -> new LegacySkin(VersionUtils.of(Legacyskins.MOD_ID, "skinpacks/dev/%s.cpmmodel".formatted(a)))).toList());
 			int i = 0;
 			for (LegacySkin skin : legacySkinPack.skins()) {
 				int finalI = i;

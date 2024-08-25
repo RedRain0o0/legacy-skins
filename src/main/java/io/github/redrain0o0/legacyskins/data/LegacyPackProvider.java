@@ -8,6 +8,7 @@ import com.mojang.serialization.JsonOps;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.migrator.Migrator;
+import io.github.redrain0o0.legacyskins.util.VersionUtils;
 //? if fabric
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.Util;
@@ -103,7 +104,7 @@ public abstract class LegacyPackProvider implements DataProvider {
 		}
 
 		default ResourceLocation id(String id) {
-			return !id.contains(":") ? ResourceLocation.fromNamespaceAndPath(getModId(), id) : ResourceLocation.parse(id);
+			return !id.contains(":") ? VersionUtils.of(getModId(), id) : VersionUtils.parse(id);
 		}
 
 		PackOutput getOutput();

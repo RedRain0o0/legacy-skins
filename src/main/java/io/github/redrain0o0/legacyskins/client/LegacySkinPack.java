@@ -9,6 +9,7 @@ import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import io.github.redrain0o0.legacyskins.migrator.Migrator;
+import io.github.redrain0o0.legacyskins.util.VersionUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
@@ -108,7 +109,7 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 		//? if fabric {
 		@Override
 		public ResourceLocation getFabricId() {
-			return ResourceLocation.fromNamespaceAndPath(Legacyskins.MOD_ID, "manager");
+			return VersionUtils.of(Legacyskins.MOD_ID, "manager");
 		}
 		//?}
 	}

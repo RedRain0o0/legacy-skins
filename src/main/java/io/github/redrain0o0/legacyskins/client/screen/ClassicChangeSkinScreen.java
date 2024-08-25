@@ -15,6 +15,7 @@ import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.mixin.ScreenAccessor;
 import io.github.redrain0o0.legacyskins.util.LegacySkinSprites;
+import io.github.redrain0o0.legacyskins.util.VersionUtils;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -214,7 +215,7 @@ public class ClassicChangeSkinScreen extends PanelVListScreen implements Control
 			guiGraphics.blitSprite(LegacySkinSprites.PACK_NAME_BOX, panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
 			if (this.playerSkinWidgetList != null) {
 				if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
-					guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
+					guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
 				}
 				//if (Legacyskins.INSTANCE.favorites.contains(this.playerSkinWidgetList.element3.skinRef.get())) {
 				//	guiGraphics.blit(ResourceLocation.withDefaultNamespace("textures/gui/sprites/hud/heart/container.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
@@ -278,20 +279,22 @@ public class ClassicChangeSkinScreen extends PanelVListScreen implements Control
 
 			//RenderSystem.enableScissor(panel.x + panel.width - 2, panel.y + 16, tooltipBox.getWidth() - 18, tooltipBox.getHeight() - 80);
 
+			/*
 			if (false) {
 				LayerDefinition layerDefinition = LayerDefinitions.createRoots().get(ModelLayers.PLAYER);
 				PlayerModel<LivingEntity> livingEntityPlayerModel = new PlayerModel<>(layerDefinition.bakeRoot(), false);
-				RenderType renderType = livingEntityPlayerModel.renderType(ResourceLocation.parse("minecraft:textures/entity/player/wide/steve.png"));
+				RenderType renderType = livingEntityPlayerModel.renderType(VersionUtils.parse("minecraft:textures/entity/player/wide/steve.png"));
 				guiGraphics.pose().pushPose();
 				guiGraphics.pose().scale(100, 100, 100);
 				guiGraphics.pose().scale(1, 1, -1);
 				guiGraphics.pose().mulPose(new Quaternionf().rotationXYZ((float) Math.toRadians(180), 0, 0));
 				guiGraphics.pose().mulPose((new Quaternionf()).rotationXYZ(0.43633232F, (float) Math.toRadians(System.currentTimeMillis() % 360), 3.1415927F));
 				Lighting.setupForEntityInInventory();
-				livingEntityPlayerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY/*, 1, 1, 1, 1*/);
+				livingEntityPlayerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY/^, 1, 1, 1, 1^/);
 				Lighting.setupFor3DItems();
 				guiGraphics.pose().popPose();
 			}
+			 */
 
 			//RenderSystem.disableScissor();
 
