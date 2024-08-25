@@ -76,7 +76,13 @@ dependencies {
 		implementation include("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")
 		testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
 		// Save download time by only depending on Fabric API when it's needed, otherwise just depending on a few modules required to compile Legacy Skins. {
-		if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:$project.fabric_api_version")
+		if (stonecutter.current.isActive) {
+			modLocalRuntime("net.fabricmc.fabric-api:fabric-api:$project.fabric_api_version")
+		} else {
+			modLocalRuntime "net.fabricmc.fabric-api:fabric-api:$project.fabric_api_version", {
+				transitive = false
+			}
+		}
 		for (String module in project.properties.fabric_api_modules.split(",") as String[]) {
 			modApi fabricApi.module(module, "$project.properties.fabric_api_version")
 		}
