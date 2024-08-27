@@ -26,6 +26,7 @@ public class LegacySkinsDataGenerator {
 		FabricDataGenerator.Pack pack = generator.createPack();
 		pack.addProvider(LegacySkinsLegacyPackProvider::new);
 		pack.addProvider(/*? if <=1.20.4 {*//*(FabricDataGenerator.Pack.Factory<LegacySkinsLanguageProvider>) *//*?}*/ LegacySkinsLanguageProvider::new);
+		pack.addProvider((FabricDataGenerator.Pack.Factory<LegacySkinsMcmetaProvider>) LegacySkinsMcmetaProvider::new);
 	}
 	//?} else if neoforge {
 	/*@SubscribeEvent
@@ -33,6 +34,7 @@ public class LegacySkinsDataGenerator {
 		DataGenerator generator = event.getGenerator();
 		generator.addProvider(true, (DataProvider.Factory<LegacySkinsLegacyPackProvider>) p -> new LegacySkinsLegacyPackProvider(p, event.getLookupProvider()));
 		generator.addProvider(true, (DataProvider.Factory<LegacySkinsLanguageProvider>) LegacySkinsLanguageProvider::new);
+		generator.addProvider(true, (DataProvider.Factory<LegacySkinsMcmetaProvider>) LegacySkinsMcmetaProvider::new);
 	}
 	*///?}
 }
