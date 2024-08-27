@@ -92,6 +92,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 
 	public void beginInterpolation(float targetRotationX, float targetRotationY, float targetPosX, float targetPosY, float targetScale) {
 		this.progress = 0;
+		this.start = System.currentTimeMillis();
 		this.prevRotationX = rotationX;
 		this.prevRotationY = rotationY;
 		this.targetRotationX = targetRotationX;
@@ -182,10 +183,11 @@ public class PlayerSkinWidget extends AbstractWidget {
 		setHeight((int) (this.originalHeight * scale));
 	}
 
+	private long start = 0;
 	@Override
 	protected void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
 		interpolate(progress);
-		progress += 0.05f;
+		progress = (System.currentTimeMillis() - start) / 100f;
 		guiGraphics.pose().pushPose();
 		guiGraphics.pose().translate((float)this.getX() + (float)this.getWidth() / 2.0F, (float)(this.getY() + this.getHeight()), Z_OFFSET);
 		float g = (float)this.getHeight() / MODEL_HEIGHT;
