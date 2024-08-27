@@ -55,7 +55,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 	private static final float ROTATION_SENSITIVITY = 2.5F;
 	private static final float DEFAULT_ROTATION_X = -5.0F;
 	private static final float DEFAULT_ROTATION_Y = 30.0F;
-	private static final float ROTATION_X_LIMIT = 50.0F;
+	private final float ROTATION_X_LIMIT = Legacyskins.INSTANCE.dollRotationXLimit();
 	private final PlayerSkinWidget.Model model;
 	final Supplier<SkinReference> skinRef;
 	final Supplier<LegacySkin> skin;

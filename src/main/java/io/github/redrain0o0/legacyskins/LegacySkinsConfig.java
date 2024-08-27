@@ -29,11 +29,13 @@ public class LegacySkinsConfig {
 			Codec.list(SkinReference.CODEC).xmap(ArrayList::new, c -> c).fieldOf("favorites").forGetter(LegacySkinsConfig::getFavorites),
 			SkinsScreen.CODEC.fieldOf("skinsScreen").forGetter(LegacySkinsConfig::getSkinsScreen),
 			Codec.BOOL.fieldOf("showDevPacks").forGetter(LegacySkinsConfig::showDevPacks),
-			Codec.BOOL.fieldOf("showSkinEditorButton").forGetter(LegacySkinsConfig::showSkinEditorButton)
+			Codec.BOOL.fieldOf("showSkinEditorButton").forGetter(LegacySkinsConfig::showSkinEditorButton),
+			Codec.FLOAT.optionalFieldOf("dollRotationXLimit", 50f).forGetter(LegacySkinsConfig::dollRotationXLimit)
 	).apply(instance, LegacySkinsConfig::new));
 	private final SkinsScreen screen;
 	private final boolean showDevPacks;
 	private final boolean showEditorButton;
+	private final float dollRotationXLimit;
 	// selected skin
 	public Optional<SkinReference> skin;
 	// Note: American English
@@ -63,18 +65,23 @@ public class LegacySkinsConfig {
 		return showEditorButton;
 	}
 
+	public float dollRotationXLimit() {
+		return dollRotationXLimit;
+	}
+
 	public enum SkinsScreen {
 		DEFAULT,
 		CLASSIC;
 		public static final Codec<SkinsScreen> CODEC = Codec.STRING.xmap(a -> SkinsScreen.valueOf(a.toUpperCase(Locale.ROOT)), a -> a.name().toLowerCase(Locale.ROOT));
 	}
 
-	public LegacySkinsConfig(Optional<SkinReference> skin, ArrayList<SkinReference> favorites, SkinsScreen screen, boolean showDevPacks, boolean showEditorButton) {
+	public LegacySkinsConfig(Optional<SkinReference> skin, ArrayList<SkinReference> favorites, SkinsScreen screen, boolean showDevPacks, boolean showEditorButton, float dollRotationXLimit) {
 		this.skin = skin;
 		this.favorites = favorites;
 		this.screen = screen;
 		this.showDevPacks = showDevPacks;
 		this.showEditorButton = showEditorButton;
+		this.dollRotationXLimit = dollRotationXLimit;
 	}
 
 	public void setSkin(@Nullable SkinReference skin) {
@@ -120,7 +127,7 @@ public class LegacySkinsConfig {
 			Legacyskins.INSTANCE = fromDynamic(jsonElementDynamic);
 
 		} else {
-			(Legacyskins.INSTANCE = new LegacySkinsConfig(Optional.empty(), new ArrayList<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment() /*TODO make loader agnostic */, false)).save();
+			(Legacyskins.INSTANCE = new LegacySkinsConfig(Optional.empty(), new ArrayList<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment() /*TODO make loader agnostic */, false, 50f)).save();
 		}
 	}
 
