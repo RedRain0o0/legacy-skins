@@ -33,6 +33,7 @@ stonecutter.const("neoforge", loader == NEOFORGE)
 stonecutter.const("multientrypoints", loader == NEOFORGE && minecraftIntVersion >= 1_20_06)
 stonecutter.const("constructorargs", loader == NEOFORGE && minecraftIntVersion >= 1_20_02)
 stonecutter.const("yacl", project.yacl_version != "[VERSIONED]")
+stonecutter.const("clothconfig", project.clothconfig_version != "[VERSIONED]")
 
 base {
 	archivesName = project.archives_base_name
@@ -59,6 +60,10 @@ repositories {
 	}
 	maven {
 		url "https://maven.minecraftforge.net/"
+	}
+	// Architectury + other shedaniel
+	maven {
+		url "https://maven.shedaniel.me/"
 	}
 	exclusiveContent {
 		forRepository {
@@ -97,6 +102,12 @@ dependencies {
 
 	if (project.yacl_version != "[VERSIONED]") {
 		modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}", {
+			exclude group: "net.fabricmc.fabric-api"
+		}
+	}
+
+	if (project.clothconfig_version != "[VERSIONED]") {
+		modImplementation "me.shedaniel.cloth:cloth-config-${loader.friendlyName}:${project.clothconfig_version}", {
 			exclude group: "net.fabricmc.fabric-api"
 		}
 	}
