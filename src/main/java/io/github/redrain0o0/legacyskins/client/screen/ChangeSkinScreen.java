@@ -36,6 +36,8 @@ import net.minecraft.world.entity.LivingEntity;
 import org.joml.Quaternionf;
 import wily.legacy.Legacy4J;
 import wily.legacy.client.ControlType;
+//? if <=1.20.1
+/*import wily.legacy.client.LegacyGuiGraphics;*/
 import wily.legacy.client.controller.BindingState;
 import wily.legacy.client.controller.Controller;
 import wily.legacy.client.controller.ControllerBinding;
@@ -200,15 +202,15 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		}
 		ScreenUtil.renderDefaultBackground(guiGraphics, false);
 		if (ScreenUtil.hasTooltipBoxes()) {
-			guiGraphics.blitSprite(LegacySkinSprites.SKIN_PANEL, panel.x + panel.width - 10, panel.y + 7, tooltipBox.getWidth(), tooltipBox.getHeight() - 2);
-			guiGraphics.blitSprite(LegacySkinSprites.PANEL_FILLER, panel.x + panel.width - 5, panel.y + 16 + tooltipBox.getHeight() - 80, tooltipBox.getWidth() - 14, 60);
-			guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width - 1, panel.y + tooltipBox.getHeight() - 59, tooltipBox.getWidth() - 55, 55);
+			p(guiGraphics).blitSprite(LegacySkinSprites.SKIN_PANEL, panel.x + panel.width - 10, panel.y + 7, tooltipBox.getWidth(), tooltipBox.getHeight() - 2);
+			p(guiGraphics).blitSprite(LegacySkinSprites.PANEL_FILLER, panel.x + panel.width - 5, panel.y + 16 + tooltipBox.getHeight() - 80, tooltipBox.getWidth() - 14, 60);
+			p(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width - 1, panel.y + tooltipBox.getHeight() - 59, tooltipBox.getWidth() - 55, 55);
 			guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
 			guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 0, 0, 24, 24, 24, 24);
 			//guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 24, 24);
 			RenderSystem.enableBlend();
-			guiGraphics.blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80);
-			guiGraphics.blitSprite(LegacySkinSprites.PACK_NAME_BOX, panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
+			p(guiGraphics).blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80);
+			p(guiGraphics).blitSprite(LegacySkinSprites.PACK_NAME_BOX, panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
 			if (this.playerSkinWidgetList != null) {
 				if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
 					guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
@@ -295,16 +297,23 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	}
 
 	@Override
-	public boolean mouseScrolled(double d, double e, double f, double g) {
+	public boolean mouseScrolled(double d, double e, /*? if >=1.20.2 {*/ double f, /*?}*/ double g) {
 		if ((tooltipBox.isHovered(d, e) || !ControlType.getActiveType().isKbm()) && scrollableRenderer.mouseScrolled(g))
 			return true;
-		return super.mouseScrolled(d, e, f, g);
+		return super.mouseScrolled(d, e, /*? if >=1.20.2 {*/ f, /*?}*/ g);
+	}
+
+	private /*? if >=1.20.2 {*/ GuiGraphics /*?} else {*/ /*LegacyGuiGraphics *//*?}*/ p(GuiGraphics in) {
+		//? if >=1.20.2 {
+		return in;
+		//?} else
+		/*return LegacyGuiGraphics.of(in);*/
 	}
 
 	@Override
 	public void renderableVListInit() {
-		addRenderableOnly(((guiGraphics, i, j, f) -> guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + 7, panel.y + 7 + 130 - 8, panel.width - 14, panel.height - 14 - 135 + 1 + 8)));
-		addRenderableOnly(((guiGraphics, i, j, f) -> guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + 34, panel.y + 10, 112, 112)));
+		addRenderableOnly(((guiGraphics, i, j, f) -> p(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + 7, panel.y + 7 + 130 - 8, panel.width - 14, panel.height - 14 - 135 + 1 + 8)));
+		addRenderableOnly(((guiGraphics, i, j, f) -> p(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + 34, panel.y + 10, 112, 112)));
 		addRenderableOnly((guiGraphics, i, j, f) -> {
 			if (this.focusedPack == null) return;
 			ResourceLocation icon = this.focusedPack.getSecond().icon();

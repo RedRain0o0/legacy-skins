@@ -6,8 +6,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -21,6 +19,7 @@ import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
+import io.github.redrain0o0.legacyskins.client.util.PlayerSkinUtils;
 import io.github.redrain0o0.legacyskins.mixin.PlayerRendererImplAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
@@ -34,7 +33,6 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
@@ -114,6 +112,9 @@ public class PlayerSkinWidget extends AbstractWidget {
 			this.targetPosY = Float.NEGATIVE_INFINITY;
 			this.scale = targetScale;
 			setWidth((int) (this.originalWidth * scale));
+			//? if <=1.20.1 {
+			/*height = (int) (this.originalHeight * scale);
+			*///?} else
 			setHeight((int) (this.originalHeight * scale));
 			this.targetScale = Float.NEGATIVE_INFINITY;
 			this.progress = 2;
@@ -143,6 +144,9 @@ public class PlayerSkinWidget extends AbstractWidget {
 			this.targetPosY = Float.NEGATIVE_INFINITY;
 			this.scale = targetScale;
 			setWidth((int) (this.originalWidth * scale));
+			//? if <=1.20.1 {
+			/*height = (int) (this.originalHeight * scale);
+			*///?} else
 			setHeight((int) (this.originalHeight * scale));
 			this.targetScale = Float.NEGATIVE_INFINITY;
 			return;
@@ -162,6 +166,9 @@ public class PlayerSkinWidget extends AbstractWidget {
 			this.targetPosY = Float.NEGATIVE_INFINITY;
 			this.scale = targetScale;
 			setWidth((int) (this.originalWidth * scale));
+			//? if <=1.20.1 {
+			/*height = (int) (this.originalHeight * scale);
+			*///?} else
 			setHeight((int) (this.originalHeight * scale));
 			this.targetScale = Float.NEGATIVE_INFINITY;
 			return;
@@ -180,6 +187,9 @@ public class PlayerSkinWidget extends AbstractWidget {
 		this.setY((int) nY2);
 		this.scale = nS;
 		setWidth((int) (this.originalWidth * scale));
+		//? if <=1.20.1 {
+		/*height = (int) (this.originalHeight * scale);
+		*///?} else
 		setHeight((int) (this.originalHeight * scale));
 	}
 
@@ -262,8 +272,11 @@ public class PlayerSkinWidget extends AbstractWidget {
 			guiGraphics.pose().scale(1.0F, 1.0F, -1.0F);
 			guiGraphics.pose().translate(0.0F, -1.5F, 0.0F);
 
-			PlayerSkin insecureSkin = playerSkin != null ? null : Minecraft.getInstance().getSkinManager().getInsecureSkin(Minecraft.getInstance().getGameProfile());
-			PlayerModel<?> playerModel = playerSkin == null ? insecureSkin.model() == PlayerSkin.Model.SLIM ? slimModel : wideModel : this.wideModel;// playerSkin.model() == PlayerSkin.Model.SLIM ? this.slimModel : this.wideModel;
+			GameProfile gameProfile = Minecraft.getInstance()/*? if <=1.20.1 {*//*.getUser() *//*?}*/.getGameProfile();
+			PlayerSkinUtils.F skin = PlayerSkinUtils.skinOf(gameProfile);
+			ResourceLocation skinLoc = skin.skinLocation;
+			//Minecraft.getInstance().getSkinManager().
+			PlayerModel<?> playerModel = playerSkin == null ? skin.slim ? this.slimModel : this.wideModel : this.wideModel;
 			IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> renderer = null;
 			if (playerSkin != null) {
 				renderer = rendererHashMap.computeIfAbsent(playerSkin.hashCode() + "-temp", c -> {
@@ -298,7 +311,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 				if (renderer != null) {
 					renderType = playerModel.renderType(renderer.getDefaultTexture());// playerSkin.texture());
 				} else {
-					renderType = playerModel.renderType(insecureSkin.texture());
+					renderType = playerModel.renderType(skinLoc);
 				}
 				playerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY/*? if <1.21 {*//*, 1.0F, 1.0F, 1.0F, 1.0F*//*?}*/);
 				l:
