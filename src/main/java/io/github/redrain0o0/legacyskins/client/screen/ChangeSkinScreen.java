@@ -10,6 +10,7 @@ import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacyPackType;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
+import io.github.redrain0o0.legacyskins.client.screen.config.LegacyConfigScreens;
 import io.github.redrain0o0.legacyskins.mixin.RenderableVListAccessor;
 import io.github.redrain0o0.legacyskins.mixin.ScreenAccessor;
 import io.github.redrain0o0.legacyskins.util.LegacySkinSprites;
@@ -117,6 +118,10 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 	@Override
 	public boolean keyPressed(int keyCode, int j, int k) {
+		if (keyCode == InputConstants.KEY_C) {
+			Optional<Screen> configScreen = LegacyConfigScreens.createConfigScreen(this);
+			configScreen.ifPresent(screen -> Minecraft.getInstance().setScreen(screen));
+		}
 		if (this.playerSkinWidgetList != null) this.setFocused(this.buttons.get(focusedPack.getFirst()));
 		if (keyCode == InputConstants.KEY_RETURN) {
 			if (this.playerSkinWidgetList != null) {
@@ -151,6 +156,11 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 	@Override
 	public void bindingStateTick(BindingState state) {
+		if (state.is(ControllerBinding.LEFT_TRIGGER) && state.released) {
+			Optional<Screen> configScreen = LegacyConfigScreens.createConfigScreen(this);
+			configScreen.ifPresent(screen -> Minecraft.getInstance().setScreen(screen));
+			return;
+		}
 		if (state.is(ControllerBinding.UP_BUTTON) && state.released) {
 			favorite();
 		}
@@ -190,6 +200,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		renderer.set(1, () -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_ESCAPE) : ControllerBinding.RIGHT_BUTTON.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.cancel"));
 		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.UP_BUTTON.bindingState.getIcon(), () -> Component.translatable(this.playerSkinWidgetList != null && Legacyskins.INSTANCE.getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get()) ? "legacyskins.menu.unfavorite" : "legacyskins.menu.favorite"));
 		renderer.add(() -> ControlType.getActiveType().isKbm() ? COMPOUND_ICON_FUNCTION.apply(new ControlTooltip.Icon[]{ControlTooltip.getKeyIcon(InputConstants.KEY_LEFT),ControlTooltip.SPACE_ICON,ControlTooltip.getKeyIcon(InputConstants.KEY_RIGHT)})  : ControllerBinding.LEFT_STICK.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.navigate"));
+		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_C) : ControllerBinding.LEFT_TRIGGER.bindingState.getIcon(), () -> Component.literal("Config Screen (temporary)"));
 		//renderer.add(()-> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.LEFT_STICK.bindingState.getIcon(), ()-> null);
 	}
 
