@@ -28,6 +28,9 @@
     ],
     "fabric-datagen": [
       "io.github.redrain0o0.legacyskins.data.LegacySkinsDataGenerator::onInitializeDataGenerator"
+    ],
+    "modmenu": [
+      "io.github.redrain0o0.legacyskins.client.screen.config.ModMenuCompat"
     ]
   },
   "mixins": [

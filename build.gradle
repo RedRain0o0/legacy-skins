@@ -46,6 +46,10 @@ def packageJar = tasks.create("packageJar", Copy.class) {
 repositories {
 	mavenCentral()
 	maven {
+		name = "Terraformers"
+		url = "https://maven.terraformersmc.com/"
+	}
+	maven {
 		name = "tom5454 maven"
 		url = "https://raw.githubusercontent.com/tom5454/maven/main"
 	}
@@ -119,6 +123,9 @@ dependencies {
 	// Fabric exclusive dependencies:
 	if (loader == FABRIC) {
 		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+		modCompileOnly "com.terraformersmc:modmenu:7.2.2", {
+			transitive false
+		}
 		//implementation include("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")
 		testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
 		// Save download time by only depending on Fabric API when it's needed, otherwise just depending on a few modules required to compile Legacy Skins. {

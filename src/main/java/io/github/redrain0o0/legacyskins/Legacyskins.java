@@ -3,12 +3,12 @@ package io.github.redrain0o0.legacyskins;
 
 import io.github.redrain0o0.legacyskins.client.LegacySkinsClient;
 import io.github.redrain0o0.legacyskins.util.PlatformUtils;
-import net.neoforged.fml.ModContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //? if neoforge {
-/*import net.neoforged.fml.common.Mod;
+/*import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
