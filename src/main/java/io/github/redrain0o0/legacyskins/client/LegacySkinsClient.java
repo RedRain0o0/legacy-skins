@@ -8,19 +8,24 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 //?}
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.server.packs.PackType;
 //? if neoforge {
 /*import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 //? if >=1.20.6 {
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 //?} else {
 /^import net.neoforged.fml.common.Mod.EventBusSubscriber;
 ^///?}
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.GameShuttingDownEvent;
+
+import java.util.function.Supplier;
 *///?}
 
 //? if neoforge && multientrypoints
@@ -41,9 +46,10 @@ public class LegacySkinsClient {
 	}
 
 	//? if neoforge {
-	/*public LegacySkinsClient() {
+	/*public LegacySkinsClient(ModContainer modContainer) {
 		NeoForge.EVENT_BUS.addListener(GameShuttingDownEvent.class, LegacySkinsClient::event);
 		LegacyConfigScreens.init();
+		if (LegacyConfigScreens.hasConfigScreens()) modContainer.registerExtensionPoint(IConfigScreenFactory.class, (Supplier<IConfigScreenFactory>) () -> (IConfigScreenFactory) (container, prev) -> LegacyConfigScreens.createConfigScreen(prev).orElseThrow());
 	}
 
 	@SubscribeEvent

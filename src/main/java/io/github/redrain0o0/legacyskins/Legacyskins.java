@@ -3,6 +3,7 @@ package io.github.redrain0o0.legacyskins;
 
 import io.github.redrain0o0.legacyskins.client.LegacySkinsClient;
 import io.github.redrain0o0.legacyskins.util.PlatformUtils;
+import net.neoforged.fml.ModContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +32,11 @@ public class Legacyskins {
 	}
 
 	//? if neoforge {
-	/*public Legacyskins(/^? if constructorargs {^/ IEventBus bus /^?}^/) {
+	/*public Legacyskins(/^? if constructorargs {^/ IEventBus bus, ModContainer container /^?}^/) {
 		onInitialize();
 		bus.addListener(InterModEnqueueEvent.class, this::event);
 		//? if !multientrypoints
-		/^PlatformUtils.executeInDist(PlatformUtils.Env.CLIENT, () -> () -> LegacySkinsClient::new);^/
+		/^PlatformUtils.executeInDist(PlatformUtils.Env.CLIENT, () -> () -> new LegacySkinsClient(container));^/
 	}
 
 

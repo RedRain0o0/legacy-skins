@@ -10,6 +10,10 @@ import java.util.function.Function;
 
 public class LegacyConfigScreens {
 	static final LinkedHashMap<ConfigScreenType, Function<Screen, Screen>> CONFIG_SCREENS = new LinkedHashMap<>();
+	public static boolean hasConfigScreens() {
+		init();
+		return !CONFIG_SCREENS.isEmpty();
+	}
 	private static boolean initialized;
 	public static void init() {
 		if (initialized) return;
