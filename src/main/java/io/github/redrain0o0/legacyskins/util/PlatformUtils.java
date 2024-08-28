@@ -69,6 +69,13 @@ public enum PlatformUtils {
 		return null;
 	}
 
+	public static boolean isModLoaded(String id) {
+		//? if fabric
+		return FabricLoader.getInstance().isModLoaded(id);
+		//? if neoforge
+		/*throw new RuntimeException();*/
+	}
+
 	public enum Env {
 		CLIENT,
 		SERVER

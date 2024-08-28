@@ -1,6 +1,7 @@
 package io.github.redrain0o0.legacyskins.client;
 
 import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.client.screen.config.LegacyConfigScreens;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 //? if fabric {
 import net.fabricmc.api.ClientModInitializer;
@@ -35,6 +36,7 @@ public class LegacySkinsClient {
 			LegacySkinUtils.cleanup();
 			Legacyskins.INSTANCE.save();
 		});
+		LegacyConfigScreens.init();
 		//?}
 	}
 

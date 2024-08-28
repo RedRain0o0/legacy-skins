@@ -9,6 +9,7 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
+import io.github.redrain0o0.legacyskins.client.screen.config.LegacyConfigScreens;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import io.github.redrain0o0.legacyskins.migrator.Migrator;
 import io.github.redrain0o0.legacyskins.util.PlatformUtils;
@@ -30,7 +31,8 @@ public class LegacySkinsConfig {
 			SkinsScreen.CODEC.fieldOf("skinsScreen").forGetter(LegacySkinsConfig::getSkinsScreen),
 			Codec.BOOL.fieldOf("showDevPacks").forGetter(LegacySkinsConfig::showDevPacks),
 			Codec.BOOL.fieldOf("showSkinEditorButton").forGetter(LegacySkinsConfig::showSkinEditorButton),
-			Codec.FLOAT.optionalFieldOf("dollRotationXLimit", 50f).forGetter(LegacySkinsConfig::dollRotationXLimit)
+			Codec.FLOAT.optionalFieldOf("dollRotationXLimit", 50f).forGetter(LegacySkinsConfig::dollRotationXLimit),
+			LegacyConfigScreens.ConfigScreenType.CODEC.optionalFieldOf("configScreen").forGetter(LegacySkinsConfig::configScreenType)
 	).apply(instance, LegacySkinsConfig::new));
 	private final SkinsScreen screen;
 	@Deprecated(forRemoval = true)
@@ -39,6 +41,8 @@ public class LegacySkinsConfig {
 	public boolean showEditorButton;
 	@Deprecated(forRemoval = true)
 	public float dollRotationXLimit;
+	@Deprecated(forRemoval = true)
+	public Optional<LegacyConfigScreens.ConfigScreenType> configScreenType;
 	// selected skin
 	public Optional<SkinReference> skin;
 	// Note: American English
@@ -72,19 +76,24 @@ public class LegacySkinsConfig {
 		return dollRotationXLimit;
 	}
 
+	public Optional<LegacyConfigScreens.ConfigScreenType> configScreenType() {
+		return configScreenType;
+	}
+
 	public enum SkinsScreen {
 		DEFAULT,
 		CLASSIC;
 		public static final Codec<SkinsScreen> CODEC = Codec.STRING.xmap(a -> SkinsScreen.valueOf(a.toUpperCase(Locale.ROOT)), a -> a.name().toLowerCase(Locale.ROOT));
 	}
 
-	public LegacySkinsConfig(Optional<SkinReference> skin, ArrayList<SkinReference> favorites, SkinsScreen screen, boolean showDevPacks, boolean showEditorButton, float dollRotationXLimit) {
+	public LegacySkinsConfig(Optional<SkinReference> skin, ArrayList<SkinReference> favorites, SkinsScreen screen, boolean showDevPacks, boolean showEditorButton, float dollRotationXLimit, Optional<LegacyConfigScreens.ConfigScreenType> type) {
 		this.skin = skin;
 		this.favorites = favorites;
 		this.screen = screen;
 		this.showDevPacks = showDevPacks;
 		this.showEditorButton = showEditorButton;
 		this.dollRotationXLimit = dollRotationXLimit;
+		this.configScreenType = type;
 	}
 
 	public void setSkin(@Nullable SkinReference skin) {
@@ -130,7 +139,7 @@ public class LegacySkinsConfig {
 			Legacyskins.INSTANCE = fromDynamic(jsonElementDynamic);
 
 		} else {
-			(Legacyskins.INSTANCE = new LegacySkinsConfig(Optional.empty(), new ArrayList<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment() /*TODO make loader agnostic */, false, 50f)).save();
+			(Legacyskins.INSTANCE = new LegacySkinsConfig(Optional.empty(), new ArrayList<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment() /*TODO make loader agnostic */, false, 50f, Optional.empty())).save();
 		}
 	}
 
