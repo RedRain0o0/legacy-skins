@@ -12,10 +12,10 @@ import net.minecraft.server.packs.PackType;
 /*import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 //? if >=1.20.6 {
-/^import net.neoforged.fml.common.EventBusSubscriber;
-^///?} else {
-import net.neoforged.fml.common.Mod.EventBusSubscriber;
-//?}
+import net.neoforged.fml.common.EventBusSubscriber;
+//?} else {
+/^import net.neoforged.fml.common.Mod.EventBusSubscriber;
+^///?}
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -25,7 +25,7 @@ import net.neoforged.neoforge.event.GameShuttingDownEvent;
 //? if neoforge && multientrypoints
 /*@Mod(value = Legacyskins.MOD_ID, dist = Dist.CLIENT)*/
 //? if neoforge {
-/*@EventBusSubscriber(/^? if !multientrypoints {^/ modid = Legacyskins.MOD_ID, /^?}^/ bus = EventBusSubscriber.Bus.MOD)
+/*@EventBusSubscriber(/^? if !multientrypoints {^/ /^modid = Legacyskins.MOD_ID, ^//^?}^/ bus = EventBusSubscriber.Bus.MOD)
 *///?}
 public class LegacySkinsClient {
 	public void onInitializeClient() {
