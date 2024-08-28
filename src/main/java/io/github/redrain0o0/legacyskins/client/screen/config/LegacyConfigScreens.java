@@ -27,7 +27,7 @@ public class LegacyConfigScreens {
 		if (CONFIG_SCREENS.isEmpty()) return Optional.empty();
 		ConfigScreenType type;
 		if (Legacyskins.INSTANCE.configScreenType().isPresent() && CONFIG_SCREENS.containsKey(type = Legacyskins.INSTANCE.configScreenType().get())) return Optional.ofNullable(CONFIG_SCREENS.get(type).apply(screen));
-		return Optional.ofNullable(CONFIG_SCREENS.sequencedEntrySet().getFirst().getValue().apply(screen));
+		return Optional.ofNullable(CONFIG_SCREENS.entrySet().stream().findFirst().orElseThrow().getValue().apply(screen));
 	}
 
 	public enum ConfigScreenType {

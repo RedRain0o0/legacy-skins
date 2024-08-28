@@ -36,7 +36,7 @@ public class Legacyskins {
 		onInitialize();
 		bus.addListener(InterModEnqueueEvent.class, this::event);
 		//? if !multientrypoints
-		/^PlatformUtils.executeInDist(PlatformUtils.Env.CLIENT, () -> () -> new LegacySkinsClient(container));^/
+		PlatformUtils.executeInDist(PlatformUtils.Env.CLIENT, () -> () -> () -> new LegacySkinsClient(container));
 	}
 
 

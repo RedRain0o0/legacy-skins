@@ -14,14 +14,15 @@ import net.minecraft.server.packs.PackType;
 /*import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 //? if >=1.20.6 {
+/^import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+^///?} else {
+import net.neoforged.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.neoforge.client.ConfigScreenHandler;
+//?}
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.EventBusSubscriber;
-//?} else {
-/^import net.neoforged.fml.common.Mod.EventBusSubscriber;
-^///?}
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.GameShuttingDownEvent;
 
@@ -31,7 +32,7 @@ import java.util.function.Supplier;
 //? if neoforge && multientrypoints
 /*@Mod(value = Legacyskins.MOD_ID, dist = Dist.CLIENT)*/
 //? if neoforge {
-/*@EventBusSubscriber(/^? if !multientrypoints {^/ /^modid = Legacyskins.MOD_ID, ^//^?}^/ bus = EventBusSubscriber.Bus.MOD)
+/*@EventBusSubscriber(/^? if !multientrypoints {^/ modid = Legacyskins.MOD_ID, /^?}^/ bus = EventBusSubscriber.Bus.MOD)
 *///?}
 public class LegacySkinsClient {
 	public void onInitializeClient() {
@@ -49,7 +50,12 @@ public class LegacySkinsClient {
 	/*public LegacySkinsClient(ModContainer modContainer) {
 		NeoForge.EVENT_BUS.addListener(GameShuttingDownEvent.class, LegacySkinsClient::event);
 		LegacyConfigScreens.init();
-		if (LegacyConfigScreens.hasConfigScreens()) modContainer.registerExtensionPoint(IConfigScreenFactory.class, (Supplier<IConfigScreenFactory>) () -> (IConfigScreenFactory) (container, prev) -> LegacyConfigScreens.createConfigScreen(prev).orElseThrow());
+		if (LegacyConfigScreens.hasConfigScreens()) {
+			//? if >=1.20.6 {
+			/^modContainer.registerExtensionPoint(IConfigScreenFactory.class, (Supplier<IConfigScreenFactory>) () -> (IConfigScreenFactory) (container, prev) -> LegacyConfigScreens.createConfigScreen(prev).orElseThrow());
+			^///?} else
+			modContainer.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((mc, screen) -> LegacyConfigScreens.createConfigScreen(screen).orElseThrow()));
+		}
 	}
 
 	@SubscribeEvent
