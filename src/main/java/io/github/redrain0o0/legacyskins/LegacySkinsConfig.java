@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Optional;
 
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+@SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "DeprecatedIsStillUsed"})
 public class LegacySkinsConfig {
 	public static final Codec<LegacySkinsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			SkinReference.CODEC.optionalFieldOf("currentSkin").forGetter(LegacySkinsConfig::getCurrentSkin),
@@ -33,9 +33,12 @@ public class LegacySkinsConfig {
 			Codec.FLOAT.optionalFieldOf("dollRotationXLimit", 50f).forGetter(LegacySkinsConfig::dollRotationXLimit)
 	).apply(instance, LegacySkinsConfig::new));
 	private final SkinsScreen screen;
-	private final boolean showDevPacks;
-	private final boolean showEditorButton;
-	private final float dollRotationXLimit;
+	@Deprecated(forRemoval = true)
+	public boolean showDevPacks;
+	@Deprecated(forRemoval = true)
+	public boolean showEditorButton;
+	@Deprecated(forRemoval = true)
+	public float dollRotationXLimit;
 	// selected skin
 	public Optional<SkinReference> skin;
 	// Note: American English
