@@ -32,6 +32,7 @@ stonecutter.const("forge", loader == FORGE)
 stonecutter.const("neoforge", loader == NEOFORGE)
 stonecutter.const("multientrypoints", loader == NEOFORGE && minecraftIntVersion >= 1_20_06)
 stonecutter.const("constructorargs", loader == NEOFORGE && minecraftIntVersion >= 1_20_02)
+stonecutter.const("yacl", project.yacl_version != "[VERSIONED]")
 
 base {
 	archivesName = project.archives_base_name
@@ -47,6 +48,7 @@ repositories {
 		name = "tom5454 maven"
 		url = "https://raw.githubusercontent.com/tom5454/maven/main"
 	}
+	// libsdl4j + YACL
 	maven {
 		url "https://maven.isxander.dev/releases"
 	}
@@ -57,6 +59,16 @@ repositories {
 	}
 	maven {
 		url "https://maven.minecraftforge.net/"
+	}
+	exclusiveContent {
+		forRepository {
+			maven {
+				url "https://thedarkcolour.github.io/KotlinForForge/"
+			}
+		}
+		filter {
+			includeGroup "thedarkcolour"
+		}
 	}
 	exclusiveContent {
 		forRepository {
@@ -82,6 +94,12 @@ dependencies {
 	modImplementation "maven.modrinth:legacy4j:${project.legacy4j_version}"
 	api "dev.isxander:libsdl4j:${project.libsdl4j_version}"
 	if (loader.isForgeLike()) {forgeRuntimeLibrary "dev.isxander:libsdl4j:${project.libsdl4j_version}"}
+
+	if (project.yacl_version != "[VERSIONED]") {
+		modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}", {
+			exclude group: "net.fabricmc.fabric-api"
+		}
+	}
 
 	// Fabric exclusive dependencies:
 	if (loader == FABRIC) {
