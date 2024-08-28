@@ -19,7 +19,7 @@ public class YaclConfigScreen {
 						.name(Component.literal("General"))
 						.option(Option.<Boolean>createBuilder()
 								.name(Component.literal("Show Dev Skins"))
-								.binding(true, Legacyskins.INSTANCE::showDevPacks, b -> Legacyskins.INSTANCE.showDevPacks = b)
+								.binding(false, Legacyskins.INSTANCE::showDevPacks, b -> Legacyskins.INSTANCE.showDevPacks = b)
 								.controller(TickBoxControllerBuilder::create)
 								.build()
 						).option(Option.<Boolean>createBuilder()
