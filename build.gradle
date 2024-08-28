@@ -104,6 +104,10 @@ dependencies {
 		modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}", {
 			exclude group: "net.fabricmc.fabric-api"
 		}
+		if (stonecutter.current.isActive && loader.isForgeLike()) {
+			forgeRuntimeLibrary "org.quiltmc.parsers:gson:0.2.1"
+			forgeRuntimeLibrary "org.quiltmc.parsers:json:0.2.1"
+		}
 	}
 
 	if (project.clothconfig_version != "[VERSIONED]") {

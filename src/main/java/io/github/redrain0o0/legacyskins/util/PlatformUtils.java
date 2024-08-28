@@ -9,6 +9,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.fml.loading.LoadingModList;
 *///?}
 
 import java.nio.file.Path;
@@ -72,8 +73,11 @@ public enum PlatformUtils {
 	public static boolean isModLoaded(String id) {
 		//? if fabric
 		return FabricLoader.getInstance().isModLoaded(id);
-		//? if neoforge
-		/*throw new RuntimeException();*/
+		//? if neoforge {
+		/*// NeoForge might have renamed the class
+		//noinspection Convert2MethodRef
+		return LoadingModList.get().getMods().stream().map(a -> a.getModId()).anyMatch(id::equals);
+		*///?}
 	}
 
 	public enum Env {

@@ -43,6 +43,7 @@ public class LegacySkinsClient {
 	//? if neoforge {
 	/*public LegacySkinsClient() {
 		NeoForge.EVENT_BUS.addListener(GameShuttingDownEvent.class, LegacySkinsClient::event);
+		LegacyConfigScreens.init();
 	}
 
 	@SubscribeEvent
