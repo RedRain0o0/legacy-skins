@@ -25,7 +25,7 @@ public class Legacy4JForgeMixin {
 	//? if neoforge {
 	/*@Inject(method = {"init"}, at = @At("HEAD"), cancellable = true)
 	private static void init(CallbackInfo ci) {
-		System.out.println(FMLLoader.launcherHandlerName());
+		// System.out.println(FMLLoader.launcherHandlerName());
 		if (FMLLoader.launcherHandlerName().contains("data"))
 			ci.cancel();
 	}
