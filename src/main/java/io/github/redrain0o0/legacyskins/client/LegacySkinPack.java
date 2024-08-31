@@ -84,12 +84,14 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 			};
 		}
 
+		// addFirst does not exist before Java 21
+		@SuppressWarnings("SequencedCollectionMethodCanBeUsed")
 		@Override
 		public /*? if fabric {*/ CompletableFuture<Void> /*?} else if neoforge {*/ /*void *//*?}*/ apply(Map<ResourceLocation, LegacySkinPack> data, ResourceManager manager, ProfilerFiller profiler /*? if fabric {*/ , Executor executor /*?}*/) {
 			LegacySkinUtils.cleanup();
 			list.clear();
 			// The default skin
-			data.get(Constants.DEFAULT_PACK).skins().add(0, null); // Java 21: addFirst
+			data.get(Constants.DEFAULT_PACK).skins().add(0, null);
 			list.putAll(data);
 			Optional<SkinReference> skin = Legacyskins.lazyInstance().skin;
 			if (skin.isPresent()) {
