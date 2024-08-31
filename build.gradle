@@ -7,7 +7,7 @@ import static io.github.redrain0o0.legacyskins.buildscript.ModLoader.*
 import io.github.redrain0o0.legacyskins.buildscript.ProjectInfo
 plugins {
 	id 'maven-publish'
-	id 'me.modmuss50.mod-publish-plugin' version '0.4.5'
+	id 'me.modmuss50.mod-publish-plugin' version '0.7.2'
 }
 
 ProjectInfo info = ProjectInfo.from(project)
@@ -258,7 +258,13 @@ afterEvaluate {
 publishMods {
 	def modrinthToken = System.getenv("MODRINTH_TOKEN")
 	def curseforgeToken = System.getenv("CURSEFORGE_TOKEN")
-	if (modrinthToken == null || curseforgeToken == null) dryRun = true
+	if (modrinthToken == null || curseforgeToken == null) {
+		dryRun = true
+	} else {
+		// For debugging.
+		System.out.println(modrinthToken.hashCode() + curseforgeToken.hashCode())
+	}
+
 	type = STABLE
 	file = tasks.remapJar.archiveFile
 	version = project.version
