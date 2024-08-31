@@ -32,6 +32,7 @@ public class CPMCompat implements ICPMPlugin {
 	@Override
 	public void initClient(IClientAPI api) {
 		ModConfig.getCommonConfig().setBoolean(ConfigKeys.TITLE_SCREEN_BUTTON, Legacyskins.lazyInstance().showSkinEditorButton());
+		ModConfig.getCommonConfig().save();
 		Legacyskins.LOGGER.info("CPMCompat client initialized.");
 		loadModel = (name, b) -> {
 			// why does java require this
