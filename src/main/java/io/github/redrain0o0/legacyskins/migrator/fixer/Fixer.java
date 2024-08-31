@@ -1,8 +1,8 @@
 package io.github.redrain0o0.legacyskins.migrator.fixer;
 
 import com.mojang.serialization.Dynamic;
-
-import java.util.Optional;
+//? if <1.20.6
+/*import java.util.Optional;*/
 
 public abstract class Fixer {
 	public final int maxApplicable;
