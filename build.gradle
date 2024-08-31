@@ -268,8 +268,8 @@ publishMods {
 	modrinth {
 		accessToken = modrinthToken
 		projectId = "4UNJZ4cX"
-		if (project.supportedMinecraftVersions) {
-			for (final def v in (project.supportedMinecraftVersions as String).split(",")) {
+		if (project.supported_minecraft_versions) {
+			for (final def v in (project.supported_minecraft_versions as String).split(",")) {
 				minecraftVersions.add(v)
 			}
 		} else {
@@ -291,8 +291,8 @@ publishMods {
 	curseforge {
 		accessToken = curseforgeToken
 		projectId = "1090749"
-		if (project.supportedMinecraftVersions) {
-			for (final def v in (project.supportedMinecraftVersions as String).split(",")) {
+		if (project.supported_minecraft_versions) {
+			for (final def v in (project.supported_minecraft_versions as String).split(",")) {
 				minecraftVersions.add(v)
 			}
 		} else {
