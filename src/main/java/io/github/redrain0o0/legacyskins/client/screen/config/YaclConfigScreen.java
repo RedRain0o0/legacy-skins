@@ -51,12 +51,13 @@ public class YaclConfigScreen {
 		return yacl.generateScreen(parent);
 	}
 
-	private static enum M {
+	// Used since you can't have a null enum
+	private enum M {
 		NONE(null),
 		YACL(LegacyConfigScreens.ConfigScreenType.YACL),
 		CLOTH_CONFIG(LegacyConfigScreens.ConfigScreenType.CLOTH_CONFIG);
 		private final LegacyConfigScreens.ConfigScreenType type;
-		private M(LegacyConfigScreens.ConfigScreenType type) {
+		M(LegacyConfigScreens.ConfigScreenType type) {
 			this.type = type;
 		}
 
