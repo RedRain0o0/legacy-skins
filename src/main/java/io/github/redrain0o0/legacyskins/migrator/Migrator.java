@@ -12,9 +12,8 @@ public class Migrator {
 	private final List<Fixer> fixers;
 	public static final Migrator CONFIG_FIXER = new Migrator(
 			List.of(
-					new SkinsScreenFixer(),
-					new SkinToCurrentSkinFixer(),
-					new AddSkinEditorOptionFixer(),
+					new To1002Fixer(),
+					new To1003Fixer(),
 					new To1004Fixer()
 			),
 			1001,

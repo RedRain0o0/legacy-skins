@@ -2,9 +2,9 @@ package io.github.redrain0o0.legacyskins.migrator.fixer;
 
 import com.mojang.serialization.Dynamic;
 
-public class AddSkinEditorOptionFixer extends Fixer {
+public class To1003Fixer extends Fixer {
 
-	public AddSkinEditorOptionFixer() {
+	public To1003Fixer() {
 		super(1003);
 	}
 
