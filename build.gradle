@@ -268,7 +268,13 @@ publishMods {
 	modrinth {
 		accessToken = modrinthToken
 		projectId = "4UNJZ4cX"
-		minecraftVersions.add(minecraftVersion)
+		if (project.supportedMinecraftVersions) {
+			for (final def v in (project.supportedMinecraftVersions as String).split(",")) {
+				minecraftVersions.add(v)
+			}
+		} else {
+			minecraftVersions.add(minecraftVersion)
+		}
 		if (loader == FABRIC) {
 			requires("fabric-api")
 			optional("modmenu")
@@ -285,7 +291,13 @@ publishMods {
 	curseforge {
 		accessToken = curseforgeToken
 		projectId = "1090749"
-		minecraftVersions.add(minecraftVersion)
+		if (project.supportedMinecraftVersions) {
+			for (final def v in (project.supportedMinecraftVersions as String).split(",")) {
+				minecraftVersions.add(v)
+			}
+		} else {
+			minecraftVersions.add(minecraftVersion)
+		}
 		if (loader == FABRIC) {
 			requires("fabric-api")
 			optional("modmenu")
