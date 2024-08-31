@@ -78,6 +78,15 @@
       },
       {
         "model": "legacyskins:skinpacks/dev/tom5454.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/dev/macandmayo.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/dev/lyn.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/dev/mintyroad.cpmmodel"
       }
     ]
   }

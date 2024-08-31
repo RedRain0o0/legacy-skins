@@ -28,7 +28,7 @@
   "skin_pack.legacyskins.default.7": "Cyclist Steve",
   "skin_pack.legacyskins.default.8": "Boxer Steve",
   "skin_pack.legacyskins.default.9": "Alex",
-  "skin_pack.legacyskins.dev": "Dev Pack",
+  "skin_pack.legacyskins.dev": "Creators Pack",
   "skin_pack.legacyskins.dev.0": "RedRain0o0",
   "skin_pack.legacyskins.dev.0.desc": "Created new defaults and UI",
   "skin_pack.legacyskins.dev.1": "Jab125",
@@ -37,5 +37,11 @@
   "skin_pack.legacyskins.dev.2.desc": "Creator of Legacy4J",
   "skin_pack.legacyskins.dev.3": "tom5454",
   "skin_pack.legacyskins.dev.3.desc": "Creator of CPM",
+  "skin_pack.legacyskins.dev.4": "MacandMayo",
+  "skin_pack.legacyskins.dev.4.desc": "Helped with porting packs",
+  "skin_pack.legacyskins.dev.5": "Lyn",
+  "skin_pack.legacyskins.dev.5.desc": "Helped with porting packs",
+  "skin_pack.legacyskins.dev.6": "Minty Road",
+  "skin_pack.legacyskins.dev.6.desc": "Ported many skins to CPM",
   "skin_pack.legacyskins.favorites": "Favorite Skins"
 }
