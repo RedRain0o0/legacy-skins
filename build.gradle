@@ -102,16 +102,19 @@ dependencies {
 	modImplementation "com.tom5454.cpm:CustomPlayerModels-${loader == NEOFORGE ? "" : "${project.cpm_loader}-"}${project.cpm_mc_version}:${project.cpm_runtime_version}"
 	modImplementation "maven.modrinth:legacy4j:${project.legacy4j_version}"
 	api "dev.isxander:libsdl4j:${project.libsdl4j_version}"
-	if (loader.isForgeLike()) {forgeRuntimeLibrary "dev.isxander:libsdl4j:${project.libsdl4j_version}"}
+	if (loader.isForgeLike()) {
+		// forgeRuntimeLibrary "dev.isxander:libsdl4j:${project.libsdl4j_version}"
+	}
 
 	if (project.yacl_version != "[VERSIONED]") {
-		modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}", {
+		// Attempt to fix NeoForge crash
+		modCompileOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}", {
 			exclude group: "net.fabricmc.fabric-api"
 		}
-		if (stonecutter.current.isActive && loader.isForgeLike()) {
-			forgeRuntimeLibrary "org.quiltmc.parsers:gson:0.2.1"
-			forgeRuntimeLibrary "org.quiltmc.parsers:json:0.2.1"
-		}
+//		if (stonecutter.current.isActive && loader.isForgeLike()) {
+//			forgeRuntimeLibrary "org.quiltmc.parsers:gson:0.2.1"
+//			forgeRuntimeLibrary "org.quiltmc.parsers:json:0.2.1"
+//		}
 	}
 
 	if (project.clothconfig_version != "[VERSIONED]") {
