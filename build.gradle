@@ -268,7 +268,7 @@ publishMods {
 	modrinth {
 		accessToken = modrinthToken
 		projectId = "4UNJZ4cX"
-		if (project.supported_minecraft_versions) {
+		if (project.supported_minecraft_versions != "[VERSIONED]") {
 			for (final def v in (project.supported_minecraft_versions as String).split(",")) {
 				minecraftVersions.add(v)
 			}
@@ -291,7 +291,7 @@ publishMods {
 	curseforge {
 		accessToken = curseforgeToken
 		projectId = "1090749"
-		if (project.supported_minecraft_versions) {
+		if (project.supported_minecraft_versions != "[VERSIONED]") {
 			for (final def v in (project.supported_minecraft_versions as String).split(",")) {
 				minecraftVersions.add(v)
 			}
