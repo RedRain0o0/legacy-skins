@@ -86,6 +86,15 @@ public class LegacySkinsConfig {
 		public static final Codec<SkinsScreen> CODEC = Codec.STRING.xmap(a -> SkinsScreen.valueOf(a.toUpperCase(Locale.ROOT)), a -> a.name().toLowerCase(Locale.ROOT));
 	}
 
+	/**
+	 * @param skin A reference to a skin
+	 * @param favorites A list of {@link SkinReference}s
+	 * @param screen Classic/Default
+	 * @param showDevPacks Whether to show dev packs in the skins screen
+	 * @param showEditorButton Whether to show the skin editor button in the title screen
+	 * @param dollRotationXLimit The maximum the doll can be rotated along the X axis
+	 * @param type Which type of config screen will be preferred
+	 */
 	public LegacySkinsConfig(Optional<SkinReference> skin, ArrayList<SkinReference> favorites, SkinsScreen screen, boolean showDevPacks, boolean showEditorButton, float dollRotationXLimit, Optional<LegacyConfigScreens.ConfigScreenType> type) {
 		this.skin = skin;
 		this.favorites = favorites;
