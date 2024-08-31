@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerSkinUtils {
-	private static Map<GameProfile, F> info = new HashMap<>();
+	private static final Map<GameProfile, F> info = new HashMap<>();
 
 	public static F skinOf(GameProfile profile) {
 		F f = of(profile);
@@ -48,6 +48,7 @@ public class PlayerSkinUtils {
 			//?}
 		}
 
+		// Used on 1.20.1 for updating skin info once loaded.
 		private void onSkinTextureAvailable(MinecraftProfileTexture.Type type, ResourceLocation resourceLocation, MinecraftProfileTexture minecraftProfileTexture) {
 			if (type == MinecraftProfileTexture.Type.SKIN) {
 				this.skinLocation = resourceLocation;
