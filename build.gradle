@@ -7,6 +7,7 @@ import static io.github.redrain0o0.legacyskins.buildscript.ModLoader.*
 import io.github.redrain0o0.legacyskins.buildscript.ProjectInfo
 plugins {
 	id 'maven-publish'
+	id 'me.modmuss50.mod-publish-plugin' version '0.7.2'
 }
 
 ProjectInfo info = ProjectInfo.from(project)
@@ -252,4 +253,49 @@ afterEvaluate {
 	packageJar.dependsOn(remapJar)
 	packageJar.from(remapJar.archiveFile)
 	build.finalizedBy(packageJar)
+}
+
+publishMods {
+	def modrinthToken = System.getenv("MODRINTH_TOKEN")
+	def curseforgeToken = System.getenv("CURSEFORGE_TOKEN")
+	if (modrinthToken == null || curseforgeToken == null) dryRun = true
+	type = STABLE
+	file = tasks.remapJar.archiveFile
+	version = project.version
+	displayName = "[$minecraftVersion] ${project.mod_version} for ${loader.formalName}"
+	modLoaders.add(loader.friendlyName)
+	changelog = rootProject.file("CHANGELOG.md").text
+	modrinth {
+		accessToken = modrinthToken
+		projectId = "4UNJZ4cX"
+		minecraftVersions.add(minecraftVersion)
+		if (loader == FABRIC) {
+			requires("fabric-api")
+			optional("modmenu")
+		}
+		if (project.yacl_version) {
+			optional("yacl")
+		}
+		if (project.clothconfig_version) {
+			optional("cloth-config")
+		}
+		requires("legacy4j")
+	}
+
+	curseforge {
+		accessToken = curseforgeToken
+		projectId = "1090749"
+		minecraftVersions.add(minecraftVersion)
+		if (loader == FABRIC) {
+			requires("fabric-api")
+			optional("modmenu")
+		}
+		if (project.yacl_version) {
+			optional("yacl")
+		}
+		if (project.clothconfig_version) {
+			optional("cloth-config")
+		}
+		requires("legacy-minecraft")
+	}
 }

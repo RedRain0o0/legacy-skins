@@ -1,14 +1,16 @@
 package io.github.redrain0o0.legacyskins.buildscript;
 
 public enum ModLoader {
-	FABRIC("fabric"),
-	FORGE("forge"),
-	NEOFORGE("neoforge");
+	FABRIC("fabric", "Fabric"),
+	FORGE("forge", "Forge"),
+	NEOFORGE("neoforge", "NeoForge");
 
 	public final String friendlyName;
+	public final String formalName;
 
-	ModLoader(String friendlyName) {
+	ModLoader(String friendlyName, String formalName) {
 		this.friendlyName = friendlyName;
+		this.formalName = formalName;
 	}
 
 	public boolean isFabricLike() {

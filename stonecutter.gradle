@@ -16,4 +16,9 @@ stonecutter.registerChiseled tasks.register("chiseledRunDatagen", stonecutter.ch
 	ofTask "runDatagen"
 }
 
+stonecutter.registerChiseled tasks.register("chiseledPublishMods", stonecutter.chiseled) {
+	setGroup "project"
+	ofTask "publishMods"
+}
+
 stonecutter.exclude("*.cpmmodel")
