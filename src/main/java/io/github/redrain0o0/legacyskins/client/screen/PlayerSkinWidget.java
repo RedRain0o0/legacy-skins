@@ -101,6 +101,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 		this.targetPosY = targetPosY;
 		this.prevScale = scale;
 		this.targetScale = targetScale;
+		this.statf = State.NORMKFL;
 		if(!this.visible || this.wasHidden) {
 			this.rotationX = this.targetRotationX;
 			this.rotationY = this.targetRotationY;
@@ -210,7 +211,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 		/*Lighting.setupForFlatItems();*/
 		//? if >=1.20.6
 		Lighting.setupForEntityInInventory(Axis.XP.rotationDegrees(this.rotationX));
-		this.model.render(guiGraphics, this.skin.get());
+		this.model.render(this, guiGraphics, this.skin.get());
 		guiGraphics.flush();
 		Lighting.setupFor3DItems();
 		guiGraphics.pose().popPose();
@@ -254,6 +255,32 @@ public class PlayerSkinWidget extends AbstractWidget {
 
 	private static final HashMap<String, IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile>> rendererHashMap = new HashMap<>();
 
+	public void sktaeChange(SLy s) {
+		if (s == SLy.STEAKING && statf == State.STEAKING) {
+			statf = State.NORMKFL;
+		} else if (s == SLy.PRFINVING && statf == State.PCFVUCING) {
+			statf = State.NORMKFL;
+		} else {
+			statf = switch (s) {
+				case STEAKING -> State.STEAKING;
+				case PRFINVING -> State.PCFVUCING;
+			};
+		}
+	}
+
+	public enum SLy {
+		STEAKING,
+		PRFINVING
+	}
+
+	private enum State {
+		NORMKFL,
+		STEAKING,
+		PCFVUCING
+	}
+
+	private State statf = State.STEAKING;
+
 	//? if fabric
 	@Environment(EnvType.CLIENT)
 	//? if neoforge
@@ -267,7 +294,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 			return new PlayerSkinWidget.Model(playerModel, playerModel2);
 		}
 
-		public void render(GuiGraphics guiGraphics, LegacySkin playerSkin) {
+		public void render(@Nullable PlayerSkinWidget widget, GuiGraphics guiGraphics, LegacySkin playerSkin) {
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(1.0F, 1.0F, -1.0F);
 			guiGraphics.pose().translate(0.0F, -1.5F, 0.0F);
@@ -298,7 +325,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 				renderer.setRenderModel(playerModel);
 				renderer.setRenderType(RenderType::entityTranslucent);
 			}
-			setupAnim(playerModel);
+			setupAnim(widget, playerModel);
 			if (renderer != null) {
 				try {
 					renderer.preRender(guiGraphics.bufferSource(), AnimationEngine.AnimationMode.GUI);
@@ -323,10 +350,13 @@ public class PlayerSkinWidget extends AbstractWidget {
 					guiGraphics.pose().pushPose();
 					guiGraphics.pose().translate(0.0F, 0.0F, 0.125F);
 					PoseStack poseStack = guiGraphics.pose();
-					poseStack.mulPose(Axis.XP.rotationDegrees(6.0F + 0 / 2.0F + 0));
+					poseStack.mulPose(Axis.XP.rotationDegrees(6.0F + 0 / 2.0F + (widget != null && widget.statf == State.STEAKING ? 25.0F : 0)));
 					poseStack.mulPose(Axis.ZP.rotationDegrees(0 / 2.0F));
 					poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - 0 / 2.0F));
 					poseStack.mulPose(Axis.XP.rotation((float) ((Math.sin(System.currentTimeMillis() / 1000d) - 1) / 10f)));
+					if (widget != null && widget.statf == State.STEAKING) {
+						guiGraphics.pose().translate(0, 1.85F / 16, 1.4F / 16);
+					}
 					playerModel.renderCloak(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(capeRenderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
 					guiGraphics.pose().popPose();
 				}
@@ -337,7 +367,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 			guiGraphics.pose().popPose();
 		}
 
-		public void setupAnim(PlayerModel<?> model) {
+		public void setupAnim(@Nullable PlayerSkinWidget widget, PlayerModel<?> model) {
 			long l = System.currentTimeMillis();
 			model.leftArm.zRot = (float) Math.toRadians(-5);
 			model.rightArm.zRot = (float) Math.toRadians(5);
@@ -345,6 +375,33 @@ public class PlayerSkinWidget extends AbstractWidget {
 			model.leftLeg.xRot = (float) -Math.sin(l / 250d) / 5f;
 			model.rightArm.xRot = (float) -Math.sin(l / 250d) / 5f;
 			model.rightLeg.xRot = (float) Math.sin(l / 250d) / 5f;
+
+			if (widget != null && widget.statf == State.STEAKING) {
+				model.body.xRot = 0.5F;
+				model.rightArm.xRot += 0.4F;
+				model.leftArm.xRot += 0.4F;
+				model.rightLeg.z = 4.0F;
+				model.leftLeg.z = 4.0F;
+				model.rightLeg.y = 12.2F;
+				model.leftLeg.y = 12.2F;
+				model.head.y = 4.2F;
+				model.body.y = 3.2F;
+				model.leftArm.y = 5.2F;
+				model.rightArm.y = 5.2F;
+
+
+			} else {
+				model.body.xRot = 0.0F;
+				model.rightLeg.z = 0.0F;
+				model.leftLeg.z = 0.0F;
+				model.rightLeg.y = 12.0F;
+				model.leftLeg.y = 12.0F;
+				model.head.y = 0.0F;
+				model.body.y = 0.0F;
+				model.leftArm.y = 2.0F;
+				model.rightArm.y = 2.0F;
+			}
+
 			model.leftPants.copyFrom(model.leftLeg);
 			model.rightPants.copyFrom(model.rightLeg);
 			model.leftSleeve.copyFrom(model.leftArm);
