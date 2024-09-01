@@ -253,6 +253,9 @@ afterEvaluate {
 	packageJar.dependsOn(remapJar)
 	packageJar.from(remapJar.archiveFile)
 	build.finalizedBy(packageJar)
+	tasks.findByPath("publishMods").doFirst {
+		if (rootProject.changelogfor != rootProject.mod_version) throw new Error("Fix the changelog!")
+	}
 }
 
 publishMods {
