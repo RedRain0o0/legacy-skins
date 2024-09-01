@@ -131,8 +131,21 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		}
 		if (control(keyCode == InputConstants.KEY_LBRACKET, keyCode == InputConstants.KEY_RBRACKET)) return true;
 		if (control(keyCode == InputConstants.KEY_LEFT, keyCode == InputConstants.KEY_RIGHT)) return true;
+		if (handleDollInteraction(keyCode == InputConstants.KEY_LSHIFT, keyCode == InputConstants.KEY_RSHIFT)) return true;
 		return super.keyPressed(keyCode,j,k);
 	} // 91 93
+
+	boolean handleDollInteraction(boolean left, boolean right) {
+		if (!(left || right)) return false;
+		if (playerSkinWidgetList == null || playerSkinWidgetList.element3 == null || playerSkinWidgetList.element3.isInterpolating()) return false;
+		if (left) {
+			playerSkinWidgetList.element3.sktaeChange(PlayerSkinWidget.SLy.STEAKING);
+		}
+		if (right) {
+			playerSkinWidgetList.element3.sktaeChange(PlayerSkinWidget.SLy.PRFINVING);
+		}
+		return true;
+	}
 
 	boolean control(boolean left, boolean right) {
 		if ((left || right)) {
