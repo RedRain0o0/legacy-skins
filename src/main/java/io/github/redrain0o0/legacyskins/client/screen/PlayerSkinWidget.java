@@ -339,6 +339,8 @@ public class PlayerSkinWidget extends AbstractWidget {
 
 		public void setupAnim(PlayerModel<?> model) {
 			long l = System.currentTimeMillis();
+			model.leftArm.zRot = (float) Math.toRadians(-5);
+			model.rightArm.zRot = (float) Math.toRadians(5);
 			model.leftArm.xRot = (float) Math.sin(l / 250d) / 5f;
 			model.leftLeg.xRot = (float) -Math.sin(l / 250d) / 5f;
 			model.rightArm.xRot = (float) -Math.sin(l / 250d) / 5f;
