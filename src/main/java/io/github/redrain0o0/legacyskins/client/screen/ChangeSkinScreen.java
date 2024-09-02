@@ -381,6 +381,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	// TODO this assumes there's 6 skinpacks displayed.
 	void ix() {
 		int index = new ArrayList<>(LegacySkinPack.list.keySet()).indexOf(this.focusedPack.getFirst());
+		index--;
 		if (index < 6) return;
 		if (index > this.renderableVList.renderables.size() - 6) index = this.renderableVList.renderables.size() - 6;
 		((RenderableVListAccessor) this.renderableVList).getScrolledList().set(index);
