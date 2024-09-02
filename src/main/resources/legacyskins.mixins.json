@@ -3,12 +3,12 @@
   "package": "io.github.redrain0o0.legacyskins.mixin",
   "compatibilityLevel": "JAVA_${deps.java}",
   "mixins": [
-    "AnimationEngineMixin",
     "EditorAccessor",
     "EditorGuiAccessor",
     "GeneratorsAccessor",
     "HelpOptionsMixin",
     "Legacy4JForgeMixin",
+    "NetHandlerMixin",
     "PlayerRendererImplAccessor",
     "RenderableVListAccessor",
     "ScreenAccessor"
