@@ -30,6 +30,8 @@ import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -37,6 +39,7 @@ import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.HumanoidArm;
 import org.jetbrains.annotations.Nullable;
 //? if fabric {
 import net.fabricmc.api.EnvType;
@@ -256,6 +259,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 	private static final HashMap<String, IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile>> rendererHashMap = new HashMap<>();
 
 	public void sktaeChange(SLy s) {
+		State statf1 = statf;
 		if (s == SLy.STEAKING && statf == State.STEAKING) {
 			statf = State.NORMKFL;
 		} else if (s == SLy.PRFINVING && statf == State.PCFVUCING) {
@@ -265,6 +269,11 @@ public class PlayerSkinWidget extends AbstractWidget {
 				case STEAKING -> State.STEAKING;
 				case PRFINVING -> State.PCFVUCING;
 			};
+		}
+		//noinspection ConstantValue
+		if (statf1 != statf && statf == State.PCFVUCING) {
+			swingTime = 0;
+			f = System.currentTimeMillis();
 		}
 	}
 
@@ -279,6 +288,8 @@ public class PlayerSkinWidget extends AbstractWidget {
 		PCFVUCING
 	}
 
+	private int swingTime;
+	private long f = 0;
 	private State statf = State.STEAKING;
 
 	//? if fabric
@@ -402,11 +413,79 @@ public class PlayerSkinWidget extends AbstractWidget {
 				model.rightArm.y = 2.0F;
 			}
 
+			if (widget != null && widget.statf == State.PCFVUCING) {
+//				int i = this.getCurrentSwingDuration();
+//		if (this.swinging) {
+//			this.swingTime++;
+//			if (this.swingTime >= i) {
+//				this.swingTime = 0;
+//				this.swinging = false;
+//			}
+//		} else {
+//			this.swingTime = 0;
+//		}
+//
+//		this.attackAnim = (float)this.swingTime / (float)i;
+				int i = 6;
+				if (System.currentTimeMillis() % 20 == 0) {
+					widget.swingTime++;
+					if (widget.swingTime >= i) {
+						widget.swingTime = 0;
+					}
+				}
+				float attackAnim = (float)widget.swingTime / i;
+				model.attackTime = attackAnim;
+				System.out.println("f" + widget.swingTime + "e" + attackAnim);
+				//model.attackTime = ((System.currentTimeMillis() - widget.stateStart) / 1000f * 20) - 1;// - (System.currentTimeMillis() - widget.stateStart) / 10000f;
+				//if (((System.currentTimeMillis() - widget.stateStart) / 100f) >= 3) widget.stateStart = System.currentTimeMillis() + 100;
+				setupAttackAnimation(model, 0);
+			} else {
+				model.attackTime = 0;
+				model.rightArm.yRot = 0;
+				//model.rightArm.xRot = 0;
+				//model.leftArm.xRot = 0;
+				model.leftArm.yRot = 0;
+			}
+
 			model.leftPants.copyFrom(model.leftLeg);
 			model.rightPants.copyFrom(model.rightLeg);
 			model.leftSleeve.copyFrom(model.leftArm);
 			model.rightSleeve.copyFrom(model.rightArm);
 			model.jacket.copyFrom(model.body);
+
+			//model.setupAttackAnimation()
+		}
+
+		protected void setupAttackAnimation(PlayerModel<?> model, float f) {
+			if (!(model.attackTime <= 0.0F)) {
+				//AbstractClientPlayer
+				HumanoidArm humanoidArm = HumanoidArm.RIGHT;
+				//noinspection ConstantValue
+				ModelPart modelPart = humanoidArm == HumanoidArm.RIGHT ? model.rightArm : model.leftArm;
+				float g = model.attackTime;
+				model.body.yRot = Mth.sin(Mth.sqrt(g) * (float) (Math.PI * 2)) * 0.2F;
+				//noinspection ConstantValue
+				if (humanoidArm == HumanoidArm.LEFT) {
+					model.body.yRot *= -1.0F;
+				}
+
+				model.rightArm.z = Mth.sin(model.body.yRot) * 5.0F;
+				model.rightArm.x = -Mth.cos(model.body.yRot) * 5.0F;
+				model.leftArm.z = -Mth.sin(model.body.yRot) * 5.0F;
+				model.leftArm.x = Mth.cos(model.body.yRot) * 5.0F;
+				model.rightArm.yRot = model.rightArm.yRot + model.body.yRot;
+				model.leftArm.yRot = model.leftArm.yRot + model.body.yRot;
+				model.leftArm.xRot = model.leftArm.xRot + model.body.yRot;
+				g = 1.0F - model.attackTime;
+				g *= g;
+				g *= g;
+				g = 1.0F - g;
+				float h = Mth.sin(g * (float) Math.PI);
+				float i = Mth.sin(model.attackTime * (float) Math.PI) * -(model.head.xRot - 0.7F) * 0.75F;
+				modelPart.xRot -= h * 1.2F + i;
+				modelPart.yRot = modelPart.yRot + model.body.yRot * 2.0F;
+				modelPart.zRot = modelPart.zRot + Mth.sin(model.attackTime * (float) Math.PI) * -0.4F;
+			}
 		}
 
 //		void a() {
