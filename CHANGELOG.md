@@ -1,1 +1,7 @@
-- Initial Release
+- The doll's arms are now rotated 5 degrees in each direction.
+- Updated some skin descriptions.
+- You can now make a doll sneak by pressing LSHIFT with keyboard or the Right Stick on a controller.
+- Fixed an off by one issue when opening to a skin pack that requires scrolling for its button to be visible.
+- `pack_name_box` is now rendered before `skin_box` to fix some texture issues.
+- Replaced `AnimationEngineMixin` with `NetHandlerMixin`. This should fix a crash happening due to an apparent `@Redirect` conflict.
+- Fixed a bug where it was possible to scroll up and down with the Right Stick if there were enough skin packs.
