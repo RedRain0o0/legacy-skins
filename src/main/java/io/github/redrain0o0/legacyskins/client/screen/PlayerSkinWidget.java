@@ -259,6 +259,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 	private static final HashMap<String, IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile>> rendererHashMap = new HashMap<>();
 
 	public void sktaeChange(SLy s) {
+		if (s == SLy.PRFINVING) return; // disable this for now, it's broken
 		State statf1 = statf;
 		if (s == SLy.STEAKING && statf == State.STEAKING) {
 			statf = State.NORMKFL;
@@ -267,7 +268,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 		} else {
 			statf = switch (s) {
 				case STEAKING -> State.STEAKING;
-				case PRFINVING -> State.STEAKING;
+				case PRFINVING -> State.PCFVUCING;
 			};
 		}
 		//noinspection ConstantValue
