@@ -167,6 +167,9 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		if (state.is(ControllerBinding.UP_BUTTON) && state.released) {
 			favorite();
 		}
+		if (state.is(ControllerBinding.RIGHT_STICK_BUTTON) && state.justPressed) {
+			if (handleDollInteraction(true, false)) return;
+		}
 		if (state.is(ControllerBinding.RIGHT_STICK) && state instanceof BindingState.Axis stick) {
 			if (this.playerSkinWidgetList != null) {
 				PlayerSkinWidget element3 = this.playerSkinWidgetList.element3;
