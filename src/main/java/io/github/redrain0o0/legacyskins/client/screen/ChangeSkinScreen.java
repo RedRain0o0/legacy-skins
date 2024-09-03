@@ -175,6 +175,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				PlayerSkinWidget element3 = this.playerSkinWidgetList.element3;
 				double sensitivity = 0.3d;
 				element3.onDrag(0, 0, stick.getDeadZone() > Math.abs(stick.x) ? 0 : (double)stick.x * ((double)this.minecraft.getWindow().getScreenWidth() / (double)this.minecraft.getWindow().getGuiScaledWidth()) * ScreenUtil.getLegacyOptions().interfaceSensitivity().get() / 2.0 * sensitivity, stick.getDeadZone() > Math.abs(stick.y) ? 0 : (double)stick.y * ((double)this.minecraft.getWindow().getScreenWidth() / (double)this.minecraft.getWindow().getGuiScaledWidth()) * ScreenUtil.getLegacyOptions().interfaceSensitivity().get() / 2.0 * sensitivity);
+				state.block();
 			}
 		}
 	}
