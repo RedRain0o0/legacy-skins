@@ -134,7 +134,7 @@ public abstract class LegacyPackProvider implements DataProvider {
 			//? if fabric
 			return ((FabricDataOutput) getOutput()).getModId();
 			//? if !fabric
-			/*return modid;*/ // TODO
+			/*return modid;*/
 		}
 	}
 }

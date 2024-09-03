@@ -148,7 +148,7 @@ public class LegacySkinsConfig {
 			Legacyskins.INSTANCE = fromDynamic(jsonElementDynamic);
 
 		} else {
-			(Legacyskins.INSTANCE = new LegacySkinsConfig(Optional.empty(), new ArrayList<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment() /*TODO make loader agnostic */, false, 50f, Optional.empty())).save();
+			(Legacyskins.INSTANCE = new LegacySkinsConfig(Optional.empty(), new ArrayList<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment(), false, 50f, Optional.empty())).save();
 		}
 	}
 
