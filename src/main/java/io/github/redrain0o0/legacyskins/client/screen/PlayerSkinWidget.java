@@ -267,7 +267,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 		} else {
 			statf = switch (s) {
 				case STEAKING -> State.STEAKING;
-				case PRFINVING -> State.PCFVUCING;
+				case PRFINVING -> State.STEAKING;
 			};
 		}
 		//noinspection ConstantValue
