@@ -89,5 +89,64 @@
         "model": "legacyskins:skinpacks/dev/mintyroad.cpmmodel"
       }
     ]
+  },
+  "legacyskins:modern-defaults": {
+    "icon": "legacyskins:textures/skin_packs/dev.png",
+    "skins": [
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/wide/steve.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/slim/steve.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/wide/sunny.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/slim/sunny.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/wide/zuri.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/slim/zuri.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/wide/alex.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/slim/alex.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/wide/ari.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/slim/ari.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/wide/efe.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/slim/efe.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/wide/kai.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/slim/kai.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/wide/makena.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/slim/makena.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/wide/noor.cpmmodel"
+      },
+      {
+        "model": "legacyskins:skinpacks/modern-defaults/slim/noor.cpmmodel"
+      }
+    ]
   }
 }
