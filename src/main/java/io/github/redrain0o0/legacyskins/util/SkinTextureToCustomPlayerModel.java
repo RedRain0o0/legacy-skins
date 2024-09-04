@@ -1,5 +1,5 @@
 package io.github.redrain0o0.legacyskins.util;
-
+//? if >=1.20.2 {
 import com.google.common.reflect.AbstractInvocationHandler;
 import com.tom.cpl.gui.*;
 import com.tom.cpl.item.Stack;
@@ -139,3 +139,4 @@ public class SkinTextureToCustomPlayerModel {
 		Exporter.exportModel(editor, gui, exportLoc.toFile(), modelDescription, false);
 	}
 }
+//?}
