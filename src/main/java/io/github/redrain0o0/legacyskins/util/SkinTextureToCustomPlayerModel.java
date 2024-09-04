@@ -21,11 +21,15 @@ import io.github.redrain0o0.legacyskins.mixin.EditorAccessor;
 import io.github.redrain0o0.legacyskins.mixin.EditorGuiAccessor;
 import io.github.redrain0o0.legacyskins.mixin.GeneratorsAccessor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -37,17 +41,17 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class SkinTextureToCustomPlayerModel {
-	public static void main(String[] args) {
-		convert(null, false);
+	public static void main(String[] args) throws Throwable {
+		convert0(Files.readAllBytes(Path.of("steve.png")), false);
 	}
 	public static void convert(ResourceLocation texture, boolean slim) {
 		try {
-			convert0(texture, slim);
+			convert0(Minecraft.getInstance().getResourceManager().getResourceOrThrow(texture).open().readAllBytes(), slim);
 		} catch (Throwable e) {
 			throw new RuntimeException(e);
 		}
 	}
-	public static void convert0(ResourceLocation texture, boolean slim) throws Throwable {
+	public static void convert0(byte[] texture, boolean slim) throws Throwable {
 		UI gui = (UI) Proxy.newProxyInstance(SkinTextureToCustomPlayerModel.class.getClassLoader(), new Class[]{UI.class}, new AbstractInvocationHandler() {
 			@Override
 			protected Object handleInvocation(Object proxy, Method method,  Object[] args) throws Throwable {
@@ -61,6 +65,9 @@ public class SkinTextureToCustomPlayerModel {
 				if (method.getName().equals("executeLater")) {
 					((Runnable) args[0]).run();
 				}
+				if (method.getName().equals("i18nFormat")) {
+					return I18n.get((String) args[0], args[1]);
+				}
 				return null;
 			}
 		});
@@ -73,8 +80,8 @@ public class SkinTextureToCustomPlayerModel {
 		editor.skinType = slim ? SkinType.SLIM : SkinType.DEFAULT;
 		editor.vanillaSkin = editor.skinType.getSkinTexture();
 		editor.updateGui();
-		Image image = Image.loadFrom(Minecraft.getInstance().getResourceManager().getResourceOrThrow(texture).open());
-		byte[] bytes = Minecraft.getInstance().getResourceManager().getResourceOrThrow(texture).open().readAllBytes();
+		Image image = Image.loadFrom(new ByteArrayInputStream(texture));
+		byte[] bytes = texture;
 		Files.write(Path.of("by.png"), bytes);
 		File f = Path.of("by.png").toFile();
 		//editor.setTexSize(image.getWidth(), image.getHeight());
@@ -84,7 +91,7 @@ public class SkinTextureToCustomPlayerModel {
 				//editor.penColor = image.getRGB(x, y);
 
 				// image.getRGB(x, y)
-				((EditorAccessor)editor).callSetPixel(x, y, new Color((float) Math.random(), (float) Math.random(), (float) Math.random()).getRGB());
+				((EditorAccessor)editor).callSetPixel(x, y, image.getRGB(x, y));
 				//((EditorAccessor) editor).callSetPixel(x, y, 0x00000000);
 				//editor.drawPixel(x, y, true);
 			}
@@ -102,32 +109,39 @@ public class SkinTextureToCustomPlayerModel {
 		//editor.getTextureProvider().refreshTexture();
 
 		editor.updateGui();
+		GeneratorsAccessor.callAddSkinLayer(editor);
 
 		editor.save(new File("help.cpmproject")).join();
-		editor.load(new File("help.cpmproject"));
-//		editor.loadDefaultPlayerModel();
-//		editor.updateGui();
 		ModelDescription modelDescription = new ModelDescription();
 		editor.description = modelDescription;
 		modelDescription.name = "";
 		modelDescription.desc = "";
-
-		editor.tick();
-		editor.tick();
-		editor.tick();
 		editor.restitchTextures();
-		// THIS THING JUST CREATES BLACK LATERS
-		for (ModelElement element : editor.elements) {
-			element.preRender();
-			element.postRender();
-		}
-
-		//GeneratorsAccessor.callAddSkinLayer(editor);
-		//editor.
-		//editor.
-
 		editor.reloadSkin();
-		//Exporter.exportTempModel()
 		Exporter.exportModel(editor, gui, Path.of("exported.cpmmodel").toFile(), modelDescription, false);
+		editor.load(new File("help.cpmproject"));
+		System.out.println("Saved to " + new File("help.cpmproject").getAbsolutePath().toString());
+//		editor.load(new File("help.cpmproject"));
+////		editor.loadDefaultPlayerModel();
+////		editor.updateGui();
+//
+//
+//		editor.tick();
+//		editor.tick();
+//		editor.tick();
+//		editor.restitchTextures();
+//		// THIS THING JUST CREATES BLACK LATERS
+//		for (ModelElement element : editor.elements) {
+//			element.preRender();
+//			element.postRender();
+//		}
+//
+//		//editor.
+//		//editor.
+//
+//		editor.reloadSkin();
+//		//Exporter.exportTempModel()
+//		//Exporter.expo
+//		Exporter.exportModel(editor, gui, Path.of("exported.cpmmodel").toFile(), modelDescription, false);
 	}
 }
