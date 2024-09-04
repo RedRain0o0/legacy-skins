@@ -107,17 +107,17 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 
 		{
 			Map<String, String> models = of(
+					"steve", "Steve",
+					"sunny", "Sunny",
+					"zuri", "Zuri",
 					"alex", "Alex",
 					"ari", "Ari",
 					"efe", "Efe",
 					"kai", "Kai",
 					"makena", "Makena",
-					"noor", "Noor",
-					"steve", "Steve",
-					"sunny", "Sunny",
-					"zuri", "Zuri"
+					"noor", "Noor"
 			);
-			LegacySkinPack legacySkinPack = new LegacySkinPack(LegacyPackType.DEV, VersionUtils.of(Legacyskins.MOD_ID, "textures/skin_packs/dev.png"),
+			LegacySkinPack legacySkinPack = new LegacySkinPack(LegacyPackType.DEFAULT, VersionUtils.of(Legacyskins.MOD_ID, "textures/skin_packs/dev.png"),
 					models.keySet().stream().<LegacySkin>mapMulti((a, b) -> {
 						b.accept(new LegacySkin(VersionUtils.of(Legacyskins.MOD_ID, "skinpacks/modern-defaults/wide/%s.cpmmodel".formatted(a))));
 						b.accept(new LegacySkin(VersionUtils.of(Legacyskins.MOD_ID, "skinpacks/modern-defaults/slim/%s.cpmmodel".formatted(a))));
