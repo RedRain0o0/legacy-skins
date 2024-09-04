@@ -104,5 +104,35 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 			}
 			builder.addPack("dev", legacySkinPack);
 		}
+
+		{
+			Map<String, String> models = of(
+					"alex", "Alex",
+					"ari", "Ari",
+					"efe", "Efe",
+					"kai", "Kai",
+					"makena", "Makena",
+					"noor", "Noor",
+					"steve", "Steve",
+					"sunny", "Sunny",
+					"zuri", "Zuri"
+			);
+			LegacySkinPack legacySkinPack = new LegacySkinPack(LegacyPackType.DEV, VersionUtils.of(Legacyskins.MOD_ID, "textures/skin_packs/dev.png"),
+					models.keySet().stream().<LegacySkin>mapMulti((a, b) -> {
+						b.accept(new LegacySkin(VersionUtils.of(Legacyskins.MOD_ID, "skinpacks/modern-defaults/wide/%s.cpmmodel".formatted(a))));
+						b.accept(new LegacySkin(VersionUtils.of(Legacyskins.MOD_ID, "skinpacks/modern-defaults/slim/%s.cpmmodel".formatted(a))));
+					}).toList());
+			int i = 0;
+			//noinspection unchecked
+			for (Map.Entry<String, String> skin : models.entrySet().toArray(Map.Entry[]::new)) {
+				int finalI = i;
+				LegacySkinsLanguageProvider.addQueuedTranslation(b -> {
+					b.add("skin_pack.%s.%s".formatted(builder.id("modern-defaults").toLanguageKey(), finalI), skin.getValue() + " (Wide)");
+					b.add("skin_pack.%s.%s".formatted(builder.id("modern-defaults").toLanguageKey(), finalI + 1), skin.getValue() + " (Slim)");
+				});
+				i+=2;
+			}
+			builder.addPack("modern-defaults", legacySkinPack);
+		}
 	}
 }
