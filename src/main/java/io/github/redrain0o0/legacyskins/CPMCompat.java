@@ -6,7 +6,6 @@ import com.tom.cpm.api.IClientAPI;
 import com.tom.cpm.api.ICommonAPI;
 import com.tom.cpm.shared.config.ConfigKeys;
 import com.tom.cpm.shared.config.ModConfig;
-import io.github.redrain0o0.legacyskins.util.SkinTextureToCustomPlayerModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
