@@ -3,7 +3,9 @@ package io.github.redrain0o0.legacyskins.client.screen;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.math.Axis;
 import io.github.redrain0o0.legacyskins.Constants;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.SkinReference;
@@ -50,7 +52,9 @@ import wily.legacy.init.LegacyRegistries;
 import wily.legacy.util.LegacySprites;
 import wily.legacy.util.ScreenUtil;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.function.Supplier;
 
 import static wily.legacy.client.screen.ControlTooltip.COMPOUND_ICON_FUNCTION;
@@ -297,6 +301,15 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 					guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable(this.focusedPack.getSecond().type().translationKey()), 0, 0, 0xffffffff);
 					guiGraphics.pose().popPose();
 				}
+				if (this.focusedPack.getFirst().equals(Constants.MODERN_DEFAULTS_PACK)) {
+					k++;
+					PoseStack pose = guiGraphics.pose();
+					pose.pushPose();
+					pose.translate(width / 2f, height / 2f, 0);
+					pose.mulPose(Axis.ZP.rotationDegrees(k));
+					guiGraphics.drawCenteredString(minecraft.font, "BETA PACK!!! Things might break!", 0, 0, Color.HSBtoRGB((float) (Math.sin(k / 100f) + 1) / 2, 1, 1));
+					pose.popPose();
+				}
 			}
 			RenderSystem.disableBlend();
 
@@ -320,6 +333,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		    */
 		}
 	}
+
+	private int k;
 
 	@Override
 	public boolean mouseScrolled(double d, double e, /*? if >=1.20.2 {*/ double f, /*?}*/ double g) {
