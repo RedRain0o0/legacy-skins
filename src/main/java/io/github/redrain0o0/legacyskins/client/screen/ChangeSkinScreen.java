@@ -222,98 +222,97 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			skinPack();
 		}
 		ScreenUtil.renderDefaultBackground(guiGraphics, false);
-		if (ScreenUtil.hasTooltipBoxes()) {
-			p(guiGraphics).blitSprite(LegacySkinSprites.SKIN_PANEL, panel.x + panel.width - 10, panel.y + 7, tooltipBox.getWidth(), tooltipBox.getHeight() - 2);
-			p(guiGraphics).blitSprite(LegacySkinSprites.PANEL_FILLER, panel.x + panel.width - 5, panel.y + 16 + tooltipBox.getHeight() - 80, tooltipBox.getWidth() - 14, 60);
-			p(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width - 1, panel.y + tooltipBox.getHeight() - 59, tooltipBox.getWidth() - 55, 55);
-			guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
-			guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 0, 0, 24, 24, 24, 24);
-			//guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 24, 24);
-			RenderSystem.enableBlend();
-			p(guiGraphics).blitSprite(LegacySkinSprites.PACK_NAME_BOX, panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
-			p(guiGraphics).blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80);
-			if (this.playerSkinWidgetList != null) {
-				if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
-					guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
-				}
-				if (Legacyskins.INSTANCE.getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get())) {
-					//? if >=1.20.2 {
-					guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/container.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
-					guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/full.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
-					//?} else {
-					/*// Method params
-					// ResourceLocation atlasLocation, int x, int y, float uOffset, float vOffset, int width, int height, int textureWidth, int textureHeight
-					// ResourceLocation atlasLocation, int x, int y, int width, int height, float uOffset, float vOffset, int uWidth, int vHeight, int textureWidth, int textureHeight
-					guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/icons.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 16, 16, 16, 0, 9, 9, 256, 256);
-					guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/icons.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 16, 16, 52, 0, 9, 9, 256, 256);
-					*///?}
-				}
+		p(guiGraphics).blitSprite(LegacySkinSprites.SKIN_PANEL, panel.x + panel.width - 10, panel.y + 7, tooltipBox.getWidth(), tooltipBox.getHeight() - 2);
+		p(guiGraphics).blitSprite(LegacySkinSprites.PANEL_FILLER, panel.x + panel.width - 5, panel.y + 16 + tooltipBox.getHeight() - 80, tooltipBox.getWidth() - 14, 60);
+		p(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width - 1, panel.y + tooltipBox.getHeight() - 59, tooltipBox.getWidth() - 55, 55);
+		guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
+		guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 0, 0, 24, 24, 24, 24);
+		//guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 24, 24);
+		RenderSystem.enableBlend();
+		p(guiGraphics).blitSprite(LegacySkinSprites.PACK_NAME_BOX, panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
+		p(guiGraphics).blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80);
+		if (this.playerSkinWidgetList != null) {
+			if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
+				guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
+			}
+			if (Legacyskins.INSTANCE.getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get())) {
+				//? if >=1.20.2 {
+				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/container.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
+				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/full.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
+				//?} else {
+				/*// Method params
+				// ResourceLocation atlasLocation, int x, int y, float uOffset, float vOffset, int width, int height, int textureWidth, int textureHeight
+				// ResourceLocation atlasLocation, int x, int y, int width, int height, float uOffset, float vOffset, int uWidth, int vHeight, int textureWidth, int textureHeight
+				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/icons.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 16, 16, 16, 0, 9, 9, 256, 256);
+				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/icons.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 16, 16, 52, 0, 9, 9, 256, 256);
+				*///?}
+			}
 
-				{
-					guiGraphics.pose().pushPose();
-					// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
-					int x = panel.x + panel.width - 5;
-					int width = tooltipBox.getWidth() - 18;
-					int middle = x + width / 2;
-					guiGraphics.pose().translate(middle, panel.y + tooltipBox.getHeight() - 59 + 10, 0);
-					guiGraphics.pose().scale(1.5f, 1.5f, 1);
-					SkinReference reference = playerSkinWidgetList.element3.skinRef.get();
-					ResourceLocation rl = reference.pack();
-					guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable("skin_pack.%s.%s".formatted(rl.toLanguageKey(), reference.ordinal())), 0, 0, 0xffffffff);
-					guiGraphics.pose().popPose();
-				}
-
+			{
+				guiGraphics.pose().pushPose();
+				// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
+				int x = panel.x + panel.width - 5;
+				int width = tooltipBox.getWidth() - 18;
+				int middle = x + width / 2;
+				guiGraphics.pose().translate(middle, panel.y + tooltipBox.getHeight() - 59 + 10, 0);
+				guiGraphics.pose().scale(1.5f, 1.5f, 1);
 				SkinReference reference = playerSkinWidgetList.element3.skinRef.get();
 				ResourceLocation rl = reference.pack();
-				if (I18n.exists("skin_pack.%s.%s.desc".formatted(rl.toLanguageKey(), reference.ordinal())))
-				{
-					guiGraphics.pose().pushPose();
-					// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
-					int x = panel.x + panel.width - 5;
-					int width = tooltipBox.getWidth() - 18;
-					int middle = x + width / 2;
-					guiGraphics.pose().translate(middle, panel.y + tooltipBox.getHeight() - 59 + 35, 0);
-					guiGraphics.pose().scale(1.5f, 1.5f, 1);
-					guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable("skin_pack.%s.%s.desc".formatted(rl.toLanguageKey(), reference.ordinal())), 0, 0, 0xffffffff);
-					guiGraphics.pose().popPose();
-				}
+				guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable("skin_pack.%s.%s".formatted(rl.toLanguageKey(), reference.ordinal())), 0, 0, 0xffffffff);
+				guiGraphics.pose().popPose();
 			}
-			if (this.focusedPack != null) {
-				{
-					guiGraphics.pose().pushPose();
-					// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
-					int x = panel.x + panel.width - 5;
-					int width = tooltipBox.getWidth() - 18;
-					int middle = x + width / 2;
-					guiGraphics.pose().translate(middle, panel.y + 16 + 4 + 7, 0);
-					guiGraphics.pose().scale(1.5f, 1.5f, 1);
-					guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable(Util.makeDescriptionId("skin_pack", focusedPack.getFirst())), 0, 0, 0xffffffff);
-					guiGraphics.pose().popPose();
-				}
-				if (this.focusedPack.getSecond().type() != LegacyPackType.DEFAULT) {
-					guiGraphics.pose().pushPose();
-					// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
-					int x = panel.x + panel.width - 5;
-					int width = tooltipBox.getWidth() - 18;
-					int middle = x + width / 2;
-					guiGraphics.pose().translate(middle, panel.y + 16 + 4 + 25, 0);
-					guiGraphics.pose().scale(1f, 1f, 1);
-					guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable(this.focusedPack.getSecond().type().translationKey()), 0, 0, 0xffffffff);
-					guiGraphics.pose().popPose();
-				}
-				if (this.focusedPack.getFirst().equals(Constants.MODERN_DEFAULTS_PACK)) {
-					k++;
-					PoseStack pose = guiGraphics.pose();
-					pose.pushPose();
-					pose.translate(width / 2f, height / 2f, 0);
-					pose.mulPose(Axis.ZP.rotationDegrees(k));
-					guiGraphics.drawCenteredString(minecraft.font, "BETA PACK!!! Things might break!", 0, 0, Color.HSBtoRGB((float) (Math.sin(k / 100f) + 1) / 2, 1, 1));
-					pose.popPose();
-				}
-			}
-			RenderSystem.disableBlend();
 
-			//RenderSystem.enableScissor(panel.x + panel.width - 2, panel.y + 16, tooltipBox.getWidth() - 18, tooltipBox.getHeight() - 80);
+			SkinReference reference = playerSkinWidgetList.element3.skinRef.get();
+			ResourceLocation rl = reference.pack();
+			if (I18n.exists("skin_pack.%s.%s.desc".formatted(rl.toLanguageKey(), reference.ordinal())))
+			{
+				guiGraphics.pose().pushPose();
+				// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
+				int x = panel.x + panel.width - 5;
+				int width = tooltipBox.getWidth() - 18;
+				int middle = x + width / 2;
+				guiGraphics.pose().translate(middle, panel.y + tooltipBox.getHeight() - 59 + 35, 0);
+				guiGraphics.pose().scale(1.5f, 1.5f, 1);
+				guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable("skin_pack.%s.%s.desc".formatted(rl.toLanguageKey(), reference.ordinal())), 0, 0, 0xffffffff);
+				guiGraphics.pose().popPose();
+			}
+		}
+		if (this.focusedPack != null) {
+			{
+				guiGraphics.pose().pushPose();
+				// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
+				int x = panel.x + panel.width - 5;
+				int width = tooltipBox.getWidth() - 18;
+				int middle = x + width / 2;
+				guiGraphics.pose().translate(middle, panel.y + 16 + 4 + 7, 0);
+				guiGraphics.pose().scale(1.5f, 1.5f, 1);
+				guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable(Util.makeDescriptionId("skin_pack", focusedPack.getFirst())), 0, 0, 0xffffffff);
+				guiGraphics.pose().popPose();
+			}
+			if (this.focusedPack.getSecond().type() != LegacyPackType.DEFAULT) {
+				guiGraphics.pose().pushPose();
+				// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
+				int x = panel.x + panel.width - 5;
+				int width = tooltipBox.getWidth() - 18;
+				int middle = x + width / 2;
+				guiGraphics.pose().translate(middle, panel.y + 16 + 4 + 25, 0);
+				guiGraphics.pose().scale(1f, 1f, 1);
+				guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable(this.focusedPack.getSecond().type().translationKey()), 0, 0, 0xffffffff);
+				guiGraphics.pose().popPose();
+			}
+			if (this.focusedPack.getFirst().equals(Constants.MODERN_DEFAULTS_PACK)) {
+				k++;
+				PoseStack pose = guiGraphics.pose();
+				pose.pushPose();
+				pose.translate(width / 2f, height / 2f, 0);
+				pose.mulPose(Axis.ZP.rotationDegrees(k));
+				guiGraphics.drawCenteredString(minecraft.font, "BETA PACK!!! Things might break!", 0, 0, Color.HSBtoRGB((float) (Math.sin(k / 100f) + 1) / 2, 1, 1));
+				pose.popPose();
+			}
+		}
+		RenderSystem.disableBlend();
+
+		//RenderSystem.enableScissor(panel.x + panel.width - 2, panel.y + 16, tooltipBox.getWidth() - 18, tooltipBox.getHeight() - 80);
 
 			/*
 			if (false) {
@@ -331,7 +330,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				guiGraphics.pose().popPose();
 			}
 		    */
-		}
 	}
 
 	private int k;
