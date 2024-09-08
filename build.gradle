@@ -295,6 +295,7 @@ publishMods {
 			optional("cloth-config")
 		}
 		requires("legacy4j")
+		requires("custom-player-models")
 	}
 
 	curseforge {
@@ -318,5 +319,6 @@ publishMods {
 			optional("cloth-config")
 		}
 		requires("legacy-minecraft")
+		requires("custom-player-models")
 	}
 }
