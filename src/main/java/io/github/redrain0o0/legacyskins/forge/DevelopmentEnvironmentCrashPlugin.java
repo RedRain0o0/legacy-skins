@@ -1,3 +1,4 @@
+//? if forge {
 package io.github.redrain0o0.legacyskins.forge;
 
 import cpw.mods.modlauncher.api.INameMappingService;
@@ -58,18 +59,17 @@ public class DevelopmentEnvironmentCrashPlugin implements IMixinConfigPlugin {
 				if (instruction instanceof MethodInsnNode methodInsnNode) {
 					String name = methodInsnNode.name;
 					if (name.startsWith("m_")) {
-						LOGGER.info("Found obfuscated method: " + name);
+						LOGGER.info("Found obfuscated method in regular call: " + name);
 						methodInsnNode.name = fixMethodName(name);
 					}
 				}
 				if (instruction instanceof InvokeDynamicInsnNode node) {
-					String name = node.name;
 					Object[] bsmArgs = node.bsmArgs;
 					for (int i = 0; i < bsmArgs.length; i++) {
 						Object bsmArg = bsmArgs[i];
 						if (bsmArg instanceof Handle handle) {
 							if (handle.getName().startsWith("m_")) {
-								LOGGER.info("Found obfuscated method: " + handle);
+								LOGGER.info("Found obfuscated method in dynamic call: " + handle);
 								bsmArgs[i] = new Handle(handle.getTag(), handle.getOwner(), fixMethodName(handle.getName()), handle.getDesc(), handle.isInterface());
 							}
 						}
@@ -84,3 +84,4 @@ public class DevelopmentEnvironmentCrashPlugin implements IMixinConfigPlugin {
 		return ObfuscationReflectionHelper.remapName(INameMappingService.Domain.METHOD, obfuscatedMethodName);
 	}
 }
+//?}
