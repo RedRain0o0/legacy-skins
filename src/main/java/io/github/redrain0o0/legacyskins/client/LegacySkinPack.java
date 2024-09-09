@@ -27,12 +27,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 //? if fabric {
-import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
+/*import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-//?} else if neoforge {
-/*import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
-*///?}
+*///?} else if neoforge || forge {
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+//?}
 
 public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<LegacySkin> skins) {
 	public static final Map<ResourceLocation, LegacySkinPack> list = new LinkedHashMap<>();
@@ -45,18 +45,18 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 	private static final String PACKS = "skin_packs.json";
 
 	//? if fabric
-	public static class Manager implements SimpleResourceReloadListener<Map<ResourceLocation, LegacySkinPack>> {
-	//? if neoforge
-	/*public static class Manager extends SimplePreparableReloadListener<Map<ResourceLocation, LegacySkinPack>> {*/
+	/*public static class Manager implements SimpleResourceReloadListener<Map<ResourceLocation, LegacySkinPack>> {*/
+	//? if neoforge || forge
+	public static class Manager extends SimplePreparableReloadListener<Map<ResourceLocation, LegacySkinPack>> {
 		@Override
-		public /*? if fabric {*/ CompletableFuture< /*?}*/ Map<ResourceLocation, LegacySkinPack> /*? if fabric {*/ > load /*?} else if neoforge {*/ /*prepare *//*?}*/(ResourceManager resourceManager, ProfilerFiller profiler /*? if fabric {*/, Executor executor /*?}*/) {
+		public /*? if fabric {*/ /*CompletableFuture< *//*?}*/ Map<ResourceLocation, LegacySkinPack> /*? if fabric {*/ /*> load *//*?} else if neoforge || forge {*/ prepare /*?}*/(ResourceManager resourceManager, ProfilerFiller profiler /*? if fabric {*//*, Executor executor *//*?}*/) {
 			//? if fabric {
-			return CompletableFuture.supplyAsync(() -> {
+			/*return CompletableFuture.supplyAsync(() -> {
 				return loadPacksFromResourceManager(resourceManager);
 			});
-			//?} else if neoforge {
-			/*return loadPacksFromResourceManager(resourceManager);
-			*///?}
+			*///?} else if neoforge || forge {
+			return loadPacksFromResourceManager(resourceManager);
+			//?}
 		}
 
 		private static @NotNull Map<ResourceLocation, LegacySkinPack> loadPacksFromResourceManager(ResourceManager resourceManager) {
@@ -87,7 +87,7 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 		// addFirst does not exist before Java 21
 		@SuppressWarnings("SequencedCollectionMethodCanBeUsed")
 		@Override
-		public /*? if fabric {*/ CompletableFuture<Void> /*?} else if neoforge {*/ /*void *//*?}*/ apply(Map<ResourceLocation, LegacySkinPack> data, ResourceManager manager, ProfilerFiller profiler /*? if fabric {*/ , Executor executor /*?}*/) {
+		public /*? if fabric {*/ /*CompletableFuture<Void> *//*?} else if neoforge || forge {*/ void /*?}*/ apply(Map<ResourceLocation, LegacySkinPack> data, ResourceManager manager, ProfilerFiller profiler /*? if fabric {*/ /*, Executor executor *//*?}*/) {
 			LegacySkinUtils.cleanup();
 			list.clear();
 			// The default skin
@@ -105,14 +105,14 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 				}
 			}
 			//? if fabric
-			return CompletableFuture.completedFuture(null);
+			/*return CompletableFuture.completedFuture(null);*/
 		}
 
 		//? if fabric {
-		@Override
+		/*@Override
 		public ResourceLocation getFabricId() {
 			return VersionUtils.of(Legacyskins.MOD_ID, "manager");
 		}
-		//?}
+		*///?}
 	}
 }

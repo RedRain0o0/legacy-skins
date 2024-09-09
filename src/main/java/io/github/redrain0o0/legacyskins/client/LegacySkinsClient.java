@@ -4,12 +4,20 @@ import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.client.screen.config.LegacyConfigScreens;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 //? if fabric {
-import net.fabricmc.api.ClientModInitializer;
+/*import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-//?}
+*///?}
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.server.packs.PackType;
+//? if forge {
+import net.minecraftforge.client.ConfigScreenHandler;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.GameShuttingDownEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModContainer;
+//?}
 //? if neoforge {
 /*import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -37,29 +45,32 @@ import java.util.function.Supplier;
 public class LegacySkinsClient {
 	public void onInitializeClient() {
 		//? if fabric {
-		ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new LegacySkinPack.Manager());
+		/*ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new LegacySkinPack.Manager());
 		ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
 			LegacySkinUtils.cleanup();
 			Legacyskins.INSTANCE.save();
 		});
 		LegacyConfigScreens.init();
-		//?}
+		*///?}
 	}
 
-	//? if neoforge {
-	/*public LegacySkinsClient(ModContainer modContainer) {
-		NeoForge.EVENT_BUS.addListener(GameShuttingDownEvent.class, LegacySkinsClient::event);
+	//? if neoforge || forge {
+	public LegacySkinsClient(ModContainer modContainer) {
+		//? if neoforge
+		/*NeoForge.EVENT_BUS.addListener(GameShuttingDownEvent.class, LegacySkinsClient::event);*/
+		//? if forge
+		MinecraftForge.EVENT_BUS.addListener(LegacySkinsClient::event);
 		LegacyConfigScreens.init();
 		if (LegacyConfigScreens.hasConfigScreens()) {
 			//? if >=1.20.6 {
-			/^modContainer.registerExtensionPoint(IConfigScreenFactory.class, (Supplier<IConfigScreenFactory>) () -> (IConfigScreenFactory) (container, prev) -> LegacyConfigScreens.createConfigScreen(prev).orElseThrow());
-			^///?} else
+			/*modContainer.registerExtensionPoint(IConfigScreenFactory.class, (Supplier<IConfigScreenFactory>) () -> (IConfigScreenFactory) (container, prev) -> LegacyConfigScreens.createConfigScreen(prev).orElseThrow());
+			*///?} else
 			modContainer.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((mc, screen) -> LegacyConfigScreens.createConfigScreen(screen).orElseThrow()));
 		}
 	}
 
 	@SubscribeEvent
-	public static void event(RegisterClientReloadListenersEvent event) {
+	public static void onResourceReload(RegisterClientReloadListenersEvent event) {
 		event.registerReloadListener(new LegacySkinPack.Manager());
 	}
 
@@ -67,5 +78,5 @@ public class LegacySkinsClient {
 		LegacySkinUtils.cleanup();
 		Legacyskins.INSTANCE.save();
 	}
-	*///?}
+	//?}
 }
