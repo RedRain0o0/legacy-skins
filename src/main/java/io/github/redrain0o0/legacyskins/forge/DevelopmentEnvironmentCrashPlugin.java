@@ -69,7 +69,7 @@ public class DevelopmentEnvironmentCrashPlugin implements IMixinConfigPlugin {
 						Object bsmArg = bsmArgs[i];
 						if (bsmArg instanceof Handle handle) {
 							if (handle.getName().startsWith("m_")) {
-								LOGGER.info("Found obfuscated method in dynamic call: " + handle);
+								LOGGER.info("Found obfuscated method in dynamic call: " + handle.getName());
 								bsmArgs[i] = new Handle(handle.getTag(), handle.getOwner(), fixMethodName(handle.getName()), handle.getDesc(), handle.isInterface());
 							}
 						}
