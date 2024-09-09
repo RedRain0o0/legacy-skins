@@ -1,7 +1,7 @@
 package io.github.redrain0o0.legacyskins.forge;
 
 import cpw.mods.modlauncher.api.INameMappingService;
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.util.PlatformUtils;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.tree.*;
@@ -9,11 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
-import wily.legacy.mixin.OptionsMixin;
 
 import java.util.List;
 import java.util.Set;
 
+//
+// Extremely hacky fixes to make Minecraft launch on Forge
+// For some reason, Legacy4J is only partially remapped.
+// This should be enough to at least get to the skins screen.
+//
 public class DevelopmentEnvironmentCrashPlugin implements IMixinConfigPlugin {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Legacy Skins Forge Dev Mixin Plugin");
 
@@ -29,7 +33,7 @@ public class DevelopmentEnvironmentCrashPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		return true;
+		return PlatformUtils.isDevelopmentEnvironment();
 	}
 
 	@Override
@@ -42,7 +46,6 @@ public class DevelopmentEnvironmentCrashPlugin implements IMixinConfigPlugin {
 		return null;
 	}
 
-	// Any method calls to obfuscated method names? Record them here!
 	@Override
 	public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
 
@@ -51,14 +54,6 @@ public class DevelopmentEnvironmentCrashPlugin implements IMixinConfigPlugin {
 	@Override
 	public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
 		for (MethodNode method : targetClass.methods) {
-//			if (method.name.equals("handler$zij000$init")) {
-//				System.out.println("FOUND THE METHOD");
-//				for (AbstractInsnNode instruction : method.instructions) {
-//					if (instruction instanceof MethodInsnNode methodInsnNode) {
-//						System.out.println(methodInsnNode.name);
-//					}
-//				}
-//			}
 			for (AbstractInsnNode instruction : method.instructions) {
 				if (instruction instanceof MethodInsnNode methodInsnNode) {
 					String name = methodInsnNode.name;
@@ -79,9 +74,6 @@ public class DevelopmentEnvironmentCrashPlugin implements IMixinConfigPlugin {
 							}
 						}
 						//System.out.println(bsmArg + " " + bsmArg.getClass());
-					}
-					if (name.startsWith("m_")) {
-						LOGGER.info("Found obfuscated method: " + name);
 					}
 				}
 			}
