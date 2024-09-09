@@ -31,6 +31,7 @@ apply plugin: 'dev.architectury.loom'
 stonecutter.const("fabric", loader == FABRIC)
 stonecutter.const("forge", loader == FORGE)
 stonecutter.const("neoforge", loader == NEOFORGE)
+stonecutter.const("eventbusupdates", loader == NEOFORGE)
 stonecutter.const("multientrypoints", loader == NEOFORGE && minecraftIntVersion >= 1_20_06)
 stonecutter.const("constructorargs", loader == NEOFORGE && minecraftIntVersion >= 1_20_02)
 stonecutter.const("yacl", project.yacl_version != "[VERSIONED]")
@@ -100,7 +101,7 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	compileOnly "com.tom5454.cpm:CustomPlayerModels-API:${project.cpm_api_version}"
-	modImplementation "com.tom5454.cpm:CustomPlayerModels-${loader == NEOFORGE ? "" : "${project.cpm_loader}-"}${project.cpm_mc_version}:${project.cpm_runtime_version}"
+	modImplementation "com.tom5454.cpm:CustomPlayerModels${loader == FORGE ? "" : "-" /* ... */}${loader == NEOFORGE ? "" : "${project.cpm_loader}-"}${project.cpm_mc_version}:${project.cpm_runtime_version}"
 	modImplementation "maven.modrinth:legacy4j:${project.legacy4j_version}"
 	api "dev.isxander:libsdl4j:${project.libsdl4j_version}"
 	if (loader.isForgeLike()) {
@@ -146,6 +147,8 @@ dependencies {
 		// }
 	} else if (loader == NEOFORGE) {
 		neoForge "net.neoforged:neoforge:$project.properties.neoforge_version"
+	} else if (loader == FORGE) {
+		forge "net.minecraftforge:forge:$project.properties.forge_version"
 	}
 }
 
@@ -157,7 +160,7 @@ if (loader == FABRIC) {
 	fabricApi {
 		configureDataGeneration()
 	}
-} else if (loader == NEOFORGE) {
+} else if (loader.isForgeLike()) {
 	loom {
 		afterEvaluate {
 			runs {
@@ -185,6 +188,11 @@ loom {
 		ideConfigGenerated(true) // Run configurations are not created for subprojects by default
 		runDir = "../../run" // Use a shared run folder and just create separate worlds
 	}
+	if (loader == FORGE) {
+		forge {
+			mixinConfig "legacyskins.mixins.json"
+		}
+	}
 }
 
 processResources {
@@ -204,6 +212,7 @@ processResources {
 	if (loader != FABRIC) exclude "fabric.mod.json"
 
 	doLast {
+		// neoforge.mods.toml should be identical to mods.toml
 		fileTree(dir: outputs.files.asPath, include: "META-INF/neoforge.mods.toml").each { File file ->
 			Files.copy(file.toPath(), java.nio.file.Path.of(outputs.files.asPath).resolve("META-INF/mods.toml"), StandardCopyOption.REPLACE_EXISTING)
 		}
