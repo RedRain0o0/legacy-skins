@@ -17,6 +17,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.GameShuttingDownEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 //?}
 //? if neoforge {
 /*import net.neoforged.api.distmarker.Dist;
@@ -39,9 +40,9 @@ import java.util.function.Supplier;
 
 //? if neoforge && multientrypoints
 /*@Mod(value = Legacyskins.MOD_ID, dist = Dist.CLIENT)*/
-//? if neoforge {
-/*@EventBusSubscriber(/^? if !multientrypoints {^/ modid = Legacyskins.MOD_ID, /^?}^/ bus = EventBusSubscriber.Bus.MOD)
-*///?}
+//? if neoforge || forge {
+@EventBusSubscriber(/*? if !multientrypoints {*/ modid = Legacyskins.MOD_ID, /*?}*/ bus = EventBusSubscriber.Bus.MOD)
+//?}
 public class LegacySkinsClient {
 	public void onInitializeClient() {
 		//? if fabric {
