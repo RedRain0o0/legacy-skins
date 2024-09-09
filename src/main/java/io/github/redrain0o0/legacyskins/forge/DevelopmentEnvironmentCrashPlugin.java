@@ -73,7 +73,6 @@ public class DevelopmentEnvironmentCrashPlugin implements IMixinConfigPlugin {
 								bsmArgs[i] = new Handle(handle.getTag(), handle.getOwner(), fixMethodName(handle.getName()), handle.getDesc(), handle.isInterface());
 							}
 						}
-						//System.out.println(bsmArg + " " + bsmArg.getClass());
 					}
 				}
 			}
