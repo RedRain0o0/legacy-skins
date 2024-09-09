@@ -19,16 +19,18 @@ import java.io.IOException;
 *///?}
 
 //? if forge {
+import io.github.redrain0o0.legacyskins.Legacyskins;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 //?}
 
 import java.io.IOException;
 
-//? if neoforge
-/*@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Legacyskins.MOD_ID)*/
+//? if neoforge || forge
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Legacyskins.MOD_ID)
 public class LegacySkinsDataGenerator {
 	//? if fabric {
 	/*public void onInitializeDataGenerator(FabricDataGenerator generator) {

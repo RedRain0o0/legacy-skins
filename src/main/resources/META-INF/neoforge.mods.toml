@@ -14,7 +14,7 @@ displayURL = "https://modrinth.com/mod/legacy-skins"
 description = "An addon for Legacy4J and Customizable Player Models that brings back the ability to choose skins!"
 
 [[dependencies.legacyskins]]
-modId = "neoforge"
+modId = "${deps.ml}"
 mandatory = true
 type="required"
 versionRange = "*"

@@ -199,16 +199,17 @@ processResources {
 	def deps = [
 			"version": project.version,
 	        "minecraft": "~" + project.minecraft_version,
-			"java": javaVersion
+			"java": javaVersion,
+			"ml": loader.friendlyName
 	]
 	inputs.property "version", project.version
 	inputs.property "deps", deps
 
-	filesMatching(["fabric.mod.json", "META-INF/neoforge.mods.toml", "legacyskins.mixins.json"]) {
+	filesMatching(["fabric.mod.json", "META-INF/neoforge.mods.toml",  "legacyskins.mixins.json"]) {
 		expand "deps": deps
 	}
 
-	if (loader != NEOFORGE) exclude "META-INF/neoforge.mods.toml"
+	if (loader != NEOFORGE && loader != FORGE) exclude "META-INF/neoforge.mods.toml"
 	if (loader != FABRIC) exclude "fabric.mod.json"
 
 	doLast {
