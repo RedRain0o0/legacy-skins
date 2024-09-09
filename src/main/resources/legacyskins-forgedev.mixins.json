@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "plugin": "io.github.redrain0o0.legacyskins.forge.DevelopmentEnvironmentCrashPlugin",
+  "package": "io.github.redrain0o0.legacyskins.forge.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "DummyMixin",
+    "DummyInterfaceMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

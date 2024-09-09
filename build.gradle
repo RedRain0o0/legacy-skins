@@ -191,6 +191,7 @@ loom {
 	if (loader == FORGE) {
 		forge {
 			mixinConfig "legacyskins.mixins.json"
+			mixinConfig "legacyskins-forgedev.mixins.json"
 		}
 	}
 }
