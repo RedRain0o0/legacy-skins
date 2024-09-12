@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 
 	public LegacySkinsLegacyPackProvider(PackOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
-		super(dataOutput, registryLookup /*? if !fabric {*/, "legacyskins" /*?}*/);
+		super(dataOutput, registryLookup /*? if !fabric {*//*, "legacyskins" *//*?}*/);
 	}
 
 	private Map<String, String> of(String... s) {

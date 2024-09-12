@@ -1,5 +1,5 @@
 //? if forge {
-package io.github.redrain0o0.legacyskins.forge;
+/*package io.github.redrain0o0.legacyskins.forge;
 
 import cpw.mods.modlauncher.api.INameMappingService;
 import io.github.redrain0o0.legacyskins.util.PlatformUtils;
@@ -83,4 +83,4 @@ public class DevelopmentEnvironmentCrashPlugin implements IMixinConfigPlugin {
 		return ObfuscationReflectionHelper.remapName(INameMappingService.Domain.METHOD, obfuscatedMethodName);
 	}
 }
-//?}
+*///?}

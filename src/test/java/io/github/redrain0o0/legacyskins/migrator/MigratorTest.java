@@ -1,5 +1,5 @@
 //? if fabric {
-/*package io.github.redrain0o0.legacyskins.migrator;
+package io.github.redrain0o0.legacyskins.migrator;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -81,4 +81,4 @@ public class MigratorTest {
 		}
 	}
 }
-*///?}
+//?}

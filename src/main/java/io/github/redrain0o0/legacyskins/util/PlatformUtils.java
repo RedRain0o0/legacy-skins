@@ -1,15 +1,16 @@
 package io.github.redrain0o0.legacyskins.util;
 
 import io.github.redrain0o0.legacyskins.Legacyskins;
-import net.minecraftforge.api.distmarker.Dist;
+//? if forge {
+/*import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.loading.LoadingModList;
-//? if fabric {
-/*import net.fabricmc.api.EnvType;
+*///?} elif fabric {
+import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
-*///?} elif neoforge {
+//?} elif neoforge {
 /*import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
@@ -24,54 +25,54 @@ public enum PlatformUtils {
 	;
 	public static Path getConfigDir() {
 		//? if fabric
-		/*return FabricLoader.getInstance().getConfigDir();*/
+		return FabricLoader.getInstance().getConfigDir();
 		//? if neoforge
 		/*return FMLPaths.CONFIGDIR.get();*/
 		//? if forge
-		return FMLPaths.CONFIGDIR.get();
+		/*return FMLPaths.CONFIGDIR.get();*/
 	}
 	public static boolean isDevelopmentEnvironment() {
 		//? if fabric
-		/*return FabricLoader.getInstance().isDevelopmentEnvironment();*/
+		return FabricLoader.getInstance().isDevelopmentEnvironment();
 		//? if neoforge
 		/*return !FMLLoader.isProduction();*/
 		//? if forge
-		return !FMLLoader.isProduction();
+		/*return !FMLLoader.isProduction();*/
 	}
 	public static Path getGameDir() {
 		//? if fabric
-		/*return FabricLoader.getInstance().getGameDir();*/
+		return FabricLoader.getInstance().getGameDir();
 		//? if neoforge
 		/*return FMLPaths.GAMEDIR.get();*/
 		//? if forge
-		return FMLPaths.GAMEDIR.get();
+		/*return FMLPaths.GAMEDIR.get();*/
 	}
 
 	public static Path findInMod(String path) {
 		//? if fabric
-		/*return FabricLoader.getInstance().getModContainer(Legacyskins.MOD_ID).orElseThrow().findPath(path).orElseThrow();*/
+		return FabricLoader.getInstance().getModContainer(Legacyskins.MOD_ID).orElseThrow().findPath(path).orElseThrow();
 		//? if neoforge
 		/*return ModList.get().getModContainerById(Legacyskins.MOD_ID).orElseThrow().getModInfo().getOwningFile().getFile().findResource(path);*/
 		//? if forge
-		return ModList.get().getModContainerById(Legacyskins.MOD_ID).orElseThrow().getModInfo().getOwningFile().getFile().findResource(path);
+		/*return ModList.get().getModContainerById(Legacyskins.MOD_ID).orElseThrow().getModInfo().getOwningFile().getFile().findResource(path);*/
 	}
 
-	public static Env fromPlatformSpecific(/*? if fabric {*/ /*EnvType env *//*?} elif neoforge || forge {*/Dist dist /*?}*/) {
+	public static Env fromPlatformSpecific(/*? if fabric {*/ EnvType env /*?} elif neoforge || forge {*//*Dist dist *//*?}*/) {
 		//? if fabric
-		/*return env == EnvType.CLIENT ? Env.CLIENT : env == EnvType.SERVER ? Env.SERVER : null;*/
+		return env == EnvType.CLIENT ? Env.CLIENT : env == EnvType.SERVER ? Env.SERVER : null;
 		//? if neoforge
 		/*return dist == Dist.CLIENT ? Env.CLIENT : dist == Dist.DEDICATED_SERVER ? Env.SERVER : null;*/
 		//? if forge
-		return dist == Dist.CLIENT ? Env.CLIENT : dist == Dist.DEDICATED_SERVER ? Env.SERVER : null;
+		/*return dist == Dist.CLIENT ? Env.CLIENT : dist == Dist.DEDICATED_SERVER ? Env.SERVER : null;*/
 	}
 
 	public static Env getEnv() {
 		//? if fabric
-		/*return fromPlatformSpecific(FabricLoader.getInstance().getEnvironmentType());*/
+		return fromPlatformSpecific(FabricLoader.getInstance().getEnvironmentType());
 		//? if neoforge
 		/*return fromPlatformSpecific(FMLLoader.getDist());*/
 		//? if forge
-		return fromPlatformSpecific(FMLLoader.getDist());
+		/*return fromPlatformSpecific(FMLLoader.getDist());*/
 	}
 
 	public static void executeInDist(Env env, Supplier<Supplier<Runnable>> toRun) {
@@ -89,16 +90,16 @@ public enum PlatformUtils {
 
 	public static boolean isModLoaded(String id) {
 		//? if fabric
-		/*return FabricLoader.getInstance().isModLoaded(id);*/
+		return FabricLoader.getInstance().isModLoaded(id);
 		//? if neoforge {
 		/*// NeoForge might have renamed the class
 		//noinspection Convert2MethodRef
 		return LoadingModList.get().getMods().stream().map(a -> a.getModId()).anyMatch(id::equals);
 		*///?}
 		//? if forge {
-		//noinspection Convert2MethodRef,UnstableApiUsage
+		/*//noinspection Convert2MethodRef,UnstableApiUsage
 		return LoadingModList.get().getMods().stream().map(a -> a.getModId()).anyMatch(id::equals);
-		//?}
+		*///?}
 	}
 
 	public enum Env {

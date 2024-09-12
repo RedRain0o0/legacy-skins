@@ -15,37 +15,37 @@ import net.minecraft.data.DataGenerator;
 
 import java.io.IOException;
 *///?} else if fabric {
-/*import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-*///?}
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+//?}
 
 //? if forge {
-import io.github.redrain0o0.legacyskins.Legacyskins;
+/*import io.github.redrain0o0.legacyskins.Legacyskins;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-//?}
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+*///?}
 
 import java.io.IOException;
 
 //? if neoforge || forge
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Legacyskins.MOD_ID)
+/*@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Legacyskins.MOD_ID)*/
 public class LegacySkinsDataGenerator {
 	//? if fabric {
-	/*public void onInitializeDataGenerator(FabricDataGenerator generator) {
+	public void onInitializeDataGenerator(FabricDataGenerator generator) {
 		FabricDataGenerator.Pack pack = generator.createPack();
 		pack.addProvider(LegacySkinsLegacyPackProvider::new);
-		pack.addProvider(/^? if <=1.20.4 {^//^(FabricDataGenerator.Pack.Factory<LegacySkinsLanguageProvider>) ^//^?}^/ LegacySkinsLanguageProvider::new);
+		pack.addProvider(/*? if <=1.20.4 {*//*(FabricDataGenerator.Pack.Factory<LegacySkinsLanguageProvider>) *//*?}*/ LegacySkinsLanguageProvider::new);
 		pack.addProvider((FabricDataGenerator.Pack.Factory<LegacySkinsMcmetaProvider>) LegacySkinsMcmetaProvider::new);
 	}
-	*///?} else if neoforge || forge {
-	@SubscribeEvent
+	//?} else if neoforge || forge {
+	/*@SubscribeEvent
 	public static void event(GatherDataEvent event) throws IOException {
 		DataGenerator generator = event.getGenerator();
 		generator.addProvider(true, (DataProvider.Factory<LegacySkinsLegacyPackProvider>) p -> new LegacySkinsLegacyPackProvider(p, event.getLookupProvider()));
 		generator.addProvider(true, (DataProvider.Factory<LegacySkinsLanguageProvider>) LegacySkinsLanguageProvider::new);
 		generator.addProvider(true, (DataProvider.Factory<LegacySkinsMcmetaProvider>) LegacySkinsMcmetaProvider::new);
 	}
-	//?}
+	*///?}
 }

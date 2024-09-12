@@ -204,9 +204,9 @@ public class PlayerSkinWidget extends AbstractWidget {
 		guiGraphics.pose().mulPose(Axis.YP.rotationDegrees(this.rotationY));
 		guiGraphics.flush();
 		//? if <=1.20.4
-		Lighting.setupForFlatItems();
+		/*Lighting.setupForFlatItems();*/
 		//? if >=1.20.6
-		/*Lighting.setupForEntityInInventory(Axis.XP.rotationDegrees(this.rotationX));*/
+		Lighting.setupForEntityInInventory(Axis.XP.rotationDegrees(this.rotationX));
 		this.model.render(this, guiGraphics, this.skin.get());
 		guiGraphics.flush();
 		Lighting.setupFor3DItems();
@@ -341,7 +341,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 				} else {
 					renderType = playerModel.renderType(skinLoc);
 				}
-				playerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY/*? if <1.21 {*/, 1.0F, 1.0F, 1.0F, 1.0F/*?}*/);
+				playerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY/*? if <1.21 {*//*, 1.0F, 1.0F, 1.0F, 1.0F*//*?}*/);
 				l:
 				if (renderer != null && renderer.getDefaultTexture() != null) {
 					//CapeLayerMixin

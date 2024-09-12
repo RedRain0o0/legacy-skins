@@ -19,9 +19,9 @@ public class LegacyConfigScreens {
 		if (initialized) return;
 		initialized = true;
 		//? if yacl
-		/*if (PlatformUtils.isModLoaded("yet_another_config_lib_v3")) new YaclConfigScreen();*/
+		if (PlatformUtils.isModLoaded("yet_another_config_lib_v3")) new YaclConfigScreen();
 		//? if clothconfig
-		if (PlatformUtils.isModLoaded(/*? if fabric {*//*"cloth-config" *//*?} else {*/ "cloth_config" /*?}*/)) new ClothConfigConfigScreen();
+		if (PlatformUtils.isModLoaded(/*? if fabric {*/"cloth-config" /*?} else {*/ /*"cloth_config" *//*?}*/)) new ClothConfigConfigScreen();
 	}
 	public static Optional<Screen> createConfigScreen(Screen screen) {
 		if (CONFIG_SCREENS.isEmpty()) return Optional.empty();

@@ -10,7 +10,7 @@ import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.migrator.Migrator;
 import io.github.redrain0o0.legacyskins.util.VersionUtils;
 //? if fabric
-/*import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;*/
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.Util;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
@@ -32,19 +32,19 @@ public abstract class LegacyPackProvider implements DataProvider {
 	private final PackOutput dataOutput;
 	private final CompletableFuture<HolderLookup.Provider> registryLookup;
 	//? if !fabric
-	private String modid;
+	/*private String modid;*/
 
 	//? if !fabric {
-	public LegacyPackProvider(PackOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
+	/*public LegacyPackProvider(PackOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
 		this(dataOutput, registryLookup, "minecraft");
 	}
-	//?}
+	*///?}
 
-	public LegacyPackProvider(PackOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup /*? if !fabric {*/, String modid /*?}*/) {
+	public LegacyPackProvider(PackOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup /*? if !fabric {*//*, String modid *//*?}*/) {
 		this.dataOutput = dataOutput;
 		this.registryLookup = registryLookup;
 		//? if !fabric
-		this.modid = modid;
+		/*this.modid = modid;*/
 	}
 
 	@Override
@@ -132,9 +132,9 @@ public abstract class LegacyPackProvider implements DataProvider {
 		@Override
 		public String getModId() {
 			//? if fabric
-			/*return ((FabricDataOutput) getOutput()).getModId();*/
+			return ((FabricDataOutput) getOutput()).getModId();
 			//? if !fabric
-			return modid;
+			/*return modid;*/
 		}
 	}
 }

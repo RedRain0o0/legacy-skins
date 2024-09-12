@@ -1,5 +1,5 @@
 //? if yacl {
-/*package io.github.redrain0o0.legacyskins.client.screen.config;
+package io.github.redrain0o0.legacyskins.client.screen.config;
 
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
@@ -66,4 +66,4 @@ public class YaclConfigScreen {
 		}
 	}
 }
-*///?}
+//?}
