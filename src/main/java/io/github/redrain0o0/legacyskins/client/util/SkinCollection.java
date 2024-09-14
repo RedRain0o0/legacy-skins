@@ -64,4 +64,8 @@ public class SkinCollection {
 	public boolean isEmpty() {
 		return backingArray.isEmpty();
 	}
+
+	public boolean has(SkinReference reference) {
+		return backingArray.contains(reference);
+	}
 }

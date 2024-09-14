@@ -395,13 +395,9 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	}
 
 	void skinPack() {
-		if (this.focusedPack.getFirst().equals(Constants.FAVORITES_PACK) && Legacyskins.INSTANCE.getFavorites().contains(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
-			skinPack(Legacyskins.INSTANCE.getFavorites().indexOf(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0))));
-		} else if (Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).pack().equals(this.focusedPack.getFirst())) {
-			skinPack(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).ordinal());
-		} else {
-			skinPack(0);
-		}
+		SkinReference currentSkin = Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0));
+		SkinCollection collection = this.focusedPack.getSecond();
+		skinPack(collection.has(currentSkin) ? collection.indexOf(currentSkin) : 0);
 	}
 	Renderable f;
 	Renderable g;
