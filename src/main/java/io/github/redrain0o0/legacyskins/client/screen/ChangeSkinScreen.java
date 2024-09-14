@@ -12,6 +12,7 @@ import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacyPackType;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
+import io.github.redrain0o0.legacyskins.client.util.SkinCollection;
 import io.github.redrain0o0.legacyskins.mixin.RenderableVListAccessor;
 import io.github.redrain0o0.legacyskins.mixin.ScreenAccessor;
 import io.github.redrain0o0.legacyskins.util.LegacySkinSprites;
@@ -63,7 +64,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	protected final Minecraft minecraft;
 	protected final Panel tooltipBox = Panel.tooltipBoxOf(panel, 350);
 	protected ScrollableRenderer scrollableRenderer = new ScrollableRenderer(new LegacyScrollRenderer());
-	private Pair<ResourceLocation, LegacySkinPack> focusedPack;
+	private Pair<ResourceLocation, SkinCollection> focusedPack;
 	private PlayerSkinWidgetList playerSkinWidgetList;
 	private final Map<ResourceLocation, Button> buttons = new HashMap<>();
 
@@ -75,20 +76,21 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		//int[] index = new int[]{0};
 		LegacySkinPack.list.forEach((id, pack) -> {
 			if (pack.type() == LegacyPackType.DEV && !Legacyskins.INSTANCE.showDevPacks() && !Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).pack().equals(id)) return;
+			SkinCollection collection = SkinCollection.ofSkinPack(pack);
 			Button button = new Button(0, 0, 260, 20, Component.translatable(Util.makeDescriptionId("skin_pack", id)), b -> {}, Supplier::get){
 				@Override
 				protected void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
 					super.renderWidget(guiGraphics, i, j, f);
 					if (this.isFocused()) {
-						if (focusedPack != null && focusedPack.getSecond() == pack) return;
-						ChangeSkinScreen.this.focusedPack = Pair.of(id, pack);
+						if (focusedPack != null && focusedPack.getSecond() == collection) return;
+						ChangeSkinScreen.this.focusedPack = Pair.of(id, collection);
 						queuedChangeSkinPack = true;
 					}
 				}
 
 				@Override
 				public boolean isHoveredOrFocused() {
-					if (focusedPack != null && focusedPack.getSecond() == pack) return true;
+					if (focusedPack != null && focusedPack.getSecond() == collection) return true;
 					return super.isHoveredOrFocused();
 				}
 			};
@@ -370,28 +372,16 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	void openToCurrentSkin() {
 		Optional<SkinReference> currentSkin = Legacyskins.INSTANCE.getCurrentSkin();
 		SkinReference ref = currentSkin.orElse(new SkinReference(Constants.DEFAULT_PACK, 0));
-		if (Legacyskins.INSTANCE.getFavorites().contains(ref)) {
-			this.focusedPack = Pair.of(Constants.FAVORITES_PACK, LegacySkinPack.list.get(Constants.FAVORITES_PACK));
+		{
+			if (Legacyskins.INSTANCE.getFavorites().contains(ref)) {
+				this.focusedPack = Pair.of(Constants.FAVORITES_PACK, SkinCollection.ofFavorites());
+			} else {
+				this.focusedPack = Pair.of(ref.pack(), SkinCollection.ofSkinPack(ref.pack()));
+			}
 			this.queuedChangeSkinPack = true;
 			ix();
 			this.setFocused(this.buttons.get(focusedPack.getFirst()));
-			skinPack(Legacyskins.INSTANCE.getFavorites().indexOf(ref));
-			return;
-		}
-		if (currentSkin.isEmpty()) {
-			// No skin
-			this.focusedPack = Pair.of(Constants.DEFAULT_PACK, LegacySkinPack.list.get(Constants.DEFAULT_PACK));
-			this.queuedChangeSkinPack = true;
-			ix();
-			this.setFocused(this.buttons.get(focusedPack.getFirst()));
-			skinPack(0);
-		} else {
-			SkinReference skinReference = currentSkin.get();
-			this.focusedPack = Pair.of(skinReference.pack(), LegacySkinPack.list.get(skinReference.pack()));
-			this.queuedChangeSkinPack = true;
-			ix();
-			this.setFocused(this.buttons.get(focusedPack.getFirst()));
-			skinPack(skinReference.ordinal());
+			skinPack(this.focusedPack.getSecond().indexOf(ref));
 		}
 	}
 
@@ -441,19 +431,10 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			List<SkinReference> skins = new ArrayList<>();
 			while (quota > 0) {
 				int i = 0;
-				if (Constants.FAVORITES_PACK.equals(this.focusedPack.getFirst())) {
-					if (Legacyskins.INSTANCE.getFavorites().isEmpty()) break;
-					for (SkinReference favorite : Legacyskins.INSTANCE.getFavorites()) {
-						skins.add(favorite);
-						i++;
-						quota--;
-					}
-				} else {
-					for (LegacySkin ignored : this.focusedPack.getSecond().skins()) {
-						skins.add(new SkinReference(this.focusedPack.getFirst(), i));
-						i++;
-						quota--;
-					}
+				if (this.focusedPack.getSecond().isEmpty()) break;
+				for (SkinReference ref : this.focusedPack.getSecond().skins()) {
+					skins.add(ref);
+					quota--;
 				}
 			}
 			

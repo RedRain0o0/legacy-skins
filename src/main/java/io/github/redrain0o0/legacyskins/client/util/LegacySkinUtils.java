@@ -4,7 +4,9 @@ import com.tom.cpm.shared.MinecraftClientAccess;
 import com.tom.cpm.shared.config.ConfigKeys;
 import com.tom.cpm.shared.config.ModConfig;
 import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
+import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.util.PlatformUtils;
 import io.github.redrain0o0.legacyskins.util.VersionUtils;
 import net.minecraft.client.Minecraft;
@@ -18,6 +20,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class LegacySkinUtils {
 	public static void switchSkin(@Nullable LegacySkin skin) {
@@ -72,5 +77,19 @@ public class LegacySkinUtils {
 			throw new RuntimeException(e);
 		}
 		return Legacyskins.MOD_ID + "-models/" + location.hashCode() + ".cpmmodel";
+	}
+
+	public static ArrayList<SkinReference> referencesFromSkinPack(LegacySkinPack pack) {
+		List<LegacySkin> skins = pack.skins();
+		ResourceLocation id = id(pack);
+		ArrayList<SkinReference> references = new ArrayList<>();
+		for (int i = 0; i < skins.size(); i++) {
+			references.add(new SkinReference(id, i));
+		}
+		return references;
+	}
+
+	public static ResourceLocation id(LegacySkinPack pack) {
+		return LegacySkinPack.list.entrySet().stream().filter(a -> a.getValue().equals(pack)).map(Map.Entry::getKey).findFirst().orElseThrow();
 	}
 }
