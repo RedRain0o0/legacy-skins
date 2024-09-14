@@ -5,6 +5,7 @@ import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacyPackType;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
+import io.github.redrain0o0.legacyskins.util.VersionUtils;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class SkinCollection {
 		if (backing instanceof LegacySkinPack pack) {
 			return pack.icon();
 		}
-		return ResourceLocation.fromNamespaceAndPath("minecraft", "missing"); // TODO proper missing texture
+		return VersionUtils.of("minecraft", "missing"); // TODO proper missing texture
 	}
 
 	public LegacyPackType type() {
