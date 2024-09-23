@@ -1,8 +1,5 @@
-- The doll's arms are now rotated 5 degrees in each direction.
-- Updated some skin descriptions.
-- You can now make a doll sneak by pressing LSHIFT with keyboard or the Right Stick on a controller.
-- Fixed an off by one issue when opening to a skin pack that requires scrolling for its button to be visible.
-- `pack_name_box` is now rendered before `skin_box` to fix some texture issues.
-- Replaced `AnimationEngineMixin` with `NetHandlerMixin`. This should fix a crash happening due to an apparent `@Redirect` conflict.
-- Fixed a bug where it was possible to scroll up and down with the Right Stick if there were enough skin packs.
-- Added the default skins as found in the latest releases of Minecraft Java Edition. These are hidden behind the Dev Pack config option, and may change at any time.
+- Fixed bug where tooltip boxes needed to be on for the skins screen UI texture to be displayed
+- Added CPM as a required dependency (It was missing in prior releases)
+- Added Forge 1.20.4 support
+- Various internal changes
+- Added link to the [skinpack showcases page](https://github.com/RedRain0o0/legacy-skins/discussions/categories/showcase) in the config screen
