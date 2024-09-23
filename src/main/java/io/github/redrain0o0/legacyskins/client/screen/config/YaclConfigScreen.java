@@ -2,13 +2,16 @@
 package io.github.redrain0o0.legacyskins.client.screen.config;
 
 import dev.isxander.yacl3.api.ConfigCategory;
+import dev.isxander.yacl3.api.LabelOption;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
+import dev.isxander.yacl3.api.controller.ControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,6 +49,8 @@ public class YaclConfigScreen {
 								.binding(M.NONE, M.of(Legacyskins.INSTANCE::configScreenType), t -> Legacyskins.INSTANCE.configScreenType = Optional.ofNullable(t.type))
 								.controller(c -> EnumControllerBuilder.create(c).enumClass(M.class))
 								.build()
+						).option(
+								LabelOption.create(Component.literal("Get more skin packs!").withStyle(s -> s.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/RedRain0o0/legacy-skins/discussions/categories/showcase"))))
 						).build()
 				).build();
 		return yacl.generateScreen(parent);
