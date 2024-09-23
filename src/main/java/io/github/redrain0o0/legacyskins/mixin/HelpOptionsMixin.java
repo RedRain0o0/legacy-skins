@@ -17,7 +17,7 @@ import wily.legacy.client.screen.RenderableVListScreen;
 
 import java.util.function.Consumer;
 
-@Mixin(value = HelpOptionsScreen.class, remap = false)
+@Mixin(HelpOptionsScreen.class)
 public class HelpOptionsMixin extends RenderableVListScreen {
 	public HelpOptionsMixin(Screen parent, Component component, Consumer<RenderableVList> vListBuild) {
 		super(parent, component, vListBuild);
