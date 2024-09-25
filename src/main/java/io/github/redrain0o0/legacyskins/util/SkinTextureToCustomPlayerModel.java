@@ -68,6 +68,8 @@ public class SkinTextureToCustomPlayerModel {
 		}
 		System.out.println("Exported default skins");
 	}
+
+	// Simulate the CPM GUI to create and export skins
 	public static void convert0(byte[] texture, boolean slim, Path exportLoc) throws Throwable {
 		UI gui = (UI) Proxy.newProxyInstance(SkinTextureToCustomPlayerModel.class.getClassLoader(), new Class[]{UI.class}, new AbstractInvocationHandler() {
 			@Override
