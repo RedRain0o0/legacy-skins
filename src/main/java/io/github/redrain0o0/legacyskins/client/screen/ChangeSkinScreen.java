@@ -13,7 +13,7 @@ import io.github.redrain0o0.legacyskins.client.LegacyPackType;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.util.SkinCollection;
-import io.github.redrain0o0.legacyskins.mixin.RenderableVListAccessor;
+import io.github.redrain0o0.legacyskins.mixin.legacy4j.RenderableVListAccessor;
 import io.github.redrain0o0.legacyskins.mixin.ScreenAccessor;
 import io.github.redrain0o0.legacyskins.util.LegacySkinSprites;
 import io.github.redrain0o0.legacyskins.util.VersionUtils;

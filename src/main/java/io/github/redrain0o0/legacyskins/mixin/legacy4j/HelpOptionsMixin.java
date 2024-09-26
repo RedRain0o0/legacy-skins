@@ -1,4 +1,4 @@
-package io.github.redrain0o0.legacyskins.mixin;
+package io.github.redrain0o0.legacyskins.mixin.legacy4j;
 
 import io.github.redrain0o0.legacyskins.LegacySkinsConfig;
 import io.github.redrain0o0.legacyskins.Legacyskins;

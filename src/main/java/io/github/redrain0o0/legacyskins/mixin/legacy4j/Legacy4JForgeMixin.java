@@ -1,11 +1,6 @@
-package io.github.redrain0o0.legacyskins.mixin;
+package io.github.redrain0o0.legacyskins.mixin.legacy4j;
 
-import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import wily.legacy.Legacy4J;
 import wily.legacy.Legacy4JClient;
 //? if neoforge {

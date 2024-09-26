@@ -15,12 +15,11 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.jetbrains.annotations.NotNull;
-import wily.legacy.Legacy4J;
-import wily.legacy.util.JsonUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,9 +60,8 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 
 		private static @NotNull Map<ResourceLocation, LegacySkinPack> loadPacksFromResourceManager(ResourceManager resourceManager) {
 			Map<ResourceLocation, LegacySkinPack> packs = new LinkedHashMap<>();
-			List<String> allNamespaces = JsonUtil.getOrderedNamespaces(resourceManager).toList();
-			allNamespaces.stream().filter(Legacyskins.MOD_ID::equals).forEach(loadPackData(resourceManager, packs));
-			allNamespaces.stream().filter(a -> !Legacyskins.MOD_ID.equals(a)).forEach(loadPackData(resourceManager, packs));
+			List<String> allNamespaces = resourceManager.getNamespaces().stream().sorted(Comparator.comparingInt(s -> s.equals(Legacyskins.MOD_ID) ? 0 : 1)).toList();
+			allNamespaces.forEach(loadPackData(resourceManager, packs));
 			return packs;
 		}
 
@@ -77,8 +75,8 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 						Map<ResourceLocation, LegacySkinPack> map = MAP_CODEC.parse(JsonOps.INSTANCE, obj).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
 						packs.putAll(map);
 						bufferedReader.close();
-					} catch (IOException var8) {
-						Legacy4J.LOGGER.warn(var8.getMessage());
+					} catch (IOException e) {
+						Legacyskins.LOGGER.warn(e.getMessage());
 					}
 				});
 			};

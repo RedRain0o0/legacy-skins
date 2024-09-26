@@ -6,10 +6,10 @@
     "EditorAccessor",
     "EditorGuiAccessor",
     "GeneratorsAccessor",
-    "HelpOptionsMixin",
-    "Legacy4JForgeMixin",
+    "legacy4j.HelpOptionsMixin",
+    "legacy4j.Legacy4JForgeMixin",
     "PlayerRendererImplAccessor",
-    "RenderableVListAccessor",
+    "legacy4j.RenderableVListAccessor",
     "ScreenAccessor"
   ],
   "injectors": {
