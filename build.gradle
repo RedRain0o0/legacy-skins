@@ -105,7 +105,7 @@ dependencies {
 	modImplementation "maven.modrinth:legacy4j:${project.legacy4j_version}"
 	api "dev.isxander:libsdl4j:${project.libsdl4j_version}"
 	if (loader.isForgeLike()) {
-		// forgeRuntimeLibrary "dev.isxander:libsdl4j:${project.libsdl4j_version}"
+		 forgeRuntimeLibrary "dev.isxander:libsdl4j:${project.libsdl4j_version}"
 	}
 
 	if (project.yacl_version != "[VERSIONED]") {
