@@ -9,9 +9,10 @@ import java.util.List;
 import java.util.Set;
 
 public class LegacySkinsMixinPlugin implements IMixinConfigPlugin {
+	private boolean legacyLoaded;
 	@Override
 	public void onLoad(String mixinPackage) {
-
+		legacyLoaded = PlatformUtils.isModLoaded("legacy");
 	}
 
 	@Override
@@ -19,13 +20,10 @@ public class LegacySkinsMixinPlugin implements IMixinConfigPlugin {
 		return null;
 	}
 
-	@SuppressWarnings({
-			"SimplifiableConditionalExpression", // it's more readable like this, and compiles the same anyways
-			"GrazieInspection" // who cares about "informal American English" anyways
-	})
+	@SuppressWarnings("SpellCheckingInspection")
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		return mixinClassName.contains("legacy4j") ? PlatformUtils.isModLoaded("legacy") : true;
+		return mixinClassName.contains("nonlegacy4j") ? !legacyLoaded : mixinClassName.contains("legacy4j") && legacyLoaded;
 	}
 
 	@Override
