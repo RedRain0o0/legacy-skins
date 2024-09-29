@@ -224,6 +224,12 @@ public class PlayerSkinWidget extends AbstractWidget {
 	}
 
 	@Override
+	public boolean mouseClicked(double d, double e, int i) {
+		if (isInterpolating()  || !interactable || !visible) return false;
+		return super.mouseClicked(d, e, i);
+	}
+
+	@Override
 	public void onRelease(double d, double e) {
 		//progress = 0;
 		//beginInterpolation(0.0F/*-5.0F*/, /*30.0F*/0.0F);
