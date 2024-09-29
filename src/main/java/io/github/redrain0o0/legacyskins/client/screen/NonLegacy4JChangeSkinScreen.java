@@ -117,6 +117,7 @@ public class NonLegacy4JChangeSkinScreen extends Screen {
 		super.render(guiGraphics, i, j, f);
 	}
 
+	//? if >=1.21 {
 	@Override
 	public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
 		super.renderBackground(guiGraphics, i, j, f);
@@ -143,6 +144,7 @@ public class NonLegacy4JChangeSkinScreen extends Screen {
 		//tesselator.clear();
 		//VertexConsumer consumer = bufferSource.getBuffer(RenderType.gui())
 	}
+	//?}
 
 	@Override
 	public void onClose() {
