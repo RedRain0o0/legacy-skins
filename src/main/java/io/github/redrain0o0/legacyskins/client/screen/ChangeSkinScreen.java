@@ -490,7 +490,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		panel.y = panel.y - 15;
 		if (firstOpen) {
 			firstOpen = false;
-			System.out.println("Opened to current skin in init");
+			Legacyskins.LOGGER.debug("Opened to current skin in init");
 			openToCurrentSkin();
 		} else {
 			if (playerSkinWidgetList != null && playerSkinWidgetList.element3 != null && playerSkinWidgetList.element3.skinRef.get() != null) skinPack(playerSkinWidgetList.element3.skinRef.get().ordinal());
