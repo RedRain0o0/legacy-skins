@@ -33,8 +33,7 @@ public class PlayerSkinUtils {
 		private final GameProfile profile;
 		public ResourceLocation skinLocation;
 		public boolean slim;
-		// TODO implement capes
-		private ResourceLocation capeLocation;
+		public ResourceLocation capeLocation;
 		public F(GameProfile profile) {
 			this.profile = profile;
 			//? if <=1.20.1 {
@@ -53,12 +52,15 @@ public class PlayerSkinUtils {
 			if (type == MinecraftProfileTexture.Type.SKIN) {
 				this.skinLocation = resourceLocation;
 				this.slim = "slim".equals(minecraftProfileTexture.getMetadata("model"));
+			} else if (type == MinecraftProfileTexture.Type.CAPE) {
+				this.capeLocation = resourceLocation;
 			}
 		}
 
 		//? if >=1.20.2 {
 		public void apply(PlayerSkin playerSkin) {
 			this.skinLocation = playerSkin.texture();
+			this.capeLocation = playerSkin.capeTexture();
 			this.slim = "slim".equals(playerSkin.model().id());
 		}
 		//?}

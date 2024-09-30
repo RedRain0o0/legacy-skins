@@ -366,6 +366,22 @@ public class PlayerSkinWidget extends AbstractWidget {
 					}
 					playerModel.renderCloak(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(capeRenderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
 					guiGraphics.pose().popPose();
+				} else if (renderer == null) {
+					if (skin.capeLocation != null) {
+						RenderType capeRenderType = RenderType.entityTranslucent(skin.capeLocation); // even though Minecraft uses entitySolid, we use entityTranslucent because many cape mods make it translucent
+						guiGraphics.pose().pushPose();
+						guiGraphics.pose().translate(0.0F, 0.0F, 0.125F);
+						PoseStack poseStack = guiGraphics.pose();
+						poseStack.mulPose(Axis.XP.rotationDegrees(6.0F + 0 / 2.0F + (widget != null && widget.statf == State.STEAKING ? 25.0F : 0)));
+						poseStack.mulPose(Axis.ZP.rotationDegrees(0 / 2.0F));
+						poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - 0 / 2.0F));
+						poseStack.mulPose(Axis.XP.rotation((float) ((Math.sin(System.currentTimeMillis() / 1000d) - 1) / 10f)));
+						if (widget != null && widget.statf == State.STEAKING) {
+							guiGraphics.pose().translate(0, 1.85F / 16, 1.4F / 16);
+						}
+						playerModel.renderCloak(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(capeRenderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
+						guiGraphics.pose().popPose();
+					}
 				}
 			}
 			if (renderer != null) {
