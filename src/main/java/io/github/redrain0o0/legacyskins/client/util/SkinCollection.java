@@ -43,7 +43,7 @@ public class SkinCollection {
 		if (backing instanceof LegacySkinPack pack) {
 			return pack.icon();
 		}
-		return VersionUtils.of("minecraft", "missing"); // TODO proper missing texture
+		return Constants.MISSING_TEXTURE;
 	}
 
 	public LegacyPackType type() {
