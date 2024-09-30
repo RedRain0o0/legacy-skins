@@ -225,7 +225,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 
 	@Override
 	public boolean mouseClicked(double d, double e, int i) {
-		if (isInterpolating()  || !interactable || !visible) return false;
+		if (isInterpolating() || !interactable || !visible) return false;
 		return super.mouseClicked(d, e, i);
 	}
 
