@@ -387,8 +387,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			this.setFocused(this.buttons.get(focusedPack.getFirst()));
 		}
 	}
-
-	// TODO this assumes there's 6 skinpacks displayed.
+	
 	@SuppressWarnings("LoggingSimilarMessage" /* Fix when it stops working */)
 	void ix() {
 		ProfilerFiller profiler = this.minecraft.getProfiler();
