@@ -11,4 +11,6 @@ public interface RenderableVListAccessor {
 	Stocker<Integer> getScrolledList();
 	@Accessor
 	int getRenderablesCount();
+	@Accessor("canScrollDown")
+	boolean canScrollDown();
 }

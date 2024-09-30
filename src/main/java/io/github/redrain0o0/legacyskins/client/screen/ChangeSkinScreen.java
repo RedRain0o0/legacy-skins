@@ -22,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.LayerDefinitions;
@@ -35,8 +36,10 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.LivingEntity;
 import org.joml.Quaternionf;
+import org.slf4j.Logger;
 import wily.legacy.Legacy4J;
 import wily.legacy.client.ControlType;
 //? if <=1.20.1
@@ -379,19 +382,53 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				this.focusedPack = Pair.of(ref.pack(), SkinCollection.ofSkinPack(ref.pack()));
 			}
 			this.queuedChangeSkinPack = true;
-			ix();
-			this.setFocused(this.buttons.get(focusedPack.getFirst()));
 			skinPack(this.focusedPack.getSecond().indexOf(ref));
+			if (!firstOpen) ix();
+			this.setFocused(this.buttons.get(focusedPack.getFirst()));
 		}
 	}
 
 	// TODO this assumes there's 6 skinpacks displayed.
+	@SuppressWarnings("LoggingSimilarMessage" /* Fix when it stops working */)
 	void ix() {
-		int index = new ArrayList<>(LegacySkinPack.list.keySet()).indexOf(this.focusedPack.getFirst());
-		index--;
-		if (index < 6) return;
-		if (index > this.renderableVList.renderables.size() - 6) index = this.renderableVList.renderables.size() - 6;
-		((RenderableVListAccessor) this.renderableVList).getScrolledList().set(index);
+		ProfilerFiller profiler = this.minecraft.getProfiler();
+		Logger logger = Legacyskins.LOGGER;
+		Renderable renderable = this.buttons.get(focusedPack.getFirst());
+		for (Renderable renderable1 : ((ScreenAccessor) this).getRenderables()) {
+			if (renderable1 instanceof Button button) {
+				logger.debug("Button found: {}", button.getMessage().getString());
+			}
+		}
+		if (renderable instanceof Button button) {
+			if (this.children().contains(button) && button.visible) {
+				logger.debug("Button was found and it is visible {} {}", button, button.getMessage().getString());
+				// do nothing
+			} else {
+				profiler.push(() -> "Scrolling to " + button.getMessage());
+				int i = 0;
+				while (((RenderableVListAccessor)renderableVList).canScrollDown()) renderableVList.mouseScrolled(true);
+				logger.debug("scrolled to the bottom");
+				while(!this.children().contains(button)) {
+					logger.debug("Searching for {}", button.getMessage());
+					renderableVList.mouseScrolled(false);
+					logger.debug("Scrolled up:");
+					for (GuiEventListener renderable1 : this.children()) {
+						if (renderable1 instanceof Button button2) {
+							logger.debug("Button found: {}", button2.getMessage().getString());
+						}
+					}
+					// Note, increase this if there people actually have more than 500 skin packs
+					if (i++ > 500) {
+						logger.error("Failed to find {}", button.getMessage().getString());
+						logger.error("We have tried over 500 times and still haven't found the button");
+						break;
+					} else {
+						logger.debug("Found {}", button.getMessage().getString());
+					}
+				}
+				profiler.pop();
+			}
+		}
 	}
 
 	void skinPack() {
@@ -444,7 +481,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		}
 	}
 
-	private boolean firstOpen = false;
+	private boolean firstOpen = true;
 
 	@Override
 	protected void init() {
@@ -453,6 +490,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		panel.y = panel.y - 15;
 		if (firstOpen) {
 			firstOpen = false;
+			System.out.println("Opened to current skin in init");
 			openToCurrentSkin();
 		} else {
 			if (playerSkinWidgetList != null && playerSkinWidgetList.element3 != null && playerSkinWidgetList.element3.skinRef.get() != null) skinPack(playerSkinWidgetList.element3.skinRef.get().ordinal());
