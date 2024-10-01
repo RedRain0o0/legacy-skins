@@ -43,6 +43,12 @@ public class MigratorTest {
 			Assertions.assertTrue(jsonElementDynamic.getValue().getAsJsonObject().has("showSkinEditorButton"));
 		}
 		{
+			Dynamic<JsonElement> jsonElementDynamic = new Dynamic<>(JsonOps.INSTANCE, load("1004.json"));
+			jsonElementDynamic = Migrator.CONFIG_FIXER.fix(jsonElementDynamic);
+			Assertions.assertEquals("testpack:test_skin", jsonElementDynamic.getValue().getAsJsonObject().getAsJsonObject("profiles").getAsJsonObject("00000000-0000-0000-0000-000000000000").getAsJsonObject("selectedSkin").getAsJsonPrimitive("pack").getAsString());
+			Assertions.assertEquals(1, jsonElementDynamic.getValue().getAsJsonObject().getAsJsonObject("profiles").getAsJsonObject("00000000-0000-0000-0000-000000000000").getAsJsonArray("favorites").size());
+		}
+		{
 			Dynamic<JsonElement> jsonElementDynamic = new Dynamic<>(JsonOps.INSTANCE, load("2mig.json"));
 			jsonElementDynamic = Migrators.migrator.fix(jsonElementDynamic);
 			Assertions.assertEquals("1", jsonElementDynamic.get("value2").asString().resultOrPartial(Legacyskins.LOGGER::error).orElseThrow());

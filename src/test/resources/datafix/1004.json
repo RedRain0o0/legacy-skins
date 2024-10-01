@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1004,
+  "currentSkin": {
+    "pack": "testpack:test_skin",
+    "ordinal": 2
+  },
+  "showDevPacks": true,
+  "showSkinEditorButton": true,
+  "favorites": [
+    {
+      "pack": "legacyskins:dev",
+      "ordinal": 1
+    }
+  ],
+  "skinsScreen": "default"
+}
