@@ -13,6 +13,8 @@ import io.github.redrain0o0.legacyskins.client.screen.config.LegacyConfigScreens
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import io.github.redrain0o0.legacyskins.migrator.Migrator;
 import io.github.redrain0o0.legacyskins.util.PlatformUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.UUIDUtil;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.VisibleForTesting;
 
@@ -20,14 +22,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.UUID;
 
 @SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "DeprecatedIsStillUsed"})
 public class LegacySkinsConfig {
 	public static final Codec<LegacySkinsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			SkinReference.CODEC.optionalFieldOf("currentSkin").forGetter(LegacySkinsConfig::getCurrentSkin),
-			Codec.list(SkinReference.CODEC).xmap(ArrayList::new, c -> c).fieldOf("favorites").forGetter(LegacySkinsConfig::getFavorites),
+			Codec.unboundedMap(UUIDUtil.STRING_CODEC, SkinsConfig.CODEC).fieldOf("profiles").xmap(HashMap::new, LegacySkinsConfig::identity).forGetter(LegacySkinsConfig::getProfiles),
 			SkinsScreen.CODEC.fieldOf("skinsScreen").forGetter(LegacySkinsConfig::getSkinsScreen),
 			Codec.BOOL.fieldOf("showDevPacks").forGetter(LegacySkinsConfig::showDevPacks),
 			Codec.BOOL.fieldOf("showSkinEditorButton").forGetter(LegacySkinsConfig::showSkinEditorButton),
@@ -43,21 +46,15 @@ public class LegacySkinsConfig {
 	public float dollRotationXLimit;
 	@Deprecated(forRemoval = true)
 	public Optional<LegacyConfigScreens.ConfigScreenType> configScreenType;
-	// selected skin
-	public Optional<SkinReference> skin;
-	// Note: American English
-	/**
-	 * @deprecated Use {@link LegacySkinsConfig#getFavorites()}
-	 */
-	@Deprecated
-	public ArrayList<SkinReference> favorites;
+	// The ordering of the entries doesn't matter
+	private final HashMap<UUID, SkinsConfig> profiles;
 
-	public Optional<SkinReference> getCurrentSkin() {
-		return skin;
+	static <T> T identity(T t) {
+		return t;
 	}
 
-	public ArrayList<SkinReference> getFavorites() {
-		return favorites;
+	public HashMap<UUID, SkinsConfig> getProfiles() {
+		return profiles;
 	}
 
 	public SkinsScreen getSkinsScreen() {
@@ -87,17 +84,14 @@ public class LegacySkinsConfig {
 	}
 
 	/**
-	 * @param skin A reference to a skin
-	 * @param favorites A list of {@link SkinReference}s
 	 * @param screen Classic/Default
 	 * @param showDevPacks Whether to show dev packs in the skins screen
 	 * @param showEditorButton Whether to show the skin editor button in the title screen
 	 * @param dollRotationXLimit The maximum the doll can be rotated along the X axis
 	 * @param type Which type of config screen will be preferred
 	 */
-	public LegacySkinsConfig(Optional<SkinReference> skin, ArrayList<SkinReference> favorites, SkinsScreen screen, boolean showDevPacks, boolean showEditorButton, float dollRotationXLimit, Optional<LegacyConfigScreens.ConfigScreenType> type) {
-		this.skin = skin;
-		this.favorites = favorites;
+	public LegacySkinsConfig(HashMap<UUID, SkinsConfig> profiles, SkinsScreen screen, boolean showDevPacks, boolean showEditorButton, float dollRotationXLimit, Optional<LegacyConfigScreens.ConfigScreenType> type) {
+		this.profiles = profiles;
 		this.screen = screen;
 		this.showDevPacks = showDevPacks;
 		this.showEditorButton = showEditorButton;
@@ -105,9 +99,34 @@ public class LegacySkinsConfig {
 		this.configScreenType = type;
 	}
 
+	public static class SkinsConfig {
+		public static final Codec<SkinsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				SkinReference.CODEC.optionalFieldOf("selectedSkin").forGetter(SkinsConfig::getCurrentSkin),
+				Codec.list(SkinReference.CODEC).xmap(ArrayList::new, c -> c).fieldOf("favorites").forGetter(SkinsConfig::getFavorites)
+		).apply(instance, SkinsConfig::new));
+		private Optional<SkinReference> currentSkin;
+		private ArrayList<SkinReference> favorites;
+		public SkinsConfig(Optional<SkinReference> skin, ArrayList<SkinReference> favorites) {
+			this.currentSkin = skin;
+			this.favorites = favorites;
+		}
+		public Optional<SkinReference> getCurrentSkin() {
+			return currentSkin;
+		}
+		public ArrayList<SkinReference> getFavorites() {
+			return favorites;
+		}
+	}
+
+	public SkinsConfig getActiveSkinsConfig() {
+		UUID uuid = Minecraft.getInstance().getGameProfile().getId();
+		return this.profiles.computeIfAbsent(uuid, c -> new SkinsConfig(Optional.empty(), new ArrayList<>()));
+	}
+
 	public void setSkin(@Nullable SkinReference skin) {
+		SkinsConfig skinsConfig = getActiveSkinsConfig();
 		if (skin != null && skin.pack().equals(Constants.DEFAULT_PACK) && skin.ordinal() == 0) {
-			this.skin = Optional.empty();
+			skinsConfig.currentSkin = Optional.empty();
 			LegacySkinUtils.switchSkin(null);
 			return;
 		}
@@ -119,7 +138,7 @@ public class LegacySkinsConfig {
 				return;
 			}
 		}
-		this.skin = Optional.ofNullable(skin);
+		skinsConfig.currentSkin = Optional.ofNullable(skin);
 		LegacySkinUtils.switchSkin(skin != null ? LegacySkinPack.list.get(skin.pack()).skins().get(skin.ordinal()) : null);
 	}
 
@@ -148,7 +167,7 @@ public class LegacySkinsConfig {
 			Legacyskins.INSTANCE = fromDynamic(jsonElementDynamic);
 
 		} else {
-			(Legacyskins.INSTANCE = new LegacySkinsConfig(Optional.empty(), new ArrayList<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment(), false, 50f, Optional.empty())).save();
+			(Legacyskins.INSTANCE = new LegacySkinsConfig(new HashMap<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment(), false, 50f, Optional.empty())).save();
 		}
 	}
 

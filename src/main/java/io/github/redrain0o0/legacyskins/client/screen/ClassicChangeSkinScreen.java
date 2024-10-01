@@ -173,7 +173,7 @@ public class ClassicChangeSkinScreen extends PanelVListScreen implements Control
 			PlayerSkinWidget element3 = this.playerSkinWidgetList.element3;
 			if (element3 != null) {
 				SkinReference skinReference = element3.skinRef.get();
-				ArrayList<SkinReference> favorites = Legacyskins.INSTANCE.favorites;
+				ArrayList<SkinReference> favorites = Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites();
 				if (favorites.contains(skinReference)) {
 					favorites.removeIf(skinReference::equals);
 				} else {
@@ -220,7 +220,7 @@ public class ClassicChangeSkinScreen extends PanelVListScreen implements Control
 			graphics.blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80);
 			graphics.blitSprite(LegacySkinSprites.PACK_NAME_BOX, panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
 			if (this.playerSkinWidgetList != null) {
-				if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
+				if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
 					guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
 				}
 				//if (Legacyskins.INSTANCE.favorites.contains(this.playerSkinWidgetList.element3.skinRef.get())) {
@@ -354,13 +354,13 @@ public class ClassicChangeSkinScreen extends PanelVListScreen implements Control
 
 
 	void openToCurrentSkin() {
-		Optional<SkinReference> currentSkin = Legacyskins.INSTANCE.getCurrentSkin();
+		Optional<SkinReference> currentSkin = Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin();
 		SkinReference ref = currentSkin.orElse(new SkinReference(Constants.DEFAULT_PACK, 0));
-		if (Legacyskins.INSTANCE.favorites.contains(ref)) {
+		if (Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().contains(ref)) {
 			this.focusedPack = Pair.of(Constants.FAVORITES_PACK, LegacySkinPack.list.get(Constants.FAVORITES_PACK));
 			this.queuedChangeSkinPack = true;
 			this.setFocused(this.buttons.get(focusedPack.getFirst()));
-			skinPack(Legacyskins.INSTANCE.favorites.indexOf(ref));
+			skinPack(Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().indexOf(ref));
 			return;
 		}
 		if (currentSkin.isEmpty()) {
@@ -381,10 +381,10 @@ public class ClassicChangeSkinScreen extends PanelVListScreen implements Control
 	}
 
 	void skinPack() {
-		if (this.focusedPack.getFirst().equals(Constants.FAVORITES_PACK) && Legacyskins.INSTANCE.favorites.contains(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
-			skinPack(Legacyskins.INSTANCE.getFavorites().indexOf(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0))));
-		} else if (Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).pack().equals(this.focusedPack.getFirst())) {
-			skinPack(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).ordinal());
+		if (this.focusedPack.getFirst().equals(Constants.FAVORITES_PACK) && Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().contains(Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
+			skinPack(Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().indexOf(Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0))));
+		} else if (Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).pack().equals(this.focusedPack.getFirst())) {
+			skinPack(Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).ordinal());
 		} else {
 			skinPack(0);
 		}
@@ -423,8 +423,8 @@ public class ClassicChangeSkinScreen extends PanelVListScreen implements Control
 			while (quota > 0) {
 				int i = 0;
 				if (Constants.FAVORITES_PACK.equals(this.focusedPack.getFirst())) {
-					if (Legacyskins.INSTANCE.favorites.isEmpty()) break;
-					for (SkinReference favorite : Legacyskins.INSTANCE.favorites) {
+					if (Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().isEmpty()) break;
+					for (SkinReference favorite : Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites()) {
 						skins.add(favorite);
 						i++;
 						quota--;

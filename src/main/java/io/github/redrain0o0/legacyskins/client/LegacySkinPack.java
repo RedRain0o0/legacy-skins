@@ -91,7 +91,7 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 			// The default skin
 			data.get(Constants.DEFAULT_PACK).skins().add(0, null);
 			list.putAll(data);
-			Optional<SkinReference> skin = Legacyskins.lazyInstance().skin;
+			Optional<SkinReference> skin = Legacyskins.lazyInstance().getActiveSkinsConfig().getCurrentSkin();
 			if (skin.isPresent()) {
 				SkinReference skinReference = skin.get();
 				try {

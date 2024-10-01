@@ -18,7 +18,7 @@ public class Migrator {
 			),
 			1001,
 			1001,
-			1004
+			1005
 	);
 
 	public static final Migrator SKIN_PACKS_FIXER = new Migrator(

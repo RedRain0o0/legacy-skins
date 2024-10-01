@@ -78,7 +78,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		minecraft = Minecraft.getInstance();
 		//int[] index = new int[]{0};
 		LegacySkinPack.list.forEach((id, pack) -> {
-			if (pack.type() == LegacyPackType.DEV && !Legacyskins.INSTANCE.showDevPacks() && !Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).pack().equals(id)) return;
+			if (pack.type() == LegacyPackType.DEV && !Legacyskins.INSTANCE.showDevPacks() && !Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).pack().equals(id)) return;
 			SkinCollection collection = SkinCollection.ofSkinPack(pack);
 			Button button = new Button(0, 0, 260, 20, Component.translatable(Util.makeDescriptionId("skin_pack", id)), b -> {}, Supplier::get){
 				@Override
@@ -194,7 +194,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			PlayerSkinWidget element3 = this.playerSkinWidgetList.element3;
 			if (element3 != null) {
 				SkinReference skinReference = element3.skinRef.get();
-				ArrayList<SkinReference> favorites = Legacyskins.INSTANCE.getFavorites();
+				ArrayList<SkinReference> favorites = Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites();
 				if (favorites.contains(skinReference)) {
 					favorites.removeIf(skinReference::equals);
 				} else {
@@ -214,7 +214,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		super.addControlTooltips(renderer);
 		renderer.set(0, () -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_RETURN) : ControllerBinding.DOWN_BUTTON.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.select_skin"));
 		renderer.set(1, () -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_ESCAPE) : ControllerBinding.RIGHT_BUTTON.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.cancel"));
-		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.UP_BUTTON.bindingState.getIcon(), () -> Component.translatable(this.playerSkinWidgetList != null && Legacyskins.INSTANCE.getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get()) ? "legacyskins.menu.unfavorite" : "legacyskins.menu.favorite"));
+		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.UP_BUTTON.bindingState.getIcon(), () -> Component.translatable(this.playerSkinWidgetList != null && Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get()) ? "legacyskins.menu.unfavorite" : "legacyskins.menu.favorite"));
 		renderer.add(() -> ControlType.getActiveType().isKbm() ? COMPOUND_ICON_FUNCTION.apply(new ControlTooltip.Icon[]{ControlTooltip.getKeyIcon(InputConstants.KEY_LEFT),ControlTooltip.SPACE_ICON,ControlTooltip.getKeyIcon(InputConstants.KEY_RIGHT)})  : ControllerBinding.LEFT_STICK.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.navigate"));
 		//renderer.add(()-> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.LEFT_STICK.bindingState.getIcon(), ()-> null);
 	}
@@ -237,10 +237,10 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		p(guiGraphics).blitSprite(LegacySkinSprites.PACK_NAME_BOX, panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
 		p(guiGraphics).blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80);
 		if (this.playerSkinWidgetList != null) {
-			if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
+			if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
 				guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
 			}
-			if (Legacyskins.INSTANCE.getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get())) {
+			if (Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get())) {
 				//? if >=1.20.2 {
 				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/container.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
 				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/full.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
@@ -373,10 +373,10 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 
 	void openToCurrentSkin() {
-		Optional<SkinReference> currentSkin = Legacyskins.INSTANCE.getCurrentSkin();
+		Optional<SkinReference> currentSkin = Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin();
 		SkinReference ref = currentSkin.orElse(new SkinReference(Constants.DEFAULT_PACK, 0));
 		{
-			if (Legacyskins.INSTANCE.getFavorites().contains(ref)) {
+			if (Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().contains(ref)) {
 				this.focusedPack = Pair.of(Constants.FAVORITES_PACK, SkinCollection.ofFavorites());
 			} else {
 				this.focusedPack = Pair.of(ref.pack(), SkinCollection.ofSkinPack(ref.pack()));
@@ -431,7 +431,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	}
 
 	void skinPack() {
-		SkinReference currentSkin = Legacyskins.INSTANCE.getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0));
+		SkinReference currentSkin = Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0));
 		SkinCollection collection = this.focusedPack.getSecond();
 		skinPack(collection.has(currentSkin) ? collection.indexOf(currentSkin) : 0);
 	}

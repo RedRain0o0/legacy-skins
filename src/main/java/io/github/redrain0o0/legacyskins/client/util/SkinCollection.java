@@ -31,7 +31,7 @@ public class SkinCollection {
 	}
 
 	public static SkinCollection ofFavorites() {
-		return new SkinCollection(Legacyskins.lazyInstance()::getFavorites, LegacySkinPack.list.get(Constants.FAVORITES_PACK));
+		return new SkinCollection(Legacyskins.lazyInstance().getActiveSkinsConfig()::getFavorites, LegacySkinPack.list.get(Constants.FAVORITES_PACK));
 	}
 
 	public SkinCollection refresh() {

@@ -37,7 +37,7 @@ public class NonLegacy4JChangeSkinScreen extends Screen {
 
 	private SkinCollection getInitialSkinCollection() {
 		SkinReference defaultSkin = new SkinReference(Constants.DEFAULT_PACK, 0);
-		SkinReference currentSkin = Legacyskins.INSTANCE.getCurrentSkin().orElse(defaultSkin);
+		SkinReference currentSkin = Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(defaultSkin);
 		if (SkinCollection.ofFavorites().has(currentSkin)) {
 			return SkinCollection.ofFavorites();
 		}
