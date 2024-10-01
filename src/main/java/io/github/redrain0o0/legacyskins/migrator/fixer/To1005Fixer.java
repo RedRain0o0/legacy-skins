@@ -44,7 +44,7 @@ public class To1005Fixer extends Fixer {
 			uuid = Minecraft.getInstance().getGameProfile().getId();
 		} catch (Throwable t) {
 			uuid = UUID.fromString("00000000-0000-0000-0000-000000000000");
-			Legacyskins.LOGGER.error("Failed to fetch player uuid!", t);
+			if (!System.getProperties().containsKey("legacy-skins-unit-testing")) Legacyskins.LOGGER.error("Failed to fetch player uuid!", t);
 		}
 		skinConfig = skinConfig.set((String) /* If this is not a string we're in big trouble */ UUIDUtil.STRING_CODEC.encodeStart(JavaOps.INSTANCE, uuid).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow(), profile);
 		element = element.set("profiles", skinConfig);

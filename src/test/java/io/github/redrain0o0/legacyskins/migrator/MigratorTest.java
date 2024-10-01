@@ -16,7 +16,8 @@ public class MigratorTest {
 
 	@Test
 	void dataFix() throws Throwable{
-
+		// Set unit testing property so we don't get error messages
+		System.getProperties().setProperty("legacy-skins-unit-testing", "a");
 		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
 			Dynamic<JsonElement> jsonElementDynamic = new Dynamic<>(JsonOps.INSTANCE, load("999.json"));
 			Migrator.CONFIG_FIXER.fix(jsonElementDynamic);
