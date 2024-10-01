@@ -26,14 +26,14 @@ public class MigratorTest {
 			jsonElementDynamic = Migrator.CONFIG_FIXER.fix(jsonElementDynamic);
 			Assertions.assertEquals("default", jsonElementDynamic.get("skinsScreen").asString().result().orElse(null));
 			Assertions.assertFalse(jsonElementDynamic.getValue().getAsJsonObject().has("skin"));
-			Assertions.assertTrue(jsonElementDynamic.getValue().getAsJsonObject().has("currentSkin"));
+			Assertions.assertTrue(jsonElementDynamic.getValue().getAsJsonObject().getAsJsonObject("profiles").getAsJsonObject("00000000-0000-0000-0000-000000000000").has("selectedSkin"));
 			Assertions.assertTrue(jsonElementDynamic.getValue().getAsJsonObject().has("showSkinEditorButton"));
 		}
 		{
 			Dynamic<JsonElement> jsonElementDynamic = new Dynamic<>(JsonOps.INSTANCE, load("1001-without-skin.json"));
 			jsonElementDynamic = Migrator.CONFIG_FIXER.fix(jsonElementDynamic);
 			Assertions.assertFalse(jsonElementDynamic.getValue().getAsJsonObject().has("skin"));
-			Assertions.assertFalse(jsonElementDynamic.getValue().getAsJsonObject().has("currentSkin"));
+			Assertions.assertFalse(jsonElementDynamic.getValue().getAsJsonObject().getAsJsonObject("profiles").getAsJsonObject("00000000-0000-0000-0000-000000000000").has("selectedSkin"));
 			Assertions.assertTrue(jsonElementDynamic.getValue().getAsJsonObject().has("showSkinEditorButton"));
 		}
 		{
