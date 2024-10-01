@@ -3,7 +3,6 @@ package io.github.redrain0o0.legacyskins.migrator.fixer;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JavaOps;
 import io.github.redrain0o0.legacyskins.Legacyskins;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.UUIDUtil;
 
