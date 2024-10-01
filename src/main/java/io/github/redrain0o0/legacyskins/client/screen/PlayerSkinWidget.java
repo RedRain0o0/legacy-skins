@@ -464,6 +464,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 			model.leftSleeve.copyFrom(model.leftArm);
 			model.rightSleeve.copyFrom(model.rightArm);
 			model.jacket.copyFrom(model.body);
+			model.hat.copyFrom(model.head);
 
 			//model.setupAttackAnimation()
 		}
