@@ -1,6 +1,9 @@
 package io.github.redrain0o0.legacyskins.migrator.fixer;
 
 import com.mojang.serialization.Dynamic;
+//? if <=1.20.4 {
+/*import net.minecraft.util.JavaOps;
+*///?} else
 import com.mojang.serialization.JavaOps;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import net.minecraft.client.Minecraft;
