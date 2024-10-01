@@ -14,7 +14,8 @@ public class Migrator {
 			List.of(
 					new To1002Fixer(),
 					new To1003Fixer(),
-					new To1004Fixer()
+					new To1004Fixer(),
+					new To1005Fixer()
 			),
 			1001,
 			1001,
