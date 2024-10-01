@@ -1,10 +1,1 @@
-- Fixed bug where tooltip boxes needed to be on for the skins screen UI texture to be displayed
-- Added CPM as a required dependency (It was missing in prior releases)
-- Added Forge 1.20.1 support
-- Added Forge 1.20.2 support
-- Added Forge 1.20.4 support
-- Various internal changes
-- Added link to the [skinpack showcases page](https://github.com/RedRain0o0/legacy-skins/discussions/categories/showcase) in the config screen
-- Made autoscrolling to the currently selected skin pack less error-prone
-- Made the player's default skin display a cape if they have one active
-- Added a missing texture for skin collections
+- The selected skin and favorite skins are now stored per-user.
