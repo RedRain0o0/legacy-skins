@@ -119,7 +119,7 @@ public class LegacySkinsConfig {
 	}
 
 	public SkinsConfig getActiveSkinsConfig() {
-		UUID uuid = Minecraft.getInstance().getGameProfile().getId();
+		UUID uuid = Minecraft.getInstance()/*? if <=1.20.1 {*//*.getUser()*//*?}*/.getGameProfile().getId();
 		return this.profiles.computeIfAbsent(uuid, c -> new SkinsConfig(Optional.empty(), new ArrayList<>()));
 	}
 
