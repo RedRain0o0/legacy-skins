@@ -3,10 +3,12 @@ package io.github.redrain0o0.legacyskins.migrator.fixer;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JavaOps;
 import io.github.redrain0o0.legacyskins.Legacyskins;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.UUIDUtil;
 
 import java.util.Optional;
+import java.util.UUID;
 
 // requires GameProfile not to be null
 public class To1005Fixer extends Fixer {
@@ -37,7 +39,14 @@ public class To1005Fixer extends Fixer {
 		} else {
 			profile = profile.set("favorites", profile.emptyList());
 		}
-		skinConfig = skinConfig.set((String) /* If this is not a string we're in big trouble */ UUIDUtil.STRING_CODEC.encodeStart(JavaOps.INSTANCE, Minecraft.getInstance().getGameProfile().getId()).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow(), profile);
+		UUID uuid;
+		try {
+			uuid = Minecraft.getInstance().getGameProfile().getId();
+		} catch (Throwable t) {
+			uuid = UUID.fromString("00000000-0000-0000-0000-000000000000");
+			Legacyskins.LOGGER.error("Failed to fetch player uuid!", t);
+		}
+		skinConfig = skinConfig.set((String) /* If this is not a string we're in big trouble */ UUIDUtil.STRING_CODEC.encodeStart(JavaOps.INSTANCE, uuid).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow(), profile);
 		element = element.set("profiles", skinConfig);
 		return element;
 	}
