@@ -117,35 +117,6 @@ public class NonLegacy4JChangeSkinScreen extends Screen {
 		super.render(guiGraphics, i, j, f);
 	}
 
-	//? if >=1.21 {
-	@Override
-	public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
-		super.renderBackground(guiGraphics, i, j, f);
-		renderCoolAnimation(guiGraphics, i, j, f);
-	}
-
-	private void renderCoolAnimation(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-		System.out.println("oooooh");
-		MultiBufferSource.BufferSource bufferSource = guiGraphics.bufferSource();
-		PoseStack pose = guiGraphics.pose();
-		Matrix4f last = pose.last().pose();
-		Tesselator tesselator = Tesselator.getInstance();
-		BufferBuilder bufferBuilder = tesselator.begin(VertexFormat.Mode.TRIANGLES, DefaultVertexFormat.POSITION_COLOR);
-		bufferBuilder.addVertex(last, 15f, 15f, 5f).setColor(0x00454545);
-		bufferBuilder.addVertex(last, 100, 100, 5).setColor(0x7F232323);
-		bufferBuilder.addVertex(last, 305, 15, 5).setColor(0xFF989898);
-		RenderSystem.setShader(GameRenderer::getPositionColorShader);
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		BufferUploader.drawWithShader(bufferBuilder.build());
-
-
-		//RenderSystem.setShaderColor(1, 1, 1, 1);
-		//tesselator.
-		//tesselator.clear();
-		//VertexConsumer consumer = bufferSource.getBuffer(RenderType.gui())
-	}
-	//?}
-
 	@Override
 	public void onClose() {
 		this.minecraft.setScreen(parent);
