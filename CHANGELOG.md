@@ -1,1 +1,4 @@
 - The selected skin and favorite skins are now stored per-user.
+- Crouching in the skins screen no longer leaves the hat layer floating when using the default skin.
+- The Legacy Skins config file now loads much earlier.
+  - As the config file was previously first loaded during resource reload, if any issues occured, the game would think that there was a corrupt resource pack and disable every single resource pack, except for the default pack. This now no longer occurs.
