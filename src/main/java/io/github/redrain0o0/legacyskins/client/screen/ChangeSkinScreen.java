@@ -15,6 +15,7 @@ import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.util.SkinCollection;
 import io.github.redrain0o0.legacyskins.mixin.legacy4j.RenderableVListAccessor;
 import io.github.redrain0o0.legacyskins.mixin.ScreenAccessor;
+import io.github.redrain0o0.legacyskins.util.Legacy4JUtils;
 import io.github.redrain0o0.legacyskins.util.LegacySkinSprites;
 import io.github.redrain0o0.legacyskins.util.VersionUtils;
 import net.minecraft.Util;
@@ -183,7 +184,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			if (this.playerSkinWidgetList != null) {
 				PlayerSkinWidget element3 = this.playerSkinWidgetList.element3;
 				double sensitivity = 0.3d;
-				element3.onDrag(0, 0, stick.getDeadZone() > Math.abs(stick.x) ? 0 : (double)stick.x * ((double)this.minecraft.getWindow().getScreenWidth() / (double)this.minecraft.getWindow().getGuiScaledWidth()) * ScreenUtil.getLegacyOptions().interfaceSensitivity().get() / 2.0 * sensitivity, stick.getDeadZone() > Math.abs(stick.y) ? 0 : (double)stick.y * ((double)this.minecraft.getWindow().getScreenWidth() / (double)this.minecraft.getWindow().getGuiScaledWidth()) * ScreenUtil.getLegacyOptions().interfaceSensitivity().get() / 2.0 * sensitivity);
+				element3.onDrag(0, 0, stick.getDeadZone() > Math.abs(stick.x) ? 0 : (double)stick.x * ((double)this.minecraft.getWindow().getScreenWidth() / (double)this.minecraft.getWindow().getGuiScaledWidth()) * Legacy4JUtils.options().interfaceSensitivity() / 2.0 * sensitivity, stick.getDeadZone() > Math.abs(stick.y) ? 0 : (double)stick.y * ((double)this.minecraft.getWindow().getScreenWidth() / (double)this.minecraft.getWindow().getGuiScaledWidth()) * Legacy4JUtils.options().interfaceSensitivity() / 2.0 * sensitivity);
 				state.block();
 			}
 		}
