@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -79,8 +79,20 @@ public class LegacySkinsConfig {
 
 	public enum SkinsScreen {
 		DEFAULT,
-		CLASSIC;
-		public static final Codec<SkinsScreen> CODEC = Codec.STRING.xmap(a -> SkinsScreen.valueOf(a.toUpperCase(Locale.ROOT)), a -> a.name().toLowerCase(Locale.ROOT));
+		CLASSIC,
+		NON_LEGACY4J;
+		public static final Codec<SkinsScreen> CODEC = Codec.STRING.xmap(a -> Arrays.stream(SkinsScreen.values()).filter(b -> b.serializedNameEquals(a)).findFirst().orElseThrow(), SkinsScreen::serializedName);
+
+		public boolean serializedNameEquals(String string) {
+			return this.serializedName().equals(string);
+		}
+		public String serializedName() {
+			return switch (this) {
+				case DEFAULT -> "default";
+				case CLASSIC -> "classic";
+				case NON_LEGACY4J -> "nonLegacy4J";
+			};
+		}
 	}
 
 	/**
