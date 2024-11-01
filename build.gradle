@@ -27,7 +27,9 @@ project.ext["loom.platform"] = loader.friendlyName
 version = project.mod_version + "+" + loader.friendlyName + "+" + minecraftVersion
 group = project.maven_group
 
+String l4jVerStr = project.legacy4j_version as String
 apply plugin: 'dev.architectury.loom'
+stonecutter.dependency("legacy4j", l4jVerStr.substring(l4jVerStr.indexOf("-") + 1))
 stonecutter.const("fabric", loader == FABRIC)
 stonecutter.const("forge", loader == FORGE)
 stonecutter.const("neoforge", loader == NEOFORGE)
