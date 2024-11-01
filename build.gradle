@@ -40,7 +40,7 @@ stonecutter.const("yacl", project.yacl_version != "[VERSIONED]")
 stonecutter.const("clothconfig", project.clothconfig_version != "[VERSIONED]")
 
 stonecutter.swap("l4joptionsscreen") {
-	if (stonecutter.eval(l4jVerStr, ">=1.7.5")) "HelpAndOptionsScreen" else "HelpOptionsScreen"
+	if (stonecutter.eval(l4jVerStr.substring(l4jVerStr.indexOf("-") + 1), ">=1.7.5")) "HelpAndOptionsScreen" else "HelpOptionsScreen"
 }
 base {
 	archivesName = project.archives_base_name

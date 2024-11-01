@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import wily.legacy.client.screen./*$ l4joptionsscreen >>*/HelpAndOptionsScreen ; // KEEP THE SPACE
+import wily.legacy.client.screen./*$ l4joptionsscreen {*/HelpAndOptionsScreen/*$}*/;
 import wily.legacy.client.screen.RenderableVList;
 import wily.legacy.client.screen.RenderableVListScreen;
 
 import java.util.function.Consumer;
 
-@Mixin(/*$ l4joptionsscreen >>*/HelpAndOptionsScreen .class) // KEEP THE SPACE
+@Mixin(/*$ l4joptionsscreen {*/HelpAndOptionsScreen/*$}*/.class)
 public class HelpOptionsMixin extends RenderableVListScreen {
 	public HelpOptionsMixin(Screen parent, Component component, Consumer<RenderableVList> vListBuild) {
 		super(parent, component, vListBuild);
