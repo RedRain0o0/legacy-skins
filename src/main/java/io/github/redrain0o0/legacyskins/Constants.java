@@ -8,7 +8,7 @@ public enum Constants {;
 	public static final LegacySkin FALLBACK_SKIN = new LegacySkin(VersionUtils.of("legacyskins", "fallback.cpmmodel"));
 	public static final ResourceLocation DEFAULT_PACK = VersionUtils.of(Legacyskins.MOD_ID, "default");
 	public static final ResourceLocation FAVORITES_PACK = VersionUtils.of(Legacyskins.MOD_ID, "favorites");
-	public static final ResourceLocation DEV_SKIN_PACK = VersionUtils.of(Legacyskins.MOD_ID, "dev_skin_pack");
+	public static final ResourceLocation CREDITORS_PACK = VersionUtils.of(Legacyskins.MOD_ID, "creditors");
 	public static final ResourceLocation MODERN_DEFAULTS_PACK = VersionUtils.of(Legacyskins.MOD_ID, "modern-defaults");
 	public static final ResourceLocation MISSING_TEXTURE = VersionUtils.of(Legacyskins.MOD_ID, "textures/skin_packs/missing.png");
 }

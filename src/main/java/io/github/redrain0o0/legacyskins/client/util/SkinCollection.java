@@ -24,7 +24,7 @@ public class SkinCollection {
 	}
 	public static SkinCollection ofSkinPack(LegacySkinPack pack) {
 		if (LegacySkinUtils.id(pack).equals(Constants.FAVORITES_PACK)) return ofFavorites();
-		if (LegacySkinUtils.id(pack).equals(Constants.DEV_SKIN_PACK)) return ofDevSkins();
+		if (LegacySkinUtils.id(pack).equals(Constants.CREDITORS_PACK)) return ofCreditors();
 		return new SkinCollection(() -> LegacySkinUtils.referencesFromSkinPack(pack), pack);
 	}
 
@@ -37,8 +37,8 @@ public class SkinCollection {
 		return new SkinCollection(Legacyskins.lazyInstance().getActiveSkinsConfig()::getFavorites, LegacySkinPack.list.get(Constants.FAVORITES_PACK));
 	}
 
-	public static SkinCollection ofDevSkins() {
-		return new SkinCollection(() -> new ArrayList<>(LegacySkinPack.list.entrySet().stream().filter(legacySkinPack -> legacySkinPack.getValue().type() == LegacyPackType.DEV && !Constants.DEV_SKIN_PACK.equals(legacySkinPack.getKey()) && !Constants.MODERN_DEFAULTS_PACK.equals(legacySkinPack.getKey())).map(Map.Entry::getValue).map(LegacySkinUtils::referencesFromSkinPack).flatMap(Collection::stream).toList()), LegacySkinPack.list.get(Constants.DEV_SKIN_PACK));
+	public static SkinCollection ofCreditors() {
+		return new SkinCollection(() -> new ArrayList<>(LegacySkinPack.list.entrySet().stream().filter(legacySkinPack -> legacySkinPack.getValue().type() == LegacyPackType.DEV && !Constants.CREDITORS_PACK.equals(legacySkinPack.getKey()) && !Constants.MODERN_DEFAULTS_PACK.equals(legacySkinPack.getKey())).map(Map.Entry::getValue).map(LegacySkinUtils::referencesFromSkinPack).flatMap(Collection::stream).toList()), LegacySkinPack.list.get(Constants.CREDITORS_PACK));
 	}
 
 	public SkinCollection refresh() {

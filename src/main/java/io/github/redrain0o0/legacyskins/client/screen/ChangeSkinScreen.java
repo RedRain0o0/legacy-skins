@@ -311,7 +311,14 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				int middle = x + width / 2;
 				guiGraphics.pose().translate(middle, panel.y + 16 + 4 + 25, 0);
 				guiGraphics.pose().scale(1f, 1f, 1);
-				guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable(this.focusedPack.getSecond().type().translationKey()), 0, 0, 0xffffffff);
+				SkinReference skinReference;
+				Component text;
+				if (Constants.CREDITORS_PACK.equals(this.focusedPack.getFirst()) && (skinReference = playerSkinWidgetList.element3.skinRef.get()) != null) {
+					text = Component.translatable(Util.makeDescriptionId("skin_pack", skinReference.pack()));
+				} else {
+					text = Component.translatable(this.focusedPack.getSecond().type().translationKey());
+				}
+				guiGraphics.drawCenteredString(Minecraft.getInstance().font, text, 0, 0, 0xffffffff);
 				guiGraphics.pose().popPose();
 			}
 
@@ -389,8 +396,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		{
 			if (Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().contains(ref)) {
 				this.focusedPack = Pair.of(Constants.FAVORITES_PACK, SkinCollection.ofFavorites());
-			} else if (SkinCollection.ofDevSkins().has(ref)) {
-				this.focusedPack = Pair.of(Constants.DEV_SKIN_PACK, SkinCollection.ofDevSkins());
+			} else if (SkinCollection.ofCreditors().has(ref)) {
+				this.focusedPack = Pair.of(Constants.CREDITORS_PACK, SkinCollection.ofCreditors());
 			} else {
 				this.focusedPack = Pair.of(ref.pack(), SkinCollection.ofSkinPack(ref.pack()));
 			}
