@@ -90,7 +90,7 @@
       }
     ]
   },
-  "legacyskins:dev_skin_pack": {
+  "legacyskins:creditors": {
     "type": "dev",
     "icon": "legacyskins:textures/skin_packs/dev.png",
     "skins": []
