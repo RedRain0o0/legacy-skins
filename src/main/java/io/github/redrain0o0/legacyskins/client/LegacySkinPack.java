@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mojang.serialization.codecs.UnboundedMapCodec;
 import io.github.redrain0o0.legacyskins.Constants;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.SkinReference;
@@ -41,7 +42,9 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 			Codec.list(LegacySkin.CODEC).fieldOf("skins").xmap(a -> (List<LegacySkin>) new ArrayList<>(a), a -> a).forGetter(LegacySkinPack::skins)
 	).apply(instance, LegacySkinPack::new));
 	public static final Codec<Map<ResourceLocation, LegacySkinPack>> MAP_CODEC = Codec.unboundedMap(ResourceLocation.CODEC, LegacySkinPack.CODEC);
+	public static final UnboundedMapCodec<ResourceLocation, Double> PRIORITIES_CODEC = Codec.unboundedMap(ResourceLocation.CODEC, Codec.DOUBLE);
 	private static final String PACKS = "skin_packs.json";
+	private static final String PRIORITIES = "skin_pack_priorities.json";
 
 	//? if fabric
 	public static class Manager implements SimpleResourceReloadListener<Map<ResourceLocation, LegacySkinPack>> {
@@ -60,9 +63,29 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 
 		private static @NotNull Map<ResourceLocation, LegacySkinPack> loadPacksFromResourceManager(ResourceManager resourceManager) {
 			Map<ResourceLocation, LegacySkinPack> packs = new LinkedHashMap<>();
+			Map<ResourceLocation, Double> priorities = new LinkedHashMap<>();
 			List<String> allNamespaces = resourceManager.getNamespaces().stream().sorted(Comparator.comparingInt(s -> s.equals(Legacyskins.MOD_ID) ? 0 : 1)).toList();
+			allNamespaces.forEach(loadPriorities(resourceManager, priorities));
 			allNamespaces.forEach(loadPackData(resourceManager, packs));
-			return packs;
+			Map<ResourceLocation, LegacySkinPack> packs2 = new LinkedHashMap<>();
+			packs.entrySet().stream().sorted(Comparator.comparingDouble(value -> priorities.getOrDefault(value.getKey(), 0d))).forEachOrdered(entry -> packs2.put(entry.getKey(), entry.getValue()));
+			return packs2;
+		}
+
+		private static Consumer<String> loadPriorities(ResourceManager resourceManager, Map<ResourceLocation, Double> priorities) {
+			return name -> {
+				resourceManager.getResource(ResourceLocation.tryBuild(name, PRIORITIES)).ifPresent(r -> {
+					try {
+						BufferedReader bufferedReader = r.openAsReader();
+						JsonElement obj = GsonHelper.parse(bufferedReader);
+						Map<ResourceLocation, Double> map = PRIORITIES_CODEC.parse(JsonOps.INSTANCE, obj).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+						priorities.putAll(map);
+						bufferedReader.close();
+					} catch (IOException e) {
+						Legacyskins.LOGGER.warn(e.getMessage());
+					}
+				});
+			};
 		}
 
 		private static @NotNull Consumer<String> loadPackData(ResourceManager resourceManager, Map<ResourceLocation, LegacySkinPack> packs) {
