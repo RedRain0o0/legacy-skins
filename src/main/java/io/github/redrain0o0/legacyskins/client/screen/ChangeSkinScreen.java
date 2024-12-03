@@ -238,9 +238,12 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		p(guiGraphics).blitSprite(LegacySkinSprites.PACK_NAME_BOX, panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
 		p(guiGraphics).blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80);
 		if (this.playerSkinWidgetList != null) {
+			// Responsible for drawing the selected skin icon and its background
 			if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
 				guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
 			}
+
+			// Responsible for drawing the favorites icon and its background
 			if (Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get())) {
 				//? if >=1.20.2 {
 				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/container.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
@@ -254,6 +257,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				*///?}
 			}
 
+			// Responsible for drawing the skin's name
 			{
 				guiGraphics.pose().pushPose();
 				// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
@@ -268,6 +272,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				guiGraphics.pose().popPose();
 			}
 
+			// Responsible for drawing a skin's description
 			SkinReference reference = playerSkinWidgetList.element3.skinRef.get();
 			ResourceLocation rl = reference.pack();
 			if (I18n.exists("skin_pack.%s.%s.desc".formatted(rl.toLanguageKey(), reference.ordinal())))
@@ -284,6 +289,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			}
 		}
 		if (this.focusedPack != null) {
+			// Responsible for drawing the skin pack's name
 			{
 				guiGraphics.pose().pushPose();
 				// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
@@ -295,6 +301,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable(Util.makeDescriptionId("skin_pack", focusedPack.getFirst())), 0, 0, 0xffffffff);
 				guiGraphics.pose().popPose();
 			}
+
+			// Responsible for drawing the skin pack type
 			if (this.focusedPack.getSecond().type() != LegacyPackType.DEFAULT) {
 				guiGraphics.pose().pushPose();
 				// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
@@ -306,6 +314,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable(this.focusedPack.getSecond().type().translationKey()), 0, 0, 0xffffffff);
 				guiGraphics.pose().popPose();
 			}
+
+			// Responsible for drawing the "BETA PACK!!! Things might break!" text when the Modern Defaults pack is shown
 			if (this.focusedPack.getFirst().equals(Constants.MODERN_DEFAULTS_PACK)) {
 				k++;
 				PoseStack pose = guiGraphics.pose();
