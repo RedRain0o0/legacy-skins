@@ -90,6 +90,11 @@
       }
     ]
   },
+  "legacyskins:dev_skin_pack": {
+    "type": "dev",
+    "icon": "legacyskins:textures/skin_packs/dev.png",
+    "skins": []
+  },
   "legacyskins:modern-defaults": {
     "type": "dev",
     "icon": "legacyskins:textures/skin_packs/dev.png",
