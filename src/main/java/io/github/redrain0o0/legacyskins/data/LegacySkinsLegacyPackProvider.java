@@ -105,6 +105,9 @@ public final class LegacySkinsLegacyPackProvider extends LegacyPackProvider {
 			builder.addPack("dev", legacySkinPack);
 		}
 
+		// hardcoded
+		builder.addPack(Constants.DEV_SKIN_PACK, new LegacySkinPack(LegacyPackType.DEV, VersionUtils.of(Legacyskins.MOD_ID, "textures/skin_packs/dev.png"), List.of()));
+
 		{
 			Map<String, String> models = of(
 					"steve", "Steve",

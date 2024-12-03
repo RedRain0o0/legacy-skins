@@ -9,6 +9,8 @@ import io.github.redrain0o0.legacyskins.util.VersionUtils;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class SkinCollection {
@@ -22,6 +24,7 @@ public class SkinCollection {
 	}
 	public static SkinCollection ofSkinPack(LegacySkinPack pack) {
 		if (LegacySkinUtils.id(pack).equals(Constants.FAVORITES_PACK)) return ofFavorites();
+		if (LegacySkinUtils.id(pack).equals(Constants.DEV_SKIN_PACK)) return ofDevSkins();
 		return new SkinCollection(() -> LegacySkinUtils.referencesFromSkinPack(pack), pack);
 	}
 
@@ -32,6 +35,10 @@ public class SkinCollection {
 
 	public static SkinCollection ofFavorites() {
 		return new SkinCollection(Legacyskins.lazyInstance().getActiveSkinsConfig()::getFavorites, LegacySkinPack.list.get(Constants.FAVORITES_PACK));
+	}
+
+	public static SkinCollection ofDevSkins() {
+		return new SkinCollection(() -> new ArrayList<>(LegacySkinPack.list.entrySet().stream().filter(legacySkinPack -> legacySkinPack.getValue().type() == LegacyPackType.DEV && !Constants.DEV_SKIN_PACK.equals(legacySkinPack.getKey())).map(Map.Entry::getValue).map(LegacySkinUtils::referencesFromSkinPack).flatMap(Collection::stream).toList()), LegacySkinPack.list.get(Constants.DEV_SKIN_PACK));
 	}
 
 	public SkinCollection refresh() {
