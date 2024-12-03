@@ -38,7 +38,7 @@ public class SkinCollection {
 	}
 
 	public static SkinCollection ofDevSkins() {
-		return new SkinCollection(() -> new ArrayList<>(LegacySkinPack.list.entrySet().stream().filter(legacySkinPack -> legacySkinPack.getValue().type() == LegacyPackType.DEV && !Constants.DEV_SKIN_PACK.equals(legacySkinPack.getKey())).map(Map.Entry::getValue).map(LegacySkinUtils::referencesFromSkinPack).flatMap(Collection::stream).toList()), LegacySkinPack.list.get(Constants.DEV_SKIN_PACK));
+		return new SkinCollection(() -> new ArrayList<>(LegacySkinPack.list.entrySet().stream().filter(legacySkinPack -> legacySkinPack.getValue().type() == LegacyPackType.DEV && !Constants.DEV_SKIN_PACK.equals(legacySkinPack.getKey()) && !Constants.MODERN_DEFAULTS_PACK.equals(legacySkinPack.getKey())).map(Map.Entry::getValue).map(LegacySkinUtils::referencesFromSkinPack).flatMap(Collection::stream).toList()), LegacySkinPack.list.get(Constants.DEV_SKIN_PACK));
 	}
 
 	public SkinCollection refresh() {
