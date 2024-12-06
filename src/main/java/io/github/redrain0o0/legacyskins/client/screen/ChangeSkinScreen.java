@@ -256,7 +256,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				// ResourceLocation atlasLocation, int x, int y, float uOffset, float vOffset, int width, int height, int textureWidth, int textureHeight
 				// ResourceLocation atlasLocation, int x, int y, int width, int height, float uOffset, float vOffset, int uWidth, int vHeight, int textureWidth, int textureHeight
 				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/icons.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 16, 16, 16, 0, 9, 9, 256, 256);
-				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/icons.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 16, 16, 52, 0, 9, 9, 256, 256);
+				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/icons.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 16, 16, 52, hardcoreModeHearts ? 45 : 0, 9, 9, 256, 256);
 				*///?}
 			}
 
