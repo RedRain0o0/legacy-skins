@@ -12,6 +12,7 @@ import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacyPackType;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
+import io.github.redrain0o0.legacyskins.client.util.EasterEggUtils;
 import io.github.redrain0o0.legacyskins.client.util.SkinCollection;
 import io.github.redrain0o0.legacyskins.mixin.legacy4j.RenderableVListAccessor;
 import io.github.redrain0o0.legacyskins.mixin.ScreenAccessor;
@@ -71,10 +72,12 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	private Pair<ResourceLocation, SkinCollection> focusedPack;
 	private PlayerSkinWidgetList playerSkinWidgetList;
 	private final Map<ResourceLocation, Button> buttons = new HashMap<>();
+	private final boolean hardcoreModeHearts;
 
 	private boolean queuedChangeSkinPack = false;
 	public ChangeSkinScreen(Screen parent) {
 		super(parent, 180, 290, Component.empty());
+		hardcoreModeHearts = EasterEggUtils.isHardcoreMode();
 		renderableVList.layoutSpacing(l -> 0);
 		minecraft = Minecraft.getInstance();
 		//int[] index = new int[]{0};
@@ -247,7 +250,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			if (Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get())) {
 				//? if >=1.20.2 {
 				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/container.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
-				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/full.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
+				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/" + (hardcoreModeHearts ? "hardcore_" : "") + "full.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
 				//?} else {
 				/*// Method params
 				// ResourceLocation atlasLocation, int x, int y, float uOffset, float vOffset, int width, int height, int textureWidth, int textureHeight
