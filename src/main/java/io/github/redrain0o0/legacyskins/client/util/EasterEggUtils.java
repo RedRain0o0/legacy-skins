@@ -1,7 +1,6 @@
 package io.github.redrain0o0.legacyskins.client.util;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.LevelData;
