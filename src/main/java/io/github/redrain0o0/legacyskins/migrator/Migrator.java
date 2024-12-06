@@ -30,6 +30,13 @@ public class Migrator {
 			1
 	);
 
+	public static final Migrator SKIN_PACK_PRIORITIES_FIXER = new Migrator(
+			List.of(),
+			1,
+			1,
+			1
+	);
+
 	private final int oldestSupportedVersion;
 	private final int schemaVersion;
 	private final int defaultValue;

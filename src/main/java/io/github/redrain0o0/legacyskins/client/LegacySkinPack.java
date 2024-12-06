@@ -78,6 +78,7 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 					try {
 						BufferedReader bufferedReader = r.openAsReader();
 						JsonElement obj = GsonHelper.parse(bufferedReader);
+						obj = Migrator.SKIN_PACK_PRIORITIES_FIXER.fix(JsonOps.INSTANCE, obj);
 						Map<ResourceLocation, Double> map = PRIORITIES_CODEC.parse(JsonOps.INSTANCE, obj).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
 						priorities.putAll(map);
 						bufferedReader.close();
