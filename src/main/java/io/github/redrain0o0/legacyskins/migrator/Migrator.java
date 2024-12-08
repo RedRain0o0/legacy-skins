@@ -5,10 +5,13 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.migrator.fixer.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class Migrator {
+	public static final Logger LOGGER = LoggerFactory.getLogger("legacyskins-migrator");
 	private final List<Fixer> fixers;
 	public static final Migrator CONFIG_FIXER = new Migrator(
 			List.of(
@@ -95,8 +98,8 @@ public class Migrator {
 		DynamicOps<T> ops = dynamic.getOps();
 		Dynamic<T> newDynamic = new Dynamic<>(ops, ops.emptyMap());
 		newDynamic = newDynamic.set("schemaVersion", dynamic.createInt(this.schemaVersion));
-		MapLike<T> map = ops.getMap(dynamic.getValue()).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
-		T t = ops.mergeToMap(newDynamic.getValue(), map).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+		MapLike<T> map = ops.getMap(dynamic.getValue()).resultOrPartial(Migrator.LOGGER::error).orElseThrow();
+		T t = ops.mergeToMap(newDynamic.getValue(), map).resultOrPartial(Migrator.LOGGER::error).orElseThrow();
 		return new Dynamic<>(ops, t);
 	}
 

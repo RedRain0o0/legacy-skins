@@ -7,7 +7,7 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JavaOps;
 //?} else
 /*import com.mojang.serialization.JsonOps;*/
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.migrator.Migrator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.UUIDUtil;
 
@@ -48,9 +48,9 @@ public class To1005Fixer extends Fixer {
 			uuid = Minecraft.getInstance()/*? if <=1.20.1 {*//*.getUser()*//*?}*/.getGameProfile().getId();
 		} catch (Throwable t) {
 			uuid = UUID.fromString("00000000-0000-0000-0000-000000000000");
-			if (!System.getProperties().containsKey("legacy-skins-unit-testing")) Legacyskins.LOGGER.error("Failed to fetch player uuid!", t);
+			if (!System.getProperties().containsKey("legacy-skins-unit-testing")) Migrator.LOGGER.error("Failed to fetch player uuid!", t);
 		}
-		skinConfig = skinConfig.set((String) /* If this is not a string we're in big trouble */ UUIDUtil.STRING_CODEC.encodeStart(/*? if >=1.20.4 {*/JavaOps/*?} else {*//*JsonOps*//*?}*/.INSTANCE, uuid).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow()/*? if <1.20.4 {*//*.getAsString()*//*?}*/, profile);
+		skinConfig = skinConfig.set((String) /* If this is not a string we're in big trouble */ UUIDUtil.STRING_CODEC.encodeStart(/*? if >=1.20.4 {*/JavaOps/*?} else {*//*JsonOps*//*?}*/.INSTANCE, uuid).resultOrPartial(Migrator.LOGGER::error).orElseThrow()/*? if <1.20.4 {*//*.getAsString()*//*?}*/, profile);
 		element = element.set("profiles", skinConfig);
 		return element;
 	}
