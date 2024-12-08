@@ -65,6 +65,7 @@ import java.util.function.Supplier;
 
 import static wily.legacy.client.screen.ControlTooltip.COMPOUND_ICON_FUNCTION;
 
+// TODO classic change skin screen
 public class ChangeSkinScreen extends PanelVListScreen implements Controller.Event, ControlTooltip.Event {
 	protected final Minecraft minecraft;
 	protected final Panel tooltipBox = Panel.tooltipBoxOf(panel, 350);

@@ -79,7 +79,7 @@ public class LegacySkinsConfig {
 
 	public enum SkinsScreen {
 		DEFAULT,
-		CLASSIC,
+		REMOVED_CLASSIC,
 		NON_LEGACY4J;
 		public static final Codec<SkinsScreen> CODEC = Codec.STRING.xmap(a -> Arrays.stream(SkinsScreen.values()).filter(b -> b.serializedNameEquals(a)).findFirst().orElseThrow(), SkinsScreen::serializedName);
 
@@ -89,7 +89,7 @@ public class LegacySkinsConfig {
 		public String serializedName() {
 			return switch (this) {
 				case DEFAULT -> "default";
-				case CLASSIC -> "classic";
+				case REMOVED_CLASSIC -> "removed_classic";
 				case NON_LEGACY4J -> "nonLegacy4J";
 			};
 		}
