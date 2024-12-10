@@ -1,4 +1,3 @@
-- The selected skin and favorite skins are now stored per-user.
-- Crouching in the skins screen no longer leaves the hat layer floating when using the default skin.
-- The Legacy Skins config file now loads much earlier.
-  - As the config file was previously first loaded during resource reload, if any issues occured, the game would think that there was a corrupt resource pack and disable every single resource pack, except for the default pack. This now no longer occurs.
+- 1.21 versions of Legacy Skins now use Legacy4J 1.7.5.2444.1
+- Added the **Creditors Pack**, this pack automatically contains all skins from all installed developer skin packs!
+- Added the `skin_pack_priorities.json` file, which can be used sort skin packs!
