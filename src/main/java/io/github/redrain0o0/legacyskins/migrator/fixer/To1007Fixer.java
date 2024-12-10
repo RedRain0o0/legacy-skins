@@ -13,7 +13,6 @@ public class To1007Fixer extends Fixer {
 
 	@Override
 	public <T> Dynamic<T> fix(Dynamic<T> element) {
-		// "skinsScreen": "classic",
 		OptionalDynamic<T> skinsScreen = element.get("skinsScreen");
 		if ("classic".equals(skinsScreen.asString("default"))) {
 			Migrator.LOGGER.info("Classic skins screen has temporarily been removed.");
