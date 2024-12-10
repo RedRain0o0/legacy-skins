@@ -13,6 +13,10 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
 
+/**
+ * Skin packs contain {@link io.github.redrain0o0.legacyskins.client.LegacySkin}s, while skin collections contain {@link SkinReference}s.<br>
+ * A {@link SkinReference} is a reference to a {@link io.github.redrain0o0.legacyskins.client.LegacySkin} within a skin pack.
+ */
 public class SkinCollection {
 	private ArrayList<SkinReference> backingArray;
 	private final Supplier<ArrayList<SkinReference>> supplier;
@@ -37,6 +41,9 @@ public class SkinCollection {
 		return new SkinCollection(Legacyskins.lazyInstance().getActiveSkinsConfig()::getFavorites, LegacySkinPack.list.get(Constants.FAVORITES_PACK));
 	}
 
+	/*
+	 * Gets all skins from all dev packs, excluding the "legacyskins:creditors" and "legacyskins:modern-defaults" packs.
+	 */
 	public static SkinCollection ofCreditors() {
 		return new SkinCollection(() -> new ArrayList<>(LegacySkinPack.list.entrySet().stream().filter(legacySkinPack -> legacySkinPack.getValue().type() == LegacyPackType.DEV && !Constants.CREDITORS_PACK.equals(legacySkinPack.getKey()) && !Constants.MODERN_DEFAULTS_PACK.equals(legacySkinPack.getKey())).map(Map.Entry::getValue).map(LegacySkinUtils::referencesFromSkinPack).flatMap(Collection::stream).toList()), LegacySkinPack.list.get(Constants.CREDITORS_PACK));
 	}
