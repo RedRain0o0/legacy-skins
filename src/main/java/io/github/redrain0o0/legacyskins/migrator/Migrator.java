@@ -71,11 +71,14 @@ public class Migrator {
 		if (schemaVersion > this.schemaVersion) throw new UnsupportedOperationException();
 		if (schemaVersion == this.schemaVersion) return element;
 		Dynamic<T> dynamic = element;
+		int appliedFixers = 0;
 		for (Fixer fixer : fixers) {
 			if (fixer.maxApplicable > schemaVersion) {
 				dynamic = fixer.fix(dynamic);
+				appliedFixers++;
 			}
 		}
+		LOGGER.info("Migrated from schema version {} to {}, using {} fixer{}.", schemaVersion, this.schemaVersion, appliedFixers, appliedFixers == 1 ? "" : "s");
 		return dynamic;
 	}
 
