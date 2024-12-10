@@ -8,6 +8,7 @@ public class PlayerSkinWidgetList {
 	PlayerSkinWidget element0;
 	PlayerSkinWidget element1;
 	PlayerSkinWidget element2;
+	/* This is the skin in the middle */
 	PlayerSkinWidget element3;
 	PlayerSkinWidget element4;
 	PlayerSkinWidget element5;
