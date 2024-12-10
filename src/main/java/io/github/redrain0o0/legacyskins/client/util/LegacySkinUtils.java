@@ -79,6 +79,10 @@ public class LegacySkinUtils {
 		return Legacyskins.MOD_ID + "-models/" + location.hashCode() + ".cpmmodel";
 	}
 
+	/**
+	 * Gets skin references from a skin pack. Does not work with the favorites pack and the creditors pack.
+	 * @see SkinCollection#ofSkinPack(LegacySkinPack)
+	 */
 	public static ArrayList<SkinReference> referencesFromSkinPack(LegacySkinPack pack) {
 		List<LegacySkin> skins = pack.skins();
 		ResourceLocation id = id(pack);
