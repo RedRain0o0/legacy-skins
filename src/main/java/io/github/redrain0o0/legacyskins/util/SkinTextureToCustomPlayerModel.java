@@ -54,6 +54,13 @@ public class SkinTextureToCustomPlayerModel {
 			throw new RuntimeException(e);
 		}
 	}
+	@SuppressWarnings({"MismatchedReadAndWriteOfArray", "RedundantOperationOnEmptyContainer"})
+	public static void exportGenericSkins() throws Throwable{
+		String[] skins = new String[]{};
+		for (String skin : skins) {
+			convert0(Files.readAllBytes(PlatformUtils.getGameDir().resolve("generic/" + skin + ".png")), false, PlatformUtils.getGameDir().resolve("generic-output/"+ skin + ".cpmmodel"));
+		}
+	}
 	public static void exportDefaultSkins() {
 		Path path = Path.of("default-skin-export");
 		path.toFile().mkdirs();
