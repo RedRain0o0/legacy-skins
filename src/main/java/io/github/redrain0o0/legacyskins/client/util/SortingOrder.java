@@ -68,7 +68,7 @@ public class SortingOrder<T> {
 		return output;
 	}
 
-	//?if >=1.21 {
+	//? if >=1.21 {
 	// For testing
 	public static void main(String[] args) {
 		List<String> f = new ArrayList<>(List.of("A", "B", "C", "D", "E", "F", "G", "H", "I"));

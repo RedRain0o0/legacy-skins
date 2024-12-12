@@ -3,6 +3,7 @@ package io.github.redrain0o0.legacyskins.client.util;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.redrain0o0.legacyskins.util.VersionUtils;
 import net.minecraft.resources.ResourceLocation;
 
 // Here due to class loading conflicts
@@ -11,7 +12,7 @@ public class SortingOrderCodecs {
 	private static final Codec<SortingOrder.Absolute<ResourceLocation>> EXPANDED = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.DOUBLE.fieldOf("absolute").forGetter(SortingOrder.Absolute::pos)
 	).apply(instance, SortingOrder.Absolute::new));
-	private static final Codec<SortingOrder.Absolute<ResourceLocation>> ABSOLUTE_CODEC = Codec.withAlternative(COMPACT, EXPANDED);
+	private static final Codec<SortingOrder.Absolute<ResourceLocation>> ABSOLUTE_CODEC = VersionUtils.withAlternative(COMPACT, EXPANDED);
 	private static final Codec<SortingOrder.Before<ResourceLocation>> BEFORE_CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ResourceLocation.CODEC.fieldOf("before").forGetter(SortingOrder.Before::t)
 	).apply(instance, SortingOrder.Before::new));
