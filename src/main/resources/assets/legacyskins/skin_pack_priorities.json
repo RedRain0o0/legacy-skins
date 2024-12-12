@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "legacyskins:default": -100,
-  "legacyskins:favorites": -99,
-  "legacyskins:dev": -98,
-  "legacyskins:creditors": -97,
-  "legacyskins:modern-defaults": -96
+  "legacyskins:favorites": {"after": "legacyskins:default"},
+  "legacyskins:dev": {"after": "legacyskins:favorites"},
+  "legacyskins:creditors": {"after": "legacyskins:dev"},
+  "legacyskins:modern-defaults": {"after": "legacyskins:creditors"}
 }
