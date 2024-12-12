@@ -37,8 +37,8 @@ public class Migrator {
 	public static final Migrator SKIN_PACK_PRIORITIES_FIXER = new Migrator(
 			List.of(),
 			1,
-			1,
-			1
+			2,
+			2
 	);
 
 	private final int oldestSupportedVersion;
