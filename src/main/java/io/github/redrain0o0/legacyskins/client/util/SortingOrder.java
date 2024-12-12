@@ -1,9 +1,11 @@
 package io.github.redrain0o0.legacyskins.client.util;
 
+import io.github.redrain0o0.legacyskins.util.PlatformUtils;
+//? if >=1.21 {
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
-import io.github.redrain0o0.legacyskins.util.PlatformUtils;
 import net.minecraft.resources.ResourceLocation;
+//?}
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,6 +68,7 @@ public class SortingOrder<T> {
 		return output;
 	}
 
+	//?if >=1.21 {
 	// For testing
 	public static void main(String[] args) {
 		List<String> f = new ArrayList<>(List.of("A", "B", "C", "D", "E", "F", "G", "H", "I"));
@@ -86,6 +89,7 @@ public class SortingOrder<T> {
 		jsonElementDataResult = SortingOrderCodecs.CODEC.encodeStart(JsonOps.INSTANCE, after(ResourceLocation.parse("hola:hola"))).resultOrPartial().get();
 		System.out.println(jsonElementDataResult);
 	}
+	//?}
 
 	private interface Grabber<T> {
 		boolean isAbsolute(T t);
