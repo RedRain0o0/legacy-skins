@@ -390,7 +390,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		//playerSkinWidgetList = PlayerSkinWidgetList.of(this.focusedPack.getSecond().skins().stream().map(a -> new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> a))).toArray(PlayerSkinWidget[]::new));
 
 		tooltipBox.init();
-		getRenderableVList().init(this, panel.x + 11, panel.y + 11 + 125 - 10 + 5 - 15, panel.width - 22, panel.height - 135 + 10 - 2 /*? if legacy4j: >=1.7.5 {*/- 20/*?}*/);
+		getRenderableVList().init(this, panel.x + 11, panel.y + 11 + 125 - 10 + 5 - 15, panel.width - 22, panel.height - 135 + 10 - 2 /*? if legacy4j: >=1.7.5 {*//*- 20*//*?}*/);
 	}
 
 

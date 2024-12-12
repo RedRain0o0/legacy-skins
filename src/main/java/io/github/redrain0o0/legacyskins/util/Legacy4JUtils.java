@@ -1,9 +1,9 @@
 package io.github.redrain0o0.legacyskins.util;
 
 //? if legacy4j: >=1.7.5 {
-import wily.legacy.client.LegacyOption;
-//?} else
-/*import wily.legacy.util.ScreenUtil;*/
+/*import wily.legacy.client.LegacyOption;
+*///?} else
+import wily.legacy.util.ScreenUtil;
 
 public class Legacy4JUtils {
 	private static Legacy4JOptions INSTANCE;
@@ -12,9 +12,9 @@ public class Legacy4JUtils {
 			@Override
 			public Double interfaceSensitivity() {
 				//? if legacy4j: <1.7.5 {
-				/*return ScreenUtil.getLegacyOptions().interfaceSensitivity().get();
-				*///?} else
-				return LegacyOption.interfaceSensitivity.get();
+				return ScreenUtil.getLegacyOptions().interfaceSensitivity().get();
+				//?} else
+				/*return LegacyOption.interfaceSensitivity.get();*/
 			}
 		};
 		return INSTANCE;
