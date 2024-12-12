@@ -74,7 +74,12 @@ public class Migrator {
 		int appliedFixers = 0;
 		for (Fixer fixer : fixers) {
 			if (fixer.maxApplicable > schemaVersion) {
-				dynamic = fixer.fix(dynamic);
+				try {
+					dynamic = fixer.fix(dynamic);
+				} catch (RuntimeException | Error e) {
+					LOGGER.error("Failed to migrate from schema version {} to {}", schemaVersion, this.schemaVersion);
+					throw e;
+				}
 				appliedFixers++;
 			}
 		}
