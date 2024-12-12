@@ -1,3 +1,6 @@
 - 1.21 versions of Legacy Skins now use Legacy4J 1.7.5.2444.1
 - Added the **Creditors Pack**, this pack automatically contains all skins from all installed developer skin packs!
 - Added the `skin_pack_priorities.json` file, which can be used sort skin packs!
+- Temporarily removed the classic change skins screen.
+- Config migrations are now logged.
+- 
