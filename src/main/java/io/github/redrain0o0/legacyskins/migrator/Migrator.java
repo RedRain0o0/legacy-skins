@@ -3,8 +3,8 @@ package io.github.redrain0o0.legacyskins.migrator;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
-import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.migrator.fixer.*;
+import io.github.redrain0o0.legacyskins.migrator.fixer.priorities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,9 +35,9 @@ public class Migrator {
 	);
 
 	public static final Migrator SKIN_PACK_PRIORITIES_FIXER = new Migrator(
-			List.of(),
+			List.of(new To2Fixer()),
 			1,
-			2,
+			1,
 			2
 	);
 
