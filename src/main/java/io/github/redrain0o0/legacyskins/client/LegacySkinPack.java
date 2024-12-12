@@ -9,6 +9,8 @@ import io.github.redrain0o0.legacyskins.Constants;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
+import io.github.redrain0o0.legacyskins.client.util.SortingOrder;
+import io.github.redrain0o0.legacyskins.client.util.SortingOrderCodecs;
 import io.github.redrain0o0.legacyskins.migrator.Migrator;
 import io.github.redrain0o0.legacyskins.util.VersionUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -42,7 +44,7 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 			Codec.list(LegacySkin.CODEC).fieldOf("skins").xmap(a -> (List<LegacySkin>) new ArrayList<>(a), a -> a).forGetter(LegacySkinPack::skins)
 	).apply(instance, LegacySkinPack::new));
 	public static final Codec<Map<ResourceLocation, LegacySkinPack>> MAP_CODEC = Codec.unboundedMap(ResourceLocation.CODEC, LegacySkinPack.CODEC);
-	public static final UnboundedMapCodec<ResourceLocation, Double> PRIORITIES_CODEC = Codec.unboundedMap(ResourceLocation.CODEC, Codec.DOUBLE);
+	public static final UnboundedMapCodec<ResourceLocation, SortingOrder<ResourceLocation>> PRIORITIES_CODEC = Codec.unboundedMap(ResourceLocation.CODEC, SortingOrderCodecs.CODEC);
 	private static final String PACKS = "skin_packs.json";
 	private static final String PRIORITIES = "skin_pack_priorities.json";
 
@@ -63,23 +65,25 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 
 		private static @NotNull Map<ResourceLocation, LegacySkinPack> loadPacksFromResourceManager(ResourceManager resourceManager) {
 			Map<ResourceLocation, LegacySkinPack> packs = new LinkedHashMap<>();
-			Map<ResourceLocation, Double> priorities = new LinkedHashMap<>();
+			Map<ResourceLocation, SortingOrder<ResourceLocation>> priorities = new LinkedHashMap<>();
 			List<String> allNamespaces = resourceManager.getNamespaces().stream().sorted(Comparator.comparingInt(s -> s.equals(Legacyskins.MOD_ID) ? 0 : 1)).toList();
 			allNamespaces.forEach(loadPriorities(resourceManager, priorities));
 			allNamespaces.forEach(loadPackData(resourceManager, packs));
 			Map<ResourceLocation, LegacySkinPack> packs2 = new LinkedHashMap<>();
-			packs.entrySet().stream().sorted(Comparator.comparingDouble(value -> priorities.getOrDefault(value.getKey(), 0d))).forEachOrdered(entry -> packs2.put(entry.getKey(), entry.getValue()));
+			List<ResourceLocation> keys = packs.keySet().stream().toList();
+			List<ResourceLocation> sorted = SortingOrder.sorted(keys, priorities);
+			packs.entrySet().stream().sorted(Comparator.comparingInt(s -> sorted.indexOf(s.getKey()))).forEachOrdered(entry -> packs2.put(entry.getKey(), entry.getValue()));
 			return packs2;
 		}
 
-		private static Consumer<String> loadPriorities(ResourceManager resourceManager, Map<ResourceLocation, Double> priorities) {
+		private static Consumer<String> loadPriorities(ResourceManager resourceManager, Map<ResourceLocation, SortingOrder<ResourceLocation>> priorities) {
 			return name -> {
 				resourceManager.getResource(ResourceLocation.tryBuild(name, PRIORITIES)).ifPresent(r -> {
 					try {
 						BufferedReader bufferedReader = r.openAsReader();
 						JsonElement obj = GsonHelper.parse(bufferedReader);
 						obj = Migrator.SKIN_PACK_PRIORITIES_FIXER.fix(JsonOps.INSTANCE, obj);
-						Map<ResourceLocation, Double> map = PRIORITIES_CODEC.parse(JsonOps.INSTANCE, obj).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+						Map<ResourceLocation, SortingOrder<ResourceLocation>> map = PRIORITIES_CODEC.parse(JsonOps.INSTANCE, obj).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
 						priorities.putAll(map);
 						bufferedReader.close();
 					} catch (IOException e) {
