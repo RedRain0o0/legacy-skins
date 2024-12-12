@@ -3,4 +3,4 @@
 - Added the `skin_pack_priorities.json` file, which can be used sort skin packs!
 - Temporarily removed the classic change skins screen.
 - Config migrations are now logged.
-- 
+- Errors during migrations now log an error in the console.
