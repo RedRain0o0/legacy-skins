@@ -41,7 +41,7 @@ public enum EasterEggUtils {
 	private static final int funNumber = (int) (Math.random() * 1000);
 
 	public static ResourceLocation processIconId(ResourceLocation icon) {
-		if (funNumber < 15 && VersionUtils.of("legacyskins", "textures/skin_packs/dev.png").equals(icon)) {
+		if ((funNumber < 15 || isAprilFools()) && VersionUtils.of("legacyskins", "textures/skin_packs/dev.png").equals(icon)) {
 			return VersionUtils.of("legacyskins", "icon2.png");
 		}
 		return icon;
