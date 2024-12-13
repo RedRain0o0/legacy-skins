@@ -381,7 +381,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		addRenderableOnly(((guiGraphics, i, j, f) -> p(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + 34, panel.y + 10, 112, 112)));
 		addRenderableOnly((guiGraphics, i, j, f) -> {
 			if (this.focusedPack == null) return;
-			ResourceLocation icon = this.focusedPack.getSecond().icon();
+			ResourceLocation icon = EasterEggUtils.processIconId(this.focusedPack.getSecond().icon());
 			// x, y, u, v, width, height, texWidth, texHeight?
 			guiGraphics.blit(icon, panel.x + 35, panel.y + 11, 0, 0, 109, 109, 109, 109);
 		});

@@ -1,8 +1,10 @@
 package io.github.redrain0o0.legacyskins.client.util;
 
 import io.github.redrain0o0.legacyskins.client.screen.EScreen;
+import io.github.redrain0o0.legacyskins.util.VersionUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.LevelData;
 
@@ -34,5 +36,14 @@ public enum EasterEggUtils {
 		int month = calendar.get(Calendar.MONTH);
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		return month == Calendar.APRIL && day == 1;
+	}
+
+	private static final int funNumber = (int) (Math.random() * 1000);
+
+	public static ResourceLocation processIconId(ResourceLocation icon) {
+		if (funNumber < 15 && VersionUtils.of("legacyskins", "icon.png").equals(icon)) {
+			return VersionUtils.of("legacyskins", "icon2.png");
+		}
+		return icon;
 	}
 }
