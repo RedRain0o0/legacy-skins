@@ -42,7 +42,7 @@ public enum EasterEggUtils {
 
 	public static ResourceLocation processIconId(ResourceLocation icon) {
 		if ((funNumber < 15 || isAprilFools()) && VersionUtils.of("legacyskins", "textures/skin_packs/dev.png").equals(icon)) {
-			return VersionUtils.of("legacyskins", "icon2.png");
+			return VersionUtils.of("legacyskins", "textures/skin_packs/dev_live_action.png");
 		}
 		return icon;
 	}
