@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ModrinthSkinPackCollection {
-	private static ModrinthAuth auth = null;
 	private static final String userAgent = /*$ userAgent {*/"RedRainOoO/legacy-skins/1.2.6.1+fabric+1.21"/*$}*/;
 	private static final String collectionUrl = "https://api.modrinth.com/v3/collection/bJ8YVFtd";
 	private static final String projectsUrl = "https://api.modrinth.com/v3/projects";
@@ -104,7 +103,13 @@ public class ModrinthSkinPackCollection {
 	}
 
 	static HttpRequest.Builder builder() {
-		return HttpRequest.newBuilder().header("User-Agent", userAgent);
+		return builder(true);
+	}
+
+	static HttpRequest.Builder builder(boolean autoAuth) {
+		HttpRequest.Builder header = HttpRequest.newBuilder().header("User-Agent", userAgent);
+		if (!autoAuth || !ModrinthOauth.isAuthenticated()) return header;
+		else return header.header("Authorization", ModrinthOauth.auth.token());
 	}
 
 	// get a list of authors from a list of projects, either the owner of a team, or the name of an organization.
@@ -123,9 +128,5 @@ public class ModrinthSkinPackCollection {
 			}
 			return map;
 		});
-	}
-
-	private class ModrinthAuth {
-
 	}
 }
