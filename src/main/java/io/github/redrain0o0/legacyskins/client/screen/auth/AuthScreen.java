@@ -21,8 +21,11 @@ public class AuthScreen extends Screen {
 		ModrinthOauth.callbackInfo = (a, b) -> {
 			screen.lastLoadingHeader = Component.literal(a + "");
 			screen.lastLoadingStage = Component.literal(b);
-			if (a == ModrinthOauth.Status.SERVER_CLOSED) minecraft.setScreen(this);
+			if (a == ModrinthOauth.Status.SERVER_CLOSED) {
+				minecraft.tell(() -> minecraft.setScreen(this));
+			}
 		};
+		ModrinthOauth.enableOauthServer();
 	}
 
 	@Override
