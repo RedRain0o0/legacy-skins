@@ -7,8 +7,12 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import wily.legacy.client.screen.LegacyLoadingScreen;
+import wily.legacy.client.screen.ModsScreen;
+import wily.legacy.client.screen.Panel;
+import wily.legacy.util.LegacySprites;
 
 public class AuthScreen extends Screen {
+	private final Panel panel = Panel.centered(this, 300, 250);
 	public AuthScreen() {
 		super(Component.empty());
 	}
@@ -31,9 +35,16 @@ public class AuthScreen extends Screen {
 	@Override
 	protected void init() {
 		super.init();
+		panel.init();
 		addRenderableWidget(Button.builder(Component.literal("Sign in with %sModrinth".formatted(ChatFormatting.GREEN)), b -> {
 			signIntoModrinthAccount();
-		}).width(100).pos(15, 15).build());
+		}).width(150).pos(panel.x + panel.width / 2 - 150 / 2, panel.y + 5).build());
+	}
+
+	@Override
+	public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
+		super.renderBackground(guiGraphics, i, j, f);
+		panel.render(guiGraphics, i, j, f);
 	}
 
 	@Override

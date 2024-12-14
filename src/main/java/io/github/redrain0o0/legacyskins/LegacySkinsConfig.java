@@ -12,6 +12,7 @@ import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.screen.config.LegacyConfigScreens;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import io.github.redrain0o0.legacyskins.migrator.Migrator;
+import io.github.redrain0o0.legacyskins.modrinth.ModrinthOauth;
 import io.github.redrain0o0.legacyskins.util.PlatformUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.UUIDUtil;
@@ -35,7 +36,8 @@ public class LegacySkinsConfig {
 			Codec.BOOL.fieldOf("showDevPacks").forGetter(LegacySkinsConfig::showDevPacks),
 			Codec.BOOL.fieldOf("showSkinEditorButton").forGetter(LegacySkinsConfig::showSkinEditorButton),
 			Codec.FLOAT.optionalFieldOf("dollRotationXLimit", 50f).forGetter(LegacySkinsConfig::dollRotationXLimit),
-			LegacyConfigScreens.ConfigScreenType.CODEC.optionalFieldOf("configScreen").forGetter(LegacySkinsConfig::configScreenType)
+			LegacyConfigScreens.ConfigScreenType.CODEC.optionalFieldOf("configScreen").forGetter(LegacySkinsConfig::configScreenType),
+			ModrinthOauth.ModrinthAuthentication.CODEC.optionalFieldOf("modrinthAuthentication").forGetter((f) -> Optional.ofNullable(ModrinthOauth.auth))
 	).apply(instance, LegacySkinsConfig::new));
 	private final SkinsScreen screen;
 	@Deprecated(forRemoval = true)
@@ -101,14 +103,16 @@ public class LegacySkinsConfig {
 	 * @param showEditorButton Whether to show the skin editor button in the title screen
 	 * @param dollRotationXLimit The maximum the doll can be rotated along the X axis
 	 * @param type Which type of config screen will be preferred
+	 * @param authentication Modrinth authentication details
 	 */
-	public LegacySkinsConfig(HashMap<UUID, SkinsConfig> profiles, SkinsScreen screen, boolean showDevPacks, boolean showEditorButton, float dollRotationXLimit, Optional<LegacyConfigScreens.ConfigScreenType> type) {
+	public LegacySkinsConfig(HashMap<UUID, SkinsConfig> profiles, SkinsScreen screen, boolean showDevPacks, boolean showEditorButton, float dollRotationXLimit, Optional<LegacyConfigScreens.ConfigScreenType> type, Optional<ModrinthOauth.ModrinthAuthentication> authentication) {
 		this.profiles = profiles;
 		this.screen = screen;
 		this.showDevPacks = showDevPacks;
 		this.showEditorButton = showEditorButton;
 		this.dollRotationXLimit = dollRotationXLimit;
 		this.configScreenType = type;
+		ModrinthOauth.auth = authentication.orElse(null);
 	}
 
 	public static class SkinsConfig {
@@ -179,7 +183,7 @@ public class LegacySkinsConfig {
 			Legacyskins.INSTANCE = fromDynamic(jsonElementDynamic);
 
 		} else {
-			(Legacyskins.INSTANCE = new LegacySkinsConfig(new HashMap<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment(), false, 50f, Optional.empty())).save();
+			(Legacyskins.INSTANCE = new LegacySkinsConfig(new HashMap<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment(), false, 50f, Optional.empty(), Optional.empty())).save();
 		}
 	}
 
