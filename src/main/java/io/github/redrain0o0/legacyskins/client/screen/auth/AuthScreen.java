@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component;
 import wily.legacy.client.screen.LegacyLoadingScreen;
 
 public class AuthScreen extends Screen {
-	protected AuthScreen() {
+	public AuthScreen() {
 		super(Component.empty());
 	}
 

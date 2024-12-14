@@ -12,6 +12,7 @@ import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacyPackType;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
+import io.github.redrain0o0.legacyskins.client.screen.auth.AuthScreen;
 import io.github.redrain0o0.legacyskins.client.util.EasterEggUtils;
 import io.github.redrain0o0.legacyskins.client.util.SkinCollection;
 import io.github.redrain0o0.legacyskins.mixin.legacy4j.RenderableVListAccessor;
@@ -141,6 +142,10 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		}
 		if (keyCode == InputConstants.KEY_F) {
 			favorite();
+			return true;
+		}
+		if (keyCode == InputConstants.KEY_A) {
+			minecraft.setScreen(new AuthScreen());
 			return true;
 		}
 		if (control(keyCode == InputConstants.KEY_LBRACKET, keyCode == InputConstants.KEY_RBRACKET)) return true;
