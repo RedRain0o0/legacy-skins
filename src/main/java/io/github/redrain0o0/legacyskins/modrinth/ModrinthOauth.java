@@ -80,8 +80,8 @@ public class ModrinthOauth {
 							exchange.sendResponseHeaders(200, bytes.length);
 							exchange.getResponseBody().write(bytes);
 							exchange.close();
-							serverStopper.run();
 							callbackInfo.accept(Status.AUTH_SUCCESS, "Authentication Successful");
+							serverStopper.run();
 						} catch (Throwable t) {
 							callbackInfo.accept(Status.AUTH_FAILURE, "Authentication Failed");
 							byte[] bytes = ("<!DOCTYPE html><html><body>Failed to authenticate via Modrinth <a href=\"" + OAUTH_URL + "\">Try Again</a></body></html>").getBytes(StandardCharsets.UTF_8);
