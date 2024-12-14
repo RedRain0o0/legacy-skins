@@ -94,6 +94,7 @@ public class ModrinthOauth {
 				serverStopper = () -> {
 					server.stop(0);
 					callbackInfo.accept(Status.SERVER_CLOSED, "Server Closed");
+					serverStopper = () -> {}; // prevent memory leak
 				};
 			}
 
