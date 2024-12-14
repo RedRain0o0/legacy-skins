@@ -37,6 +37,7 @@ public class ModrinthOauth {
 	public static BiConsumer<Status, String> callbackInfo = (a, b) -> {};
 
 	public static void main(String[] args) {
+		callbackInfo = (a, b) -> LOGGER.info("{}: {}", a, b);
 		enableOauthServer();
 	}
 	public static void enableOauthServer() {
@@ -60,13 +61,14 @@ public class ModrinthOauth {
 					LOGGER.debug("Received at URL: " + exchange.getRequestURI());
 					LOGGER.debug("Received something? " + new String(exchange.getRequestBody().readAllBytes()));
 					String query = exchange.getRequestURI().getQuery();
-					LOGGER.info(query);
+					LOGGER.debug(query);
 					if (query.contains("code=") && query.split("=").length == 2) {
 						String code = query.split("=")[1];
 						LOGGER.debug("Modrinth has responded with a code: " + code);
 						LOGGER.debug("Attempting to get token...");
 						callbackInfo.accept(Status.AUTH_TEMP_CODE_RECEIVED, "Received a single-use authentication code.");
 						try {
+							callbackInfo.accept(Status.REQUESTING_APPLICATION_TOKEN, "Requesting application token...");
 							ModrinthDataObjects.OauthTokenResponse join = getToken(new ModrinthDataObjects.OauthTokenPostDto(
 									code,
 									"U16bR0EJ",
@@ -82,7 +84,7 @@ public class ModrinthOauth {
 							callbackInfo.accept(Status.AUTH_SUCCESS, "Authentication Successful");
 						} catch (Throwable t) {
 							callbackInfo.accept(Status.AUTH_FAILURE, "Authentication Failed");
-							byte[] bytes = "Failed to authenticate via Modrinth".getBytes(StandardCharsets.UTF_8);
+							byte[] bytes = ("<!DOCTYPE html><html><body>Failed to authenticate via Modrinth <a href=\"" + OAUTH_URL + "\">Try Again</a></body></html>").getBytes(StandardCharsets.UTF_8);
 							exchange.sendResponseHeaders(500, bytes.length);
 							exchange.getResponseBody().write(bytes);
 							exchange.close();
@@ -108,7 +110,7 @@ public class ModrinthOauth {
 	private static final String TOKEN_URL = "https://api.modrinth.com/_internal/oauth/token";
 	public static CompletableFuture<ModrinthDataObjects.OauthTokenResponse> getToken(ModrinthDataObjects.OauthTokenPostDto dto) {
 		String formText = "code=%s&client_id=%s&redirect_uri=%s&grant_type=%s".formatted(URLEncoder.encode(dto.code(), StandardCharsets.UTF_8), URLEncoder.encode(dto.clientId(), StandardCharsets.UTF_8), URLEncoder.encode(dto.redirectUri(), StandardCharsets.UTF_8), URLEncoder.encode(dto.grantType(), StandardCharsets.UTF_8));
-		System.out.println(formText);
+		LOGGER.debug(formText);
 		return client.sendAsync(builder(false).header("Content-Type", "application/x-www-form-urlencoded").header("Authorization", OAUTH_SECRET).POST(HttpRequest.BodyPublishers.ofString(formText, StandardCharsets.UTF_8 /*TODO*/)).uri(URI.create(TOKEN_URL)).build(), HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)).thenApply(response -> {
 			// we end up with a list of a list
 			String body = response.body();
@@ -135,6 +137,7 @@ public class ModrinthOauth {
 	public enum Status {
 		SERVER_STARTED,
 		AUTH_TEMP_CODE_RECEIVED,
+		REQUESTING_APPLICATION_TOKEN,
 		AUTH_SUCCESS,
 		AUTH_FAILURE,
 		SERVER_CLOSED
