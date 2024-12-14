@@ -112,7 +112,7 @@ public class LegacySkinsConfig {
 		this.showEditorButton = showEditorButton;
 		this.dollRotationXLimit = dollRotationXLimit;
 		this.configScreenType = type;
-		ModrinthOauth.auth = authentication.orElse(null);
+		ModrinthOauth.auth(authentication.orElse(null));
 	}
 
 	public static class SkinsConfig {

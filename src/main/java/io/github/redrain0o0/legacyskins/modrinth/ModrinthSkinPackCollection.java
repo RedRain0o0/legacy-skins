@@ -16,7 +16,6 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,7 +40,7 @@ public class ModrinthSkinPackCollection {
 	}
 
 	public static CompletableFuture<ModrinthDataObjects.Collection> loadCollection() {
-		return client.sendAsync(builder().GET().header("User-Agent", userAgent).uri(URI.create(collectionUrl)).build(), HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)).thenApply(response -> {
+		return client.sendAsync(builder().GET().uri(URI.create(collectionUrl)).build(), HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)).thenApply(response -> {
 			String body = response.body();
 			JsonElement element = GSON.fromJson(body, JsonElement.class);
 			return ModrinthDataObjects.Collection.CODEC.parse(JsonOps.INSTANCE, element).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
@@ -49,7 +48,7 @@ public class ModrinthSkinPackCollection {
 	}
 
 	public static CompletableFuture<List<ModrinthDataObjects.Project>> loadProjects(ModrinthDataObjects.Collection collection) {
-		return client.sendAsync(builder().GET().header("User-Agent", userAgent).uri(URI.create(projectsUrl + "?ids=" + URLEncoder.encode("[" + collection.projects().stream().map(a -> "\"" + a.str() + "\"").collect(Collectors.joining(",")) + "]", StandardCharsets.UTF_8))).build(), HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)).thenApply(response -> {
+		return client.sendAsync(builder().GET().uri(URI.create(projectsUrl + "?ids=" + URLEncoder.encode("[" + collection.projects().stream().map(a -> "\"" + a.str() + "\"").collect(Collectors.joining(",")) + "]", StandardCharsets.UTF_8))).build(), HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)).thenApply(response -> {
 			String body = response.body();
 			JsonElement element = GSON.fromJson(body, JsonElement.class);
 			return ModrinthDataObjects.Project.CODEC.listOf().parse(JsonOps.INSTANCE, element).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
@@ -57,7 +56,7 @@ public class ModrinthSkinPackCollection {
 	}
 
 	public static CompletableFuture<List<List<ModrinthDataObjects.TeamMember>>> getTeamMembers(List<ModrinthDataObjects.Project> projects) {
-		return client.sendAsync(builder().GET().header("User-Agent", userAgent).uri(URI.create(teamsUrl + "?ids=" + URLEncoder.encode("[" + projects.stream().map(ModrinthDataObjects.Project::teamId).map(a -> "\"" + a.str() + "\"").collect(Collectors.joining(",")) + "]", StandardCharsets.UTF_8))).build(), HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)).thenApply(response -> {
+		return client.sendAsync(builder().GET().uri(URI.create(teamsUrl + "?ids=" + URLEncoder.encode("[" + projects.stream().map(ModrinthDataObjects.Project::teamId).map(a -> "\"" + a.str() + "\"").collect(Collectors.joining(",")) + "]", StandardCharsets.UTF_8))).build(), HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)).thenApply(response -> {
 			// we end up with a list of a list
 			String body = response.body();
 			JsonElement element = GSON.fromJson(body, JsonElement.class);
@@ -127,6 +126,16 @@ public class ModrinthSkinPackCollection {
 				map.put(project, team.stream().filter(ModrinthDataObjects.TeamMember::isOwner).findFirst().orElseThrow().user().username());
 			}
 			return map;
+		});
+	}
+
+	private static final String userUrl = "https://api.modrinth.com/v3/user";
+	public static CompletableFuture<ModrinthDataObjects.User> getSignedInUser() {
+		return client.sendAsync(builder().GET().uri(URI.create(userUrl)).build(), HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)).thenApply(response -> {
+			// we end up with a list of a list
+			String body = response.body();
+			JsonElement element = new Gson().fromJson(body, JsonElement.class);
+			return ModrinthDataObjects.User.CODEC.parse(JsonOps.INSTANCE, element).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
 		});
 	}
 }

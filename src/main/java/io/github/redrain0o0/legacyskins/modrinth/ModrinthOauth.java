@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sun.net.httpserver.HttpServer;
+import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.modrinth.data.JavaCodecs;
 import io.github.redrain0o0.legacyskins.modrinth.data.ModrinthDataObjects;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import static io.github.redrain0o0.legacyskins.modrinth.ModrinthSkinPackCollection.builder;
 import static io.github.redrain0o0.legacyskins.modrinth.ModrinthSkinPackCollection.client;
@@ -34,7 +36,17 @@ public class ModrinthOauth {
 	public static Runnable serverStopper = () -> {};
 	public static ModrinthAuthentication auth;
 
+	public static void auth(ModrinthAuthentication authentication) {
+		ModrinthOauth.auth = authentication;
+		ModrinthSkinPackCollection.getSignedInUser().exceptionally((f) -> {
+			unAuth();
+			return null;
+		}).join();
+	}
+
 	public static BiConsumer<Status, String> callbackInfo = (a, b) -> {};
+
+	public static CompletableFuture<ModrinthDataObjects.User> signedInUser;
 
 	public static void main(String[] args) {
 		callbackInfo = (a, b) -> LOGGER.info("{}: {}", a, b);
@@ -84,12 +96,20 @@ public class ModrinthOauth {
 							serverStopper.run();
 						} catch (Throwable t) {
 							callbackInfo.accept(Status.AUTH_FAILURE, "Authentication Failed");
-							byte[] bytes = ("<!DOCTYPE html><html><body>Failed to authenticate via Modrinth <a href=\"" + OAUTH_URL + "\">Try Again</a></body></html>").getBytes(StandardCharsets.UTF_8);
+							byte[] bytes = ("<!DOCTYPE html><html><body>Failed to authenticate via Modrinth <a href=\"" + OAUTH_URL + "\">Try Again</a><a href=\"death\">Cancel</a></body></html>").getBytes(StandardCharsets.UTF_8);
 							exchange.sendResponseHeaders(500, bytes.length);
 							exchange.getResponseBody().write(bytes);
 							exchange.close();
 						}
 					}
+				});
+				server.createContext("/death", exchange -> {
+					byte[] bytes = "You can close this tab now.".getBytes(StandardCharsets.UTF_8);
+					exchange.sendResponseHeaders(200, bytes.length);
+					exchange.getResponseBody().write(bytes);
+					exchange.close();
+					callbackInfo.accept(Status.AUTH_CANCELLED, "Authentication cancelled.");
+					serverStopper.run();
 				});
 				server.start();
 				callbackInfo.accept(Status.SERVER_STARTED, "Server Started");
@@ -121,6 +141,11 @@ public class ModrinthOauth {
 		});
 	}
 
+	public static void unAuth() {
+		auth = null;
+		signedInUser = null;
+	}
+
 	public record ModrinthAuthentication(String token, Instant expiry) {
 		public ModrinthAuthentication(ModrinthDataObjects.OauthTokenResponse response) {
 			this(response.accessToken(), Instant.now().plusSeconds(response.expiresIn() - 60 /* Account for 60000ms ping */));
@@ -129,6 +154,10 @@ public class ModrinthOauth {
 				Codec.STRING.fieldOf("token").forGetter(ModrinthAuthentication::token),
 				JavaCodecs.INSTANT.fieldOf("expiry").forGetter(ModrinthAuthentication::expiry)
 		).apply(instance, ModrinthAuthentication::new));
+
+		public static void lazyLoad() {
+			if (signedInUser == null) signedInUser = ModrinthSkinPackCollection.getSignedInUser();
+		}
 	}
 
 	public static boolean isAuthenticated() {
@@ -141,6 +170,7 @@ public class ModrinthOauth {
 		REQUESTING_APPLICATION_TOKEN,
 		AUTH_SUCCESS,
 		AUTH_FAILURE,
+		AUTH_CANCELLED,
 		SERVER_CLOSED
 	}
 }
