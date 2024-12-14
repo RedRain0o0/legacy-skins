@@ -42,6 +42,10 @@ stonecutter.const("clothconfig", project.clothconfig_version != "[VERSIONED]")
 stonecutter.swap("l4joptionsscreen") {
 	if (stonecutter.eval(l4jVerStr.substring(l4jVerStr.indexOf("-") + 1), ">=1.7.5")) "HelpAndOptionsScreen" else "HelpOptionsScreen"
 }
+
+stonecutter.swap("userAgent") {
+	"\"RedRainOoO/legacy-skins/" + version + "\""
+}
 base {
 	archivesName = project.archives_base_name
 }
