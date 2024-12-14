@@ -174,4 +174,31 @@ public class ModrinthDataObjects {
 				Codec.STRING.listOf().fieldOf("game_versions").forGetter(Version::gameVersions)
 		).apply(instance, Version::new));
 	}
+
+	public record OauthTokenPostDto(
+			String code,
+			String clientId,
+			String redirectUri,
+			String grantType
+	) {
+		public static final Codec<OauthTokenPostDto> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.fieldOf("code").forGetter(OauthTokenPostDto::code),
+				Codec.STRING.fieldOf("client_id").forGetter(OauthTokenPostDto::clientId),
+				Codec.STRING.fieldOf("redirect_uri").forGetter(OauthTokenPostDto::redirectUri),
+				Codec.STRING.fieldOf("grant_type").forGetter(OauthTokenPostDto::grantType)
+		).apply(instance, OauthTokenPostDto::new));
+	}
+
+	public record OauthTokenResponse(
+			String accessToken,
+			String tokenType,
+			// it can't be more than 2 billion seconds, right?
+			int expiresIn
+	) {
+		public static final Codec<OauthTokenResponse> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.fieldOf("access_token").forGetter(OauthTokenResponse::accessToken),
+				Codec.STRING.fieldOf("token_type").forGetter(OauthTokenResponse::tokenType),
+				Codec.INT.fieldOf("expires_in").forGetter(OauthTokenResponse::expiresIn)
+		).apply(instance, OauthTokenResponse::new));
+	}
 }

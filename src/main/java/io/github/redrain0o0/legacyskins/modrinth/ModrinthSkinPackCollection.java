@@ -29,7 +29,7 @@ public class ModrinthSkinPackCollection {
 	private static final String organizationUrl = "https://api.modrinth.com/v3/organizations";
 	private static final String projectVersionsUrl = "https://api.modrinth.com/v3/project/%s/version";
 	private static final Gson GSON = new Gson();
-	private static final HttpClient client = HttpClient.newBuilder().build();
+	static final HttpClient client = HttpClient.newBuilder().build();
 	public static void main(String[] args) throws IOException, InterruptedException {
 		// {"id":"bJ8YVFtd","user":"6NJak7g0","name":"Skin Packs","description":"Skin Packs that work with Legacy Skins","icon_url":null,"color":null,"status":"listed","created":"2024-12-11T00:06:03.043533Z","updated":"2024-12-11T00:09:07.280128Z","projects":["8fM4nRG5","IU7pUM86","M4781Cfl","btzz80tF"]}
 		// https://api.modrinth.com/v3/collection/bJ8YVFtd
@@ -103,7 +103,7 @@ public class ModrinthSkinPackCollection {
 		});
 	}
 
-	private static HttpRequest.Builder builder() {
+	static HttpRequest.Builder builder() {
 		return HttpRequest.newBuilder().header("User-Agent", userAgent);
 	}
 
