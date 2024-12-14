@@ -15,8 +15,16 @@ import wily.legacy.util.LegacySprites;
 
 public class AuthScreen extends Screen {
 	private final Panel panel = Panel.centered(this, 300, 250);
-	public AuthScreen() {
+	private final Screen parent;
+
+	public AuthScreen(Screen parent) {
 		super(Component.empty());
+		this.parent = parent;
+	}
+
+	@Override
+	public void onClose() {
+		minecraft.setScreen(parent);
 	}
 
 	public void signIntoModrinthAccount() {

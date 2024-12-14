@@ -145,7 +145,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			return true;
 		}
 		if (keyCode == InputConstants.KEY_A) {
-			minecraft.setScreen(new AuthScreen());
+			minecraft.setScreen(new AuthScreen(this));
 			return true;
 		}
 		if (control(keyCode == InputConstants.KEY_LBRACKET, keyCode == InputConstants.KEY_RBRACKET)) return true;
