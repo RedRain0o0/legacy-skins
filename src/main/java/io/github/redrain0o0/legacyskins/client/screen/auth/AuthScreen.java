@@ -27,6 +27,7 @@ public class AuthScreen extends Screen {
 			screen.lastLoadingStage = Component.literal(b);
 			if (a == ModrinthOauth.Status.SERVER_CLOSED) {
 				minecraft.tell(() -> minecraft.setScreen(this));
+				ModrinthOauth.callbackInfo = (c, d) -> {}; // stop memory leak
 			}
 		};
 		ModrinthOauth.enableOauthServer();
