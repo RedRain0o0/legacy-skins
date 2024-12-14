@@ -383,7 +383,10 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			if (this.focusedPack == null) return;
 			ResourceLocation icon = EasterEggUtils.processIconId(this.focusedPack.getSecond().icon());
 			// x, y, u, v, width, height, texWidth, texHeight?
-			guiGraphics.blit(icon, panel.x + 35, panel.y + 11, 0, 0, 109, 109, 109, 109);
+			guiGraphics.pose().pushPose();
+			guiGraphics.pose().translate(panel.x + 35.3, panel.y + 11.3, 0);
+			guiGraphics.blit(icon, 0, 0, 0, 0, 109, 109, 109, 109);
+			guiGraphics.pose().popPose();
 		});
 		//addRenderableOnly(ChangeSkinScreen::renderDolls);
 
