@@ -1,5 +1,7 @@
 package io.github.redrain0o0.legacyskins.modrinth;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Pair;
@@ -14,6 +16,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -136,6 +140,23 @@ public class ModrinthSkinPackCollection {
 			String body = response.body();
 			JsonElement element = new Gson().fromJson(body, JsonElement.class);
 			return ModrinthDataObjects.User.CODEC.parse(JsonOps.INSTANCE, element).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+		});
+	}
+
+	public static CompletableFuture<Pair<ModrinthDataObjects.VersionFile, Path>> downloadFile(ModrinthDataObjects.VersionFile file, Path to) {
+		return client.sendAsync(builder().GET().uri(URI.create(file.url())).build(), HttpResponse.BodyHandlers.ofFile(to)).thenApply(vf -> {
+			// TODO: this doesn't work
+//			try {
+//				Path body = vf.body();
+//				HashCode hashCode = Hashing.sha512().hashBytes(Files.readAllBytes(body));
+//				if (!hashCode.equals(HashCode.fromBytes(file.hashes().sha512()))) {
+//					Files.delete(body);
+//					throw new IllegalStateException("Hashes for " + file.url() + " don't match!");
+//				}
+//			} catch (Throwable t) {
+//				throw new RuntimeException("An error occured while downloading " + file.url() + ".", t);
+//			}
+			return Pair.of(file, to);
 		});
 	}
 }

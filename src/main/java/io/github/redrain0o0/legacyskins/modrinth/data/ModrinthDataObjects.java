@@ -1,5 +1,7 @@
 package io.github.redrain0o0.legacyskins.modrinth.data;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.mojang.datafixers.kinds.App;
@@ -10,6 +12,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 
 import java.awt.*;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -165,7 +168,8 @@ public class ModrinthDataObjects {
 			List<String> projectTypes,
 			List<String> gameVersions, // note that we ignore this.
 			// VersionType versionType, // TODO
-			Instant datePublished
+			Instant datePublished,
+			List<VersionFile> files
 	) {
 		public static final Codec<Version> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				VersionId.CODEC.fieldOf("id").forGetter(Version::id),
@@ -173,7 +177,8 @@ public class ModrinthDataObjects {
 				Codec.STRING.fieldOf("version_number").forGetter(Version::versionNumber),
 				Codec.STRING.listOf().fieldOf("project_types").forGetter(Version::projectTypes),
 				Codec.STRING.listOf().fieldOf("game_versions").forGetter(Version::gameVersions),
-				JavaCodecs.INSTANT.fieldOf("date_published").forGetter(Version::datePublished)
+				JavaCodecs.INSTANT.fieldOf("date_published").forGetter(Version::datePublished),
+				VersionFile.CODEC.listOf().fieldOf("files").forGetter(Version::files)
 		).apply(instance, Version::new));
 	}
 
@@ -202,5 +207,30 @@ public class ModrinthDataObjects {
 				Codec.STRING.fieldOf("token_type").forGetter(OauthTokenResponse::tokenType),
 				Codec.INT.fieldOf("expires_in").forGetter(OauthTokenResponse::expiresIn)
 		).apply(instance, OauthTokenResponse::new));
+	}
+
+	public record VersionFile(
+			Hashes hashes,
+			String url,
+			String filename,
+			boolean primary,
+			int size, // assume that we don't get a file larger than 2 GB
+			Optional<String> fileType
+	) {
+		public static final Codec<VersionFile> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Hashes.CODEC.fieldOf("hashes").forGetter(VersionFile::hashes),
+				Codec.STRING.fieldOf("url").forGetter(VersionFile::url),
+				Codec.STRING.fieldOf("filename").forGetter(VersionFile::filename),
+				Codec.BOOL.fieldOf("primary").forGetter(VersionFile::primary),
+				Codec.INT.fieldOf("size").forGetter(VersionFile::size),
+				Codec.STRING.optionalFieldOf("file_type").forGetter(VersionFile::fileType)
+		).apply(instance, VersionFile::new));
+	}
+	@SuppressWarnings("deprecation")
+	public record Hashes(byte[] sha512, byte[] sha1) {
+		public static final Codec<Hashes> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.xmap(a -> Hashing.sha512().hashBytes(a.getBytes(StandardCharsets.UTF_8)).asBytes(), a -> Hashing.sha512().hashBytes(a).toString()).fieldOf("sha512").forGetter(Hashes::sha512),
+				Codec.STRING.xmap(a -> Hashing.sha1().hashBytes(a.getBytes(StandardCharsets.UTF_8)).asBytes(), a -> Hashing.sha1().hashBytes(a).toString()).fieldOf("sha1").forGetter(Hashes::sha1)
+		).apply(instance, Hashes::new));
 	}
 }
