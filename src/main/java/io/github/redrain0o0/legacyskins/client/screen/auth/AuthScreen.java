@@ -80,7 +80,7 @@ public class AuthScreen extends Screen {
 		} else {
 			addRenderableWidget(Button.builder(Component.literal("Update skin packs"), b -> {
 				updateSkinPacks();
-			}).width(150).pos(panel.x + panel.width / 2 - 150 / 2, panel.y + 10).build());
+			}).width(150).pos(panel.x + panel.width / 2 - 150 / 2, panel.y + 10 + 10).build());
 			addRenderableWidget(Button.builder(Component.literal("Sign out of ").append(Component.literal("Modrinth").withStyle(ChatFormatting.GREEN)).append(" account").withStyle(ChatFormatting.RED), b -> {
 				ModrinthOauth.unAuth();
 				rebuildWidgets();
