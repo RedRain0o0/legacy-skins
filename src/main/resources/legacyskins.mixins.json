@@ -6,17 +6,18 @@
     "EditorAccessor",
     "EditorGuiAccessor",
     "GeneratorsAccessor",
+    "PlayerRendererImplAccessor",
+    "ScreenAccessor",
+    "legacy4j.AssortMixin",
     "legacy4j.HelpOptionsMixin",
     "legacy4j.Legacy4JForgeMixin",
-    "PlayerRendererImplAccessor",
-    "legacy4j.RenderableVListAccessor",
-    "ScreenAccessor"
+    "legacy4j.RenderableVListAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "NetHandlerMixin",
-    "DefaultPlayerSkinAccessor"
+    "DefaultPlayerSkinAccessor",
+    "NetHandlerMixin"
   ]
 }

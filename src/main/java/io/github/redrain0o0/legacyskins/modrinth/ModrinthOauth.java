@@ -6,7 +6,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sun.net.httpserver.HttpServer;
-import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.modrinth.data.JavaCodecs;
 import io.github.redrain0o0.legacyskins.modrinth.data.ModrinthDataObjects;
 import org.slf4j.Logger;
@@ -21,7 +20,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 import static io.github.redrain0o0.legacyskins.modrinth.ModrinthSkinPackCollection.builder;
 import static io.github.redrain0o0.legacyskins.modrinth.ModrinthSkinPackCollection.client;

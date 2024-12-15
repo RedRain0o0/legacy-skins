@@ -13,6 +13,7 @@ import io.github.redrain0o0.legacyskins.client.screen.config.LegacyConfigScreens
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import io.github.redrain0o0.legacyskins.migrator.Migrator;
 import io.github.redrain0o0.legacyskins.modrinth.ModrinthOauth;
+import io.github.redrain0o0.legacyskins.modrinth.data.ModrinthDataObjects;
 import io.github.redrain0o0.legacyskins.util.PlatformUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.UUIDUtil;
@@ -37,7 +38,8 @@ public class LegacySkinsConfig {
 			Codec.BOOL.fieldOf("showSkinEditorButton").forGetter(LegacySkinsConfig::showSkinEditorButton),
 			Codec.FLOAT.optionalFieldOf("dollRotationXLimit", 50f).forGetter(LegacySkinsConfig::dollRotationXLimit),
 			LegacyConfigScreens.ConfigScreenType.CODEC.optionalFieldOf("configScreen").forGetter(LegacySkinsConfig::configScreenType),
-			ModrinthOauth.ModrinthAuthentication.CODEC.optionalFieldOf("modrinthAuthentication").forGetter((f) -> Optional.ofNullable(ModrinthOauth.auth))
+			ModrinthOauth.ModrinthAuthentication.CODEC.optionalFieldOf("modrinthAuthentication").forGetter((f) -> Optional.ofNullable(ModrinthOauth.auth)),
+			Codec.unboundedMap(ModrinthDataObjects.ProjectId.CODEC, Codec.STRING).fieldOf("downloadedPacks").xmap(HashMap::new, LegacySkinsConfig::identity).forGetter(LegacySkinsConfig::downloadedPacks)
 	).apply(instance, LegacySkinsConfig::new));
 	private final SkinsScreen screen;
 	@Deprecated(forRemoval = true)
@@ -50,6 +52,7 @@ public class LegacySkinsConfig {
 	public Optional<LegacyConfigScreens.ConfigScreenType> configScreenType;
 	// The ordering of the entries doesn't matter
 	private final HashMap<UUID, SkinsConfig> profiles;
+	private final HashMap<ModrinthDataObjects.ProjectId, String> downloadedPacks;
 
 	static <T> T identity(T t) {
 		return t;
@@ -79,6 +82,10 @@ public class LegacySkinsConfig {
 		return configScreenType;
 	}
 
+	public HashMap<ModrinthDataObjects.ProjectId, String> downloadedPacks() {
+		return downloadedPacks;
+	}
+
 	public enum SkinsScreen {
 		DEFAULT,
 		REMOVED_CLASSIC,
@@ -105,7 +112,7 @@ public class LegacySkinsConfig {
 	 * @param type Which type of config screen will be preferred
 	 * @param authentication Modrinth authentication details
 	 */
-	public LegacySkinsConfig(HashMap<UUID, SkinsConfig> profiles, SkinsScreen screen, boolean showDevPacks, boolean showEditorButton, float dollRotationXLimit, Optional<LegacyConfigScreens.ConfigScreenType> type, Optional<ModrinthOauth.ModrinthAuthentication> authentication) {
+	public LegacySkinsConfig(HashMap<UUID, SkinsConfig> profiles, SkinsScreen screen, boolean showDevPacks, boolean showEditorButton, float dollRotationXLimit, Optional<LegacyConfigScreens.ConfigScreenType> type, Optional<ModrinthOauth.ModrinthAuthentication> authentication, HashMap<ModrinthDataObjects.ProjectId, String> downloadedPacks) {
 		this.profiles = profiles;
 		this.screen = screen;
 		this.showDevPacks = showDevPacks;
@@ -113,6 +120,7 @@ public class LegacySkinsConfig {
 		this.dollRotationXLimit = dollRotationXLimit;
 		this.configScreenType = type;
 		ModrinthOauth.auth(authentication.orElse(null));
+		this.downloadedPacks = downloadedPacks;
 	}
 
 	public static class SkinsConfig {
@@ -183,7 +191,7 @@ public class LegacySkinsConfig {
 			Legacyskins.INSTANCE = fromDynamic(jsonElementDynamic);
 
 		} else {
-			(Legacyskins.INSTANCE = new LegacySkinsConfig(new HashMap<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment(), false, 50f, Optional.empty(), Optional.empty())).save();
+			(Legacyskins.INSTANCE = new LegacySkinsConfig(new HashMap<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment(), false, 50f, Optional.empty(), Optional.empty(), new HashMap<>())).save();
 		}
 	}
 

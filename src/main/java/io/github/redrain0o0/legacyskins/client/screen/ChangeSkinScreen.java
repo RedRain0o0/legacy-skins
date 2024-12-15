@@ -189,6 +189,10 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		if (state.is(ControllerBinding.RIGHT_STICK_BUTTON) && state.justPressed) {
 			if (handleDollInteraction(true, false)) return;
 		}
+		if (state.is(ControllerBinding.LEFT_BUTTON) && state.justPressed) {
+			minecraft.setScreen(new AuthScreen(this));
+			return;
+		}
 		if (state.is(ControllerBinding.RIGHT_STICK) && state instanceof BindingState.Axis stick) {
 			if (this.playerSkinWidgetList != null) {
 				PlayerSkinWidget element3 = this.playerSkinWidgetList.element3;
@@ -226,6 +230,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		renderer.set(1, () -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_ESCAPE) : ControllerBinding.RIGHT_BUTTON.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.cancel"));
 		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.UP_BUTTON.bindingState.getIcon(), () -> Component.translatable(this.playerSkinWidgetList != null && Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get()) ? "legacyskins.menu.unfavorite" : "legacyskins.menu.favorite"));
 		renderer.add(() -> ControlType.getActiveType().isKbm() ? COMPOUND_ICON_FUNCTION.apply(new ControlTooltip.Icon[]{ControlTooltip.getKeyIcon(InputConstants.KEY_LEFT),ControlTooltip.SPACE_ICON,ControlTooltip.getKeyIcon(InputConstants.KEY_RIGHT)})  : ControllerBinding.LEFT_STICK.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.navigate"));
+		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_A) : ControllerBinding.LEFT_BUTTON.bindingState.getIcon(), () -> Component.literal("Download skin packs"));
 		//renderer.add(()-> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.LEFT_STICK.bindingState.getIcon(), ()-> null);
 	}
 

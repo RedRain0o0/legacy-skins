@@ -2,7 +2,7 @@ package io.github.redrain0o0.legacyskins.modrinth.data;
 
 import com.mojang.serialization.Codec;
 
-import java.awt.*;
+import java.awt.Color;
 import java.time.Instant;
 
 public class JavaCodecs {

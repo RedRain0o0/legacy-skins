@@ -2,29 +2,39 @@ package io.github.redrain0o0.legacyskins.client.screen.auth;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.client.screen.ChangeSkinScreen;
 import io.github.redrain0o0.legacyskins.modrinth.ModrinthOauth;
 import io.github.redrain0o0.legacyskins.modrinth.ModrinthSkinPackCollection;
 import io.github.redrain0o0.legacyskins.modrinth.data.ModrinthDataObjects;
+import io.github.redrain0o0.legacyskins.util.TriConsumer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackRepository;
 import wily.legacy.client.screen.LegacyLoadingScreen;
-import wily.legacy.client.screen.ModsScreen;
 import wily.legacy.client.screen.Panel;
-import wily.legacy.util.LegacySprites;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AuthScreen extends Screen {
 	private Panel panel = Panel.centered(this, 300, 250);
-	private final Screen parent;
+	private Screen parent;
+	boolean replaceParent;
 
 	public AuthScreen(Screen parent) {
 		super(Component.empty());
@@ -33,6 +43,10 @@ public class AuthScreen extends Screen {
 
 	@Override
 	public void onClose() {
+		if (replaceParent && parent instanceof ChangeSkinScreen screen) {
+			System.out.println("changed parent screen");
+			this.parent = new ChangeSkinScreen(screen.parent);
+		}
 		minecraft.setScreen(parent);
 	}
 
@@ -75,55 +89,93 @@ public class AuthScreen extends Screen {
 	}
 
 	private void updateSkinPacks() {
-		ModrinthSkinPackCollection.loadCollection().thenApply(f ->
-				ModrinthSkinPackCollection.loadProjects(f).thenApply(g ->
-						ModrinthSkinPackCollection.getVersionsOfProjects(g).thenApply(projectVersionsMap -> {
-							HashMap<ModrinthDataObjects.Project, ModrinthDataObjects.Version> ilMap = new HashMap<>();
-							for (Map.Entry<ModrinthDataObjects.Project, List<ModrinthDataObjects.Version>> projectListEntry : projectVersionsMap.entrySet()) {
-								ModrinthDataObjects.Version latestVersion = getLatestVersion(projectListEntry.getValue());
-								ilMap.put(projectListEntry.getKey(), latestVersion);
-							}
-							return ilMap;
-						}).thenApply(data -> {
-							Path resourcePackDirectory = minecraft.getResourcePackDirectory();
-							int fileSize = 0;
-							HashMap<ModrinthDataObjects.Project, ModrinthDataObjects.VersionFile> map = new HashMap<>();
-							for (Map.Entry<ModrinthDataObjects.Project, ModrinthDataObjects.Version> projectVersionEntry : data.entrySet()) {
-								ModrinthDataObjects.VersionFile versionFile = projectVersionEntry.getValue().files().stream().filter(ModrinthDataObjects.VersionFile::primary).findFirst().orElseThrow();
-								fileSize += versionFile.size();
-								map.put(projectVersionEntry.getKey(), versionFile);
-							}
-							System.out.println("Total size of download will be " + fileSize + " bytes");
-							try {
-								List<CompletableFuture<Pair<ModrinthDataObjects.VersionFile, Path>>> toDownload = new ArrayList<>();
-								for (Map.Entry<ModrinthDataObjects.Project, ModrinthDataObjects.VersionFile> projectVersionFileEntry : map.entrySet()) {
-									toDownload.add(CompletableFuture.supplyAsync(() -> {
-										Path tempFile = null;
-										try {
-											tempFile = Files.createTempFile("legacyskins", ".zip");
-										} catch (IOException e) {
-											throw new RuntimeException(e);
-										}
-										return ModrinthSkinPackCollection.downloadFile(projectVersionFileEntry.getValue(), tempFile).join();
-									}));
-								}
-								CompletableFuture.allOf(toDownload.toArray(CompletableFuture[]::new)).join();
-								for (CompletableFuture<Pair<ModrinthDataObjects.VersionFile, Path>> pairCompletableFuture : toDownload) {
-									Pair<ModrinthDataObjects.VersionFile, Path> join = pairCompletableFuture.join();
-									Path path = resourcePackDirectory.resolve(join.getFirst().filename());
-									try {
-										Files.move(join.getSecond(), path);
-									} catch (IOException e) {
-										throw new RuntimeException(e);
+		LegacyLoadingScreen loadingScreen = new LegacyLoadingScreen(Component.literal("Downloading skin packs..."), Component.literal("..."));
+		TriConsumer<String, String, Double> triConsumer = (a, b, c) -> {
+			if (a != null) loadingScreen.lastLoadingHeader = Component.literal(a);
+			if (b != null) loadingScreen.lastLoadingStage = Component.literal(b);
+			if (c != null) loadingScreen.progress = (int) (c * 100);
+		};
+		Runnable finish = () -> minecraft.tell(() -> {
+			this.replaceParent = true;
+			minecraft.setScreen(this);
+		});
+		minecraft.setScreen(loadingScreen);
+		triConsumer.accept(null, "Loading collection...", null);
+		ModrinthSkinPackCollection.loadCollection().thenApply(f -> {
+			triConsumer.accept(null, "Loading projects...", null);
+					return ModrinthSkinPackCollection.loadProjects(f).thenApply(g -> {
+						triConsumer.accept(null, "Loading versions...", null);
+								return ModrinthSkinPackCollection.getVersionsOfProjects(g).thenApply(projectVersionsMap -> {
+									HashMap<ModrinthDataObjects.Project, ModrinthDataObjects.Version> ilMap = new HashMap<>();
+									for (Map.Entry<ModrinthDataObjects.Project, List<ModrinthDataObjects.Version>> projectListEntry : projectVersionsMap.entrySet()) {
+										ModrinthDataObjects.Version latestVersion = getLatestVersion(projectListEntry.getValue());
+										ilMap.put(projectListEntry.getKey(), latestVersion);
 									}
-								}
-								System.out.println("Downloaded all files");
-							} catch (Throwable t) {
-								Legacyskins.LOGGER.error("ERROR!", t);
+									return ilMap;
+								}).thenApply(data -> {
+									Path resourcePackDirectory = minecraft.getResourcePackDirectory();
+									int fileSize = 0;
+									HashMap<ModrinthDataObjects.Project, ModrinthDataObjects.VersionFile> map = new HashMap<>();
+									HashMap<ModrinthDataObjects.VersionFile, ModrinthDataObjects.Project> reversoMap = new HashMap<>();
+									for (Map.Entry<ModrinthDataObjects.Project, ModrinthDataObjects.Version> projectVersionEntry : data.entrySet()) {
+										ModrinthDataObjects.VersionFile versionFile = projectVersionEntry.getValue().files().stream().filter(ModrinthDataObjects.VersionFile::primary).findFirst().orElseThrow();
+										fileSize += versionFile.size();
+										map.put(projectVersionEntry.getKey(), versionFile);
+										reversoMap.put(versionFile, projectVersionEntry.getKey());
+									}
+									String s = "Downloaded (%s/" + map.size() + ") resource packs";
+									triConsumer.accept(null, s.formatted(0), 0d);
+									System.out.println("Total size of download will be " + fileSize + " bytes");
+									AtomicInteger downloaded = new AtomicInteger();
+									int size = map.size();
+									try {
+										List<CompletableFuture<Pair<ModrinthDataObjects.VersionFile, Path>>> toDownload = new ArrayList<>();
+										for (Map.Entry<ModrinthDataObjects.Project, ModrinthDataObjects.VersionFile> projectVersionFileEntry : map.entrySet()) {
+											toDownload.add(CompletableFuture.supplyAsync(() -> {
+												Path tempFile = null;
+												try {
+													tempFile = Files.createTempFile("legacyskins", ".zip");
+												} catch (IOException e) {
+													throw new RuntimeException(e);
+												}
+												Pair<ModrinthDataObjects.VersionFile, Path> pair = ModrinthSkinPackCollection.downloadFile(projectVersionFileEntry.getValue(), tempFile).join();
+												int i = downloaded.incrementAndGet();
+												triConsumer.accept(null, s.formatted(i), ((i / (double) size)));
+												return pair;
+											}));
+										}
+										CompletableFuture.allOf(toDownload.toArray(CompletableFuture[]::new)).join();
+										PackRepository resourcePackRepository = Minecraft.getInstance().getResourcePackRepository();
+										triConsumer.accept(null, "Moving files to the resource packs folder...", null);
+										for (CompletableFuture<Pair<ModrinthDataObjects.VersionFile, Path>> pairCompletableFuture : toDownload) {
+											Pair<ModrinthDataObjects.VersionFile, Path> join = pairCompletableFuture.join();
+											Path path = resourcePackDirectory.resolve(join.getFirst().filename());
+											try {
+												Files.move(join.getSecond(), path, StandardCopyOption.REPLACE_EXISTING);
+												Legacyskins.lazyInstance().downloadedPacks().put(reversoMap.get(join.getFirst()).id(), join.getFirst().filename());
+											} catch (IOException e) {
+												throw new RuntimeException(e);
+											}
+										}
+										triConsumer.accept(null, "Reloading resource packs...", null);
+										resourcePackRepository.reload();
+										Legacyskins.LOGGER.info(resourcePackRepository.getAvailablePacks().stream().map(Pack::getId).toList().toString());
+										for (CompletableFuture<Pair<ModrinthDataObjects.VersionFile, Path>> pairCompletableFuture : toDownload) {
+											Pair<ModrinthDataObjects.VersionFile, Path> join = pairCompletableFuture.join();
+											resourcePackRepository.addPack("file/" + join.getFirst().filename());
+										}
+										System.out.println("Downloaded all files");
+										minecraft.options.updateResourcePacks(resourcePackRepository);
+										finish.run();
+										//minecraft.tell(resourcePackRepository::reload);
+									} catch (Throwable t) {
+										Legacyskins.LOGGER.error("ERROR!", t);
+									}
+									return null;
+								});
 							}
-							return null;
-						})
-				)
+					);
+				}
 		);
 
 	}

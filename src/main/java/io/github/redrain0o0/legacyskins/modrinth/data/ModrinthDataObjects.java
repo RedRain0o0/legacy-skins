@@ -1,21 +1,13 @@
 package io.github.redrain0o0.legacyskins.modrinth.data;
 
-import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.mojang.datafixers.kinds.App;
-import com.mojang.datafixers.util.Function8;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.redrain0o0.legacyskins.Legacyskins;
 
-import java.awt.*;
+import java.awt.Color;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class ModrinthDataObjects {
