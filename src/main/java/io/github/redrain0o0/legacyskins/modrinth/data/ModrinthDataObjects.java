@@ -163,15 +163,17 @@ public class ModrinthDataObjects {
 			ProjectId projectId,
 			String versionNumber,
 			List<String> projectTypes,
-			List<String> gameVersions // note that we ignore this.
-			// VersionType versionType // TODO
+			List<String> gameVersions, // note that we ignore this.
+			// VersionType versionType, // TODO
+			Instant datePublished
 	) {
 		public static final Codec<Version> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				VersionId.CODEC.fieldOf("id").forGetter(Version::id),
 				ProjectId.CODEC.fieldOf("project_id").forGetter(Version::projectId),
 				Codec.STRING.fieldOf("version_number").forGetter(Version::versionNumber),
 				Codec.STRING.listOf().fieldOf("project_types").forGetter(Version::projectTypes),
-				Codec.STRING.listOf().fieldOf("game_versions").forGetter(Version::gameVersions)
+				Codec.STRING.listOf().fieldOf("game_versions").forGetter(Version::gameVersions),
+				JavaCodecs.INSTANT.fieldOf("date_published").forGetter(Version::datePublished)
 		).apply(instance, Version::new));
 	}
 
