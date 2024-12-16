@@ -16,6 +16,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackRepository;
+import wily.legacy.client.LegacyTip;
 import wily.legacy.client.screen.LegacyLoadingScreen;
 import wily.legacy.client.screen.Panel;
 
@@ -88,8 +89,15 @@ public class AuthScreen extends Screen {
 		}
 	}
 
+	private LegacyTip tip = new LegacyTip(Component.literal("NKVFHKHF")).centered();
 	private void updateSkinPacks() {
-		LegacyLoadingScreen loadingScreen = new LegacyLoadingScreen(Component.literal("Downloading skin packs..."), Component.literal("..."));
+
+		LegacyLoadingScreen loadingScreen = new LegacyLoadingScreen(Component.literal("Downloading skin packs..."), Component.literal("...")) {
+			@Override
+			public LegacyTip getLoadingTip() {
+				return tip;
+			}
+		};
 		TriConsumer<String, String, Double> triConsumer = (a, b, c) -> {
 			if (a != null) loadingScreen.lastLoadingHeader = Component.literal(a);
 			if (b != null) loadingScreen.lastLoadingStage = Component.literal(b);
