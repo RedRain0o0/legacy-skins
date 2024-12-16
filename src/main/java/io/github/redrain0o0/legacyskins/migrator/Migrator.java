@@ -21,11 +21,12 @@ public class Migrator {
 					new To1005Fixer(),
 					new To1006Fixer(),
 					new To1007Fixer(),
-					new To1008Fixer()
+					new To1008Fixer(),
+					new To1009Fixer()
 			),
 			1001,
 			1001,
-			1008
+			1009
 	);
 
 	public static final Migrator SKIN_PACKS_FIXER = new Migrator(
