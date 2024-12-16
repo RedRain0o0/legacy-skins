@@ -30,7 +30,7 @@ public class SkinPackFileAutoOrderer {
 			else f.put(parse, SortingOrder.absolute(0));
 			before = parse;
 		}
-		JsonElement jsonElement = Codec.unboundedMap(ResourceLocation.CODEC, SortingOrderCodecs.CODEC).encodeStart(JsonOps.INSTANCE, f).resultOrPartial().orElseThrow();
+		JsonElement jsonElement = Codec.unboundedMap(ResourceLocation.CODEC, SortingOrderCodecs.CODEC).encodeStart(JsonOps.INSTANCE, f).resultOrPartial(System.err::println).orElseThrow();
 		System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(jsonElement).replaceAll("\\{\n {4}", "{").replaceAll("\n {2}}", "}"));
 	}
 }
