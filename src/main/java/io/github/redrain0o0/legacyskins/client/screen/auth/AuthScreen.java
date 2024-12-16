@@ -114,6 +114,7 @@ public class AuthScreen extends Screen {
 									return ilMap;
 								}).thenApply(data -> {
 									Path resourcePackDirectory = minecraft.getResourcePackDirectory();
+									if (!resourcePackDirectory.toFile().exists()) resourcePackDirectory.toFile().mkdirs();
 									int fileSize = 0;
 									HashMap<ModrinthDataObjects.Project, ModrinthDataObjects.VersionFile> map = new HashMap<>();
 									HashMap<ModrinthDataObjects.VersionFile, ModrinthDataObjects.Project> reversoMap = new HashMap<>();
