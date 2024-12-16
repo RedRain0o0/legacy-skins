@@ -26,7 +26,7 @@ import static io.github.redrain0o0.legacyskins.modrinth.ModrinthSkinPackCollecti
 
 public class ModrinthOauth {
 	public static final String OAUTH_SECRET = "RAwYwN9XnHUwkIZXfv5WhxLwspQhN1Im";
-	public static final String OAUTH_URL = "https://modrinth.com/auth/authorize?client_id=U16bR0EJ&redirect_uri=http://localhost:11443&scope=USER_READ+PROJECT_READ+COLLECTION_READ+ORGANIZATION_READ";
+	public static final String OAUTH_URL = "https://modrinth.com/auth/authorize?client_id=U16bR0EJ&redirect_uri=http://localhost:11443&scope=USER_READ+PROJECT_READ+VERSION_READ+COLLECTION_READ+ORGANIZATION_READ";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger("legacyskins-oauth");
 	private static boolean serverActive = false;
