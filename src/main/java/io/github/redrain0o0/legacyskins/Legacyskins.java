@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 *///?}
+import io.github.redrain0o0.legacyskins.webinterface.Valuator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,5 +66,6 @@ public class Legacyskins {
 		// Proceed with mild caution.
 		// Load the config file here so Minecraft doesn't error during the resource reload and disable _every single resource pack_
 		lazyInstance();
+		if (PlatformUtils.isDevelopmentEnvironment()) Valuator.startOnNewThread();
 	}
 }
