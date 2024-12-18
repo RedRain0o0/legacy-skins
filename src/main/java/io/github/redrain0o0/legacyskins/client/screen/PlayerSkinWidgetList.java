@@ -46,37 +46,37 @@ public class PlayerSkinWidgetList {
 		element0 = get(index - 3);
 		element0.interactable = false;
 		element0.visible();
-		element0.beginInterpolation(0, FACING_FROM_LEFT, CENTER_X - OFFSET * 3 + 60, CENTER_Y + VERTICAL_OFFSET + 10, 0.5f);
+		element0.beginInterpolation(0, FACING_FROM_LEFT, CENTER_X - OFFSET * 3, CENTER_Y + VERTICAL_OFFSET + 33, 0.4f);
 
 		element1 = get(index - 2);
 		element1.interactable = false;
 		element1.visible();
-		element1.beginInterpolation(0, FACING_FROM_LEFT, CENTER_X - OFFSET * 2 + 40, CENTER_Y + VERTICAL_OFFSET + 10, 0.6f);
+		element1.beginInterpolation(0, FACING_FROM_LEFT, CENTER_X - OFFSET - 58, CENTER_Y + VERTICAL_OFFSET + 25, 0.55f);
 
 		element2 = get(index - 1);
 		element2.interactable = false;
 		element2.visible();
-		element2.beginInterpolation(0, FACING_FROM_LEFT, CENTER_X - OFFSET + 20, CENTER_Y + VERTICAL_OFFSET, 0.75f);
+		element2.beginInterpolation(0, FACING_FROM_LEFT, CENTER_X - OFFSET + 6, CENTER_Y + VERTICAL_OFFSET + 17, 0.7f);
 
 		element3 = get(index);
 		element3.interactable = true;
 		element3.visible();
-		element3.beginInterpolation(0, 0, CENTER_X, CENTER_Y, 1);
+		element3.beginInterpolation(0, 0, CENTER_X + 6, CENTER_Y + 20, 0.85f);
 
 		element4 = get(index + 1);
 		element4.interactable = false;
 		element4.visible();
-		element4.beginInterpolation(0, FACING_FROM_RIGHT, CENTER_X + OFFSET, CENTER_Y + VERTICAL_OFFSET, 0.75f);
+		element4.beginInterpolation(0, FACING_FROM_RIGHT, CENTER_X + OFFSET + 20, CENTER_Y + VERTICAL_OFFSET + 17, 0.7f);
 
 		element5 = get(index + 2);
 		element5.interactable = false;
 		element5.visible();
-		element5.beginInterpolation(0, FACING_FROM_RIGHT, CENTER_X + OFFSET * 2, CENTER_Y + VERTICAL_OFFSET * 2, 0.6f);
+		element5.beginInterpolation(0, FACING_FROM_RIGHT, CENTER_X + OFFSET * 2 + 15, CENTER_Y + VERTICAL_OFFSET + 25, 0.55f);
 
 		element6 = get(index + 3);
 		element6.interactable = false;
 		element6.visible();
-		element6.beginInterpolation(0, FACING_FROM_RIGHT, CENTER_X + OFFSET * 3, CENTER_Y + VERTICAL_OFFSET * 3, 0.5f);
+		element6.beginInterpolation(0, FACING_FROM_RIGHT, CENTER_X + OFFSET * 3 + 35, CENTER_Y + VERTICAL_OFFSET + 33, 0.4f);
 
 		element7 = get(index + 4);
 		element7.interactable = false;
