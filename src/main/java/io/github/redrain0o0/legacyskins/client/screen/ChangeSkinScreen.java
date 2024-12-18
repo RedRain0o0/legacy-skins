@@ -13,6 +13,7 @@ import io.github.redrain0o0.legacyskins.client.LegacyPackType;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.screen.auth.AuthScreen;
+import io.github.redrain0o0.legacyskins.client.util.Box2D;
 import io.github.redrain0o0.legacyskins.client.util.EasterEggUtils;
 import io.github.redrain0o0.legacyskins.client.util.SkinCollection;
 import io.github.redrain0o0.legacyskins.mixin.legacy4j.RenderableVListAccessor;
@@ -134,10 +135,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	public boolean keyPressed(int keyCode, int j, int k) {
 		if (this.playerSkinWidgetList != null) this.setFocused(this.buttons.get(focusedPack.getFirst()));
 		if (keyCode == InputConstants.KEY_RETURN) {
-			if (this.playerSkinWidgetList != null) {
-				Legacyskins.INSTANCE.setSkin(this.playerSkinWidgetList.element3.skinRef.get());
-				ScreenUtil.playSimpleUISound(SoundEvents.UI_BUTTON_CLICK.value(), 1.0f);
-			}
+			selectSkin();
 			return true;
 		}
 		if (keyCode == InputConstants.KEY_F) {
@@ -153,6 +151,30 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		if (handleDollInteraction(keyCode == InputConstants.KEY_LSHIFT, keyCode == InputConstants.KEY_RSHIFT)) return true;
 		return super.keyPressed(keyCode,j,k);
 	} // 91 93
+
+	private void selectSkin() {
+		if (this.playerSkinWidgetList != null) {
+			Legacyskins.INSTANCE.setSkin(this.playerSkinWidgetList.element3.skinRef.get());
+			ScreenUtil.playSimpleUISound(SoundEvents.UI_BUTTON_CLICK.value(), 1.0f);
+		}
+	}
+
+	@Override
+	public boolean mouseClicked(double d, double e, int i) {
+		// 	panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24
+		//	panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 0, 0, 24, 24, 24, 24
+		Box2D selected = new Box2D(panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 24, 24);
+		if (selected.isMouseInside(d, e)) {
+			selectSkin();
+			return true;
+		}
+		Box2D favorited = new Box2D(panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 24, 24);
+		if (favorited.isMouseInside(d, e)) {
+			favorite();
+			return true;
+		}
+		return super.mouseClicked(d, e, i);
+	}
 
 	boolean handleDollInteraction(boolean left, boolean right) {
 		if (!(left || right)) return false;
