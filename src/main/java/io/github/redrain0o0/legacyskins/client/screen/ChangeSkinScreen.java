@@ -70,7 +70,7 @@ import static wily.legacy.client.screen.ControlTooltip.COMPOUND_ICON_FUNCTION;
 // TODO classic change skin screen
 public class ChangeSkinScreen extends PanelVListScreen implements Controller.Event, ControlTooltip.Event {
 	protected final Minecraft minecraft;
-	protected final Panel tooltipBox = Panel.tooltipBoxOf(panel, 350);
+	protected final Panel tooltipBox = Panel.tooltipBoxOf(panel, 350 + 50);
 	protected ScrollableRenderer scrollableRenderer = new ScrollableRenderer(new LegacyScrollRenderer());
 	private Pair<ResourceLocation, SkinCollection> focusedPack;
 	private PlayerSkinWidgetList playerSkinWidgetList;
@@ -543,7 +543,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 	@Override
 	protected void init() {
-		panel.height = Math.min(height, 290);
+		panel.height = Math.min(height, 297);
 		super.init();
 		panel.y = panel.y - 15;
 		if (firstOpen) {
