@@ -89,7 +89,7 @@ public class AuthScreen extends Screen {
 		}
 	}
 
-	private LegacyTip tip = new LegacyTip(Component.literal("NKVFHKHF")).centered();
+	private LegacyTip tip = new LegacyTip(Component.literal("TODO: ").append(Component.literal("Replace").withStyle(ChatFormatting.RED)).append(" this text before release!")).centered();
 	private void updateSkinPacks() {
 
 		LegacyLoadingScreen loadingScreen = new LegacyLoadingScreen(Component.literal("Downloading skin packs..."), Component.literal("...")) {
