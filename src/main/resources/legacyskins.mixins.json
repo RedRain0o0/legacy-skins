@@ -19,5 +19,7 @@
   "client": [
     "DefaultPlayerSkinAccessor",
     "NetHandlerMixin"
+    "NetHandlerMixin",
+    "OptionsMixin"
   ]
 }

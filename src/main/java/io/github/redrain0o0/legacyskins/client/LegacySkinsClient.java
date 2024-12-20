@@ -44,6 +44,8 @@ import java.util.function.Supplier;
 /*@EventBusSubscriber(/^? if !multientrypoints {^/ modid = Legacyskins.MOD_ID, /^?}^/ bus = EventBusSubscriber.Bus.MOD)
 *///?}
 public class LegacySkinsClient {
+	// used in a mixin
+	public static boolean singleFireAssortApply = false;
 	public void onInitializeClient() {
 		//? if fabric {
 		ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new LegacySkinPack.Manager());
