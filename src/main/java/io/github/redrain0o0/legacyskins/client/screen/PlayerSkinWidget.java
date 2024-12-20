@@ -70,6 +70,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 	private float scale = 1;
 	private float targetScale = Float.NEGATIVE_INFINITY;
 	private float prevScale = 0;
+	private boolean overrideVisible = true;
 
 	public PlayerSkinWidget(int width, int height, EntityModelSet entityModelSet, Supplier<SkinReference> supplier) {
 		super(0, 0, width, height, CommonComponents.EMPTY);
@@ -125,6 +126,10 @@ public class PlayerSkinWidget extends AbstractWidget {
 		//this.progress = 2;
 	}
 
+	public void overrideVisible(boolean overrideVisible) {
+		this.overrideVisible = overrideVisible;
+	}
+
 	boolean wasHidden = true;
 	public void invisible() {
 		this.wasHidden = true;
@@ -172,7 +177,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 		}
 		float x = progress;
 		// sin((2πx - π) / 2) + 1) / 2
-		float delta = Mth.sin(x*Mth.HALF_PI);//(Mth.sin((2 * Mth.PI * x - Mth.PI) / 2 + 1) / 2);
+		float delta = x;//Mth.sin(x*Mth.HALF_PI);//(Mth.sin((2 * Mth.PI * x - Mth.PI) / 2 + 1) / 2);
 		float nX = prevRotationX * (1 - delta) + targetRotationX * delta;
 		float nY = prevRotationY * (1 - delta) + targetRotationY * delta;
 		float nX2 = prevPosX * (1 - delta) + targetPosX * delta;
@@ -194,7 +199,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 	@Override
 	protected void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
 		interpolate(progress);
-		progress = (System.currentTimeMillis() - start) / 100f;
+		progress = (System.currentTimeMillis() - start) / 200f;
 		guiGraphics.pose().pushPose();
 		guiGraphics.pose().translate((float)this.getX() + (float)this.getWidth() / 2.0F, (float)(this.getY() + this.getHeight()), Z_OFFSET);
 		float g = (float)this.getHeight() / MODEL_HEIGHT;
