@@ -37,7 +37,9 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -146,11 +148,22 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			minecraft.setScreen(new AuthScreen(this));
 			return true;
 		}
+		if (keyCode == InputConstants.KEY_C && selectedSkinHasCreditsLink()) {
+			openCreditsLink();
+			return true;
+		}
 		if (control(keyCode == InputConstants.KEY_LBRACKET, keyCode == InputConstants.KEY_RBRACKET)) return true;
 		if (control(keyCode == InputConstants.KEY_LEFT, keyCode == InputConstants.KEY_RIGHT)) return true;
 		if (handleDollInteraction(keyCode == InputConstants.KEY_LSHIFT, keyCode == InputConstants.KEY_RSHIFT)) return true;
 		return super.keyPressed(keyCode,j,k);
 	} // 91 93
+
+	private void openCreditsLink() {
+		SkinReference skinReference = playerSkinWidgetList.element3.skinRef.get();
+
+		LegacySkin legacySkin = LegacySkinPack.list.get(skinReference.pack()).skins().get(skinReference.ordinal());
+		handleComponentClicked(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, legacySkin.creditsLink().get())));
+	}
 
 	private void selectSkin() {
 		if (this.playerSkinWidgetList != null) {
@@ -215,6 +228,11 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			minecraft.setScreen(new AuthScreen(this));
 			return;
 		}
+		if (state.is(ControllerBinding.START) && state.justPressed) {
+			openCreditsLink();
+			state.block();
+			return;
+		}
 		if (state.is(ControllerBinding.RIGHT_STICK) && state instanceof BindingState.Axis stick) {
 			if (this.playerSkinWidgetList != null) {
 				PlayerSkinWidget element3 = this.playerSkinWidgetList.element3;
@@ -252,8 +270,17 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		renderer.set(1, () -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_ESCAPE) : ControllerBinding.RIGHT_BUTTON.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.cancel"));
 		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.UP_BUTTON.bindingState.getIcon(), () -> Component.translatable(this.playerSkinWidgetList != null && Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get()) ? "legacyskins.menu.unfavorite" : "legacyskins.menu.favorite"));
 		renderer.add(() -> ControlType.getActiveType().isKbm() ? COMPOUND_ICON_FUNCTION.apply(new ControlTooltip.Icon[]{ControlTooltip.getKeyIcon(InputConstants.KEY_LEFT),ControlTooltip.SPACE_ICON,ControlTooltip.getKeyIcon(InputConstants.KEY_RIGHT)})  : ControllerBinding.LEFT_STICK.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.navigate"));
-		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_A) : ControllerBinding.LEFT_BUTTON.bindingState.getIcon(), () -> Component.literal("Download Skin Packs"));
+		renderer.add(() -> selectedSkinHasCreditsLink() ? (ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_C) : ControllerBinding.START.bindingState.getIcon()) : (ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_A) : ControllerBinding.LEFT_BUTTON.bindingState.getIcon()), () -> selectedSkinHasCreditsLink() ? Component.literal("Show Credits") : Component.literal("Download Skin Packs"));
 		//renderer.add(()-> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.LEFT_STICK.bindingState.getIcon(), ()-> null);
+	}
+
+	private boolean selectedSkinHasCreditsLink() {
+		if (playerSkinWidgetList == null) return false;
+		SkinReference skinReference = playerSkinWidgetList.element3.skinRef.get();
+
+		LegacySkin legacySkin = LegacySkinPack.list.get(skinReference.pack()).skins().get(skinReference.ordinal());
+		if (legacySkin == null) return false; // shouldn't happen
+		return legacySkin.creditsLink().isPresent();
 	}
 
 	@Override
