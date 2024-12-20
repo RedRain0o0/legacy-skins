@@ -239,7 +239,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			}
 			// this is definitely unfavorite
 			if (Constants.FAVORITES_PACK.equals(this.focusedPack.getFirst())) {
-				skinPack(playerSkinWidgetList.element4.skinRef.get().ordinal());
+				skinPack(this.focusedPack.getSecond().indexOf(playerSkinWidgetList.element4.skinRef.get()));
 			}
 			ScreenUtil.playSimpleUISound(SoundEvents.UI_BUTTON_CLICK.value(), 1.0f);
 		}
