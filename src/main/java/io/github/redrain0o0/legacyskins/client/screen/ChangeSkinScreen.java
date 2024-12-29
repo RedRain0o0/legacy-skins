@@ -153,14 +153,14 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 	@Override
 	public boolean mouseClicked(double d, double e, int i) {
-		// 	panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24
-		//	panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 0, 0, 24, 24, 24, 24
-		Box2D selected = new Box2D(panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 24, 24);
+		// 	tooltipBox.x + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24
+		//	tooltipBox.x + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 0, 0, 24, 24, 24, 24
+		Box2D selected = new Box2D(tooltipBox.x + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 24, 24);
 		if (selected.isMouseInside(d, e)) {
 			selectSkin();
 			return true;
 		}
-		Box2D favorited = new Box2D(panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 24, 24);
+		Box2D favorited = new Box2D(tooltipBox.x + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 24, 24);
 		if (favorited.isMouseInside(d, e)) {
 			favorite();
 			return true;
@@ -272,39 +272,39 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		/*ScreenUtil.renderDefaultBackground(guiGraphics, false);
 		*///?} else
 		ScreenUtil.renderDefaultBackground(wily.factoryapi.base.client.UIDefinition.Accessor.of(this), guiGraphics, false);
-		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.SKIN_PANEL, panel.x + panel.width - 10, panel.y + 7, tooltipBox.getWidth(), tooltipBox.getHeight() - 2);
-		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.PANEL_FILLER, panel.x + panel.width - 5, panel.y + 16 + tooltipBox.getHeight() - 80, tooltipBox.getWidth() - 14, 60);
-		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width - 1, panel.y + tooltipBox.getHeight() - 59, tooltipBox.getWidth() - 55, 55);
-		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
-		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 0, 0, 24, 24, 24, 24);
+		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.SKIN_PANEL, tooltipBox.x - 10, panel.y + 7, tooltipBox.getWidth(), tooltipBox.getHeight() - 2);
+		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.PANEL_FILLER, tooltipBox.x - 5, panel.y + 16 + tooltipBox.getHeight() - 80, tooltipBox.getWidth() - 14, 60);
+		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, tooltipBox.x - 1, panel.y + tooltipBox.getHeight() - 59, tooltipBox.getWidth() - 55, 55);
+		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), tooltipBox.x + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
+		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), tooltipBox.x + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 0, 0, 24, 24, 24, 24);
 		RenderSystem.enableBlend();
-		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.PACK_NAME_BOX, panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
-		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80);
+		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.PACK_NAME_BOX, tooltipBox.x - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
+		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.SKIN_BOX, tooltipBox.x - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80);
 		if (this.playerSkinWidgetList != null) {
 			// Responsible for drawing the selected skin icon and its background
 			if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
-				GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.of(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
+				GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.of(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), tooltipBox.x + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
 			}
 
 			// Responsible for drawing the favorites icon and its background
 			if (Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get())) {
 				//? if >=1.20.2 {
-				GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/container.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
-				GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/" + (hardcoreModeHearts ? "hardcore_" : "") + "full.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
+				GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/container.png"), tooltipBox.x + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
+				GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/" + (hardcoreModeHearts ? "hardcore_" : "") + "full.png"), tooltipBox.x + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
 				//?} else {
 				/*// Method params
 				// ResourceLocation atlasLocation, int x, int y, float uOffset, float vOffset, int width, int height, int textureWidth, int textureHeight
 				// ResourceLocation atlasLocation, int x, int y, int width, int height, float uOffset, float vOffset, int uWidth, int vHeight, int textureWidth, int textureHeight
-				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/icons.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 16, 16, 16, 0, 9, 9, 256, 256);
-				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/icons.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 16, 16, 52, hardcoreModeHearts ? 45 : 0, 9, 9, 256, 256);
+				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/icons.png"), tooltipBox.x + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 16, 16, 16, 0, 9, 9, 256, 256);
+				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/icons.png"), tooltipBox.x + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 16, 16, 52, hardcoreModeHearts ? 45 : 0, 9, 9, 256, 256);
 				*///?}
 			}
 
 			// Responsible for drawing the skin's name
 			{
 				guiGraphics.pose().pushPose();
-				// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
-				int x = panel.x + panel.width - 5;
+				// tooltipBox.x - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
+				int x = tooltipBox.x - 5;
 				int width = tooltipBox.getWidth() - 18;
 				int middle = x + width / 2;
 				guiGraphics.pose().translate(middle, panel.y + tooltipBox.getHeight() - 59 + 10, 0);
@@ -321,8 +321,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			if (I18n.exists("skin_pack.%s.%s.desc".formatted(rl.toLanguageKey(), reference.ordinal())))
 			{
 				guiGraphics.pose().pushPose();
-				// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
-				int x = panel.x + panel.width - 5;
+				// tooltipBox.x - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
+				int x = tooltipBox.x - 5;
 				int width = tooltipBox.getWidth() - 18;
 				int middle = x + width / 2;
 				guiGraphics.pose().translate(middle, panel.y + tooltipBox.getHeight() - 59 + 35, 0);
@@ -335,8 +335,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			// Responsible for drawing the skin pack's name
 			{
 				guiGraphics.pose().pushPose();
-				// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
-				int x = panel.x + panel.width - 5;
+				// tooltipBox.x - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
+				int x = tooltipBox.x - 5;
 				int width = tooltipBox.getWidth() - 18;
 				int middle = x + width / 2;
 				guiGraphics.pose().translate(middle, panel.y + 16 + 4 + 7, 0);
@@ -349,7 +349,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			{
 				if (focusedPack != null && LegacySkinPack.modrinthSkinPacks.contains(focusedPack.getFirst())) {
 					guiGraphics.pose().pushPose();
-					int x = panel.x + panel.width;
+					int x = tooltipBox.x;
 					int width = tooltipBox.getWidth() - 30;
 					int wHLogo = 30;
 					int placementX = x + width - wHLogo;
@@ -362,8 +362,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			// Responsible for drawing the skin pack type
 			if (this.focusedPack.getSecond().type() != LegacyPackType.DEFAULT) {
 				guiGraphics.pose().pushPose();
-				// panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
-				int x = panel.x + panel.width - 5;
+				// tooltipBox.x - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40
+				int x = tooltipBox.x - 5;
 				int width = tooltipBox.getWidth() - 18;
 				int middle = x + width / 2;
 				guiGraphics.pose().translate(middle, panel.y + 16 + 4 + 25, 0);
@@ -423,7 +423,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			guiGraphics.pose().popPose();
 		});
 
-		tooltipBox.init();
+		tooltipBox.init("tooltipBox");
 		// TODO, should the GUI api be able to touch this list?
 		getRenderableVList().init(/*? if legacy4j: <1.7.5 {*//*this*//*?} else {*/"renderableVList"/*?}*/, panel.x + 11, panel.y + 11 + 125 - 10 + 5 - 15, panel.width - 22, panel.height - 135 + 10 - 2 /*? if legacy4j: >=1.7.5 {*/- 20/*?}*/);
 	}
@@ -525,7 +525,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 		if (this.focusedPack != null) {
 			int quota = 10;
-			int x = (panel.x + panel.width);
+			int x = (tooltipBox.x);
 			int y = (panel.y + 45);
 			int width = (tooltipBox.getWidth() - 23);
 			int height = tooltipBox.getHeight() - 80 - 50 + 40;
