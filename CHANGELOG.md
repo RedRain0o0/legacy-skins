@@ -1,5 +1,7 @@
-- Added the **Creditors Pack**, this pack automatically contains all skins from all installed developer skin packs!
-- Added the `skin_pack_priorities.json` file, which can be used sort skin packs!
-- Temporarily removed the classic change skins screen.
-- Config migrations are now logged.
-- Errors during migrations now log an error in the console.
+- The skin pack's icon should now be better aligned to its outline
+- Added the ability to download skin packs straight from Modrinth in-game.
+- Resized some elements of the skins screen to better match with Legacy Console Edition.
+- Ported to Legacy4J 1.7.6 for 1.20.4, 1.21(.1), 1.21.3 (for Fabric), and 1.21.4. 1.20.1, 1.20.2, and 1.20.6 will still use Legacy4J 1.7.4.
+- Added credits functionality to skins.
+- The animation for switching skins is now linear and slower.
+- The selected and favorite icons are now clickable. (Useful for people that play with a touchscreen, such as players with a handheld PC.)
