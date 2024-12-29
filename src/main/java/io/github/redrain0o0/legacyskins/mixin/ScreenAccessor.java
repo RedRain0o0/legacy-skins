@@ -10,6 +10,6 @@ import java.util.List;
 @Mixin(Screen.class)
 public interface ScreenAccessor {
 	@SuppressWarnings("SpellCheckingInspection")
-	@Accessor
-	List<Renderable> getRenderables();
+	@Accessor("renderables")
+	List<Renderable> legacyskins$getRenderables();
 }

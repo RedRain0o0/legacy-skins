@@ -7,19 +7,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import wily.legacy.Legacy4J;
 import wily.legacy.Legacy4JClient;
 //? if neoforge {
-/*import wily.legacy.neoforge.Legacy4JForge;
-import wily.legacy.neoforge.Legacy4JForgeClient;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.loading.FMLLoader;
+/*import net.neoforged.fml.loading.FMLLoader;
+//? if legacy4j: <1.7.5
+/^import wily.legacy.neoforge.Legacy4JForgeClient;^/
 *///?} elif forge {
-/*import wily.legacy.forge.Legacy4JForgeClient;
+/*//? if legacy4j: <1.7.5
+/^import wily.legacy.forge.Legacy4JForgeClient;^/
 import net.minecraftforge.fml.loading.FMLLoader;
 *///?}
 
 @Mixin({
-		//? if neoforge || forge
-		/*Legacy4J.class, Legacy4JClient.class, Legacy4JForgeClient.class*/
-		//? if fabric
+		//? if neoforge || forge {
+		/*Legacy4J.class, Legacy4JClient.class /^? if legacy4j: <1.7.5 {^//^, Legacy4JForgeClient.class^//^?}^/
+		*///?} elif fabric
 		Legacy4J.class
 })
 public class Legacy4JForgeMixin {

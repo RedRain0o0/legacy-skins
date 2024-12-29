@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 public class Valuator {
 	public static final ConcurrentHashMap<String, Consumer<Double>> applier = new ConcurrentHashMap<>();
 	public static void startOnNewThread() {
+		if (true) return; // does not work well with data generation
 		new Thread(wrap(Valuator::start)).start();
 	}
 

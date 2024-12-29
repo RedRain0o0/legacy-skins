@@ -72,10 +72,10 @@ public class NonLegacy4JChangeSkinScreen extends Screen {
 	void skinPack(int index) {
 		this.queuedChangeSkinPack = false;
 		if (f != null) {
-			((ScreenAccessor)this).getRenderables().remove(f);
+			((ScreenAccessor)this).legacyskins$getRenderables().remove(f);
 		}
 		if (g != null) {
-			((ScreenAccessor)this).getRenderables().remove(g);
+			((ScreenAccessor)this).legacyskins$getRenderables().remove(g);
 		}
 		if (list != null) {
 			for (PlayerSkinWidget widget : list.widgets) {

@@ -12,6 +12,9 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map;
+//? if >=1.21.4
+import java.util.Optional;
+import java.util.function.Consumer;
 
 public class PlayerSkinUtils {
 	private static final Map<GameProfile, F> info = new HashMap<>();
@@ -21,9 +24,19 @@ public class PlayerSkinUtils {
 		//? if <=1.20.1 {
 		/*Minecraft.getInstance().getSkinManager().registerSkins(profile, f::onSkinTextureAvailable, false);
 		*///?} else
-		Minecraft.getInstance().getSkinManager().getOrLoad(profile).thenAcceptAsync(f::apply);
+		Minecraft.getInstance().getSkinManager().getOrLoad(profile).thenAcceptAsync(wrap(f::apply));
 		return f;
 	}
+
+	//? if >=1.21.4 {
+	private static Consumer<Optional<PlayerSkin>> wrap(Consumer<PlayerSkin> originalConsumer) {
+		return playerSkin -> originalConsumer.accept(playerSkin.orElse(null));
+	}
+	//?} elif >=1.20.2 {
+	/*private static Consumer<PlayerSkin> wrap(Consumer<PlayerSkin> originalConsumer) {
+		return originalConsumer;
+	}
+	*///?}
 
 	private static F of(GameProfile gameProfile) {
 		return info.computeIfAbsent(gameProfile, F::new);

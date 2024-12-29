@@ -27,6 +27,11 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
+//? if >=1.21.2 {
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.PlayerCapeModel;
+import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+//?}
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -297,16 +302,28 @@ public class PlayerSkinWidget extends AbstractWidget {
 	private long f = 0;
 	private State statf = State.STEAKING;
 
-	static record Model(PlayerModel<?> wideModel, PlayerModel<?> slimModel) {
+	static record Model(PlayerModel/*? if <1.21.2 {*//*<?>*//*?}*/ wideModel, PlayerModel/*? if <1.21.2 {*//*<?>*//*?}*/ slimModel /*? if >=1.21.3 {*/, PlayerCapeModel<?> playerCapeModel /*?}*/) {
 		public static PlayerSkinWidget.Model bake(EntityModelSet entityModelSet) {
-			PlayerModel<?> playerModel = new PlayerModel<>(entityModelSet.bakeLayer(ModelLayers.PLAYER), false);
-			PlayerModel<?> playerModel2 = new PlayerModel<>(entityModelSet.bakeLayer(ModelLayers.PLAYER_SLIM), true);
-			playerModel.young = false;
+			PlayerModel/*? if <1.21.2 {*//*<?>*//*?}*/ playerModel = new PlayerModel/*? if <1.21.2 {*//*<>*//*?}*/(entityModelSet.bakeLayer(ModelLayers.PLAYER), false);
+			PlayerModel/*? if <1.21.2 {*//*<?>*//*?}*/ playerModel2 = new PlayerModel/*? if <1.21.2 {*//*<>*//*?}*/(entityModelSet.bakeLayer(ModelLayers.PLAYER_SLIM), true);
+			//? if >=1.21.2 {
+			PlayerCapeModel<?> playerCapeModel = new PlayerCapeModel<>(entityModelSet.bakeLayer(ModelLayers.PLAYER_CAPE));
+			PlayerRenderState renderState = new PlayerRenderState();
+			((PlayerCapeModel) playerCapeModel).setupAnim(renderState);
+			//?} elif <1.21.2 {
+			/*playerModel.young = false;
 			playerModel2.young = false;
-			return new PlayerSkinWidget.Model(playerModel, playerModel2);
+			*///?}
+			return new PlayerSkinWidget.Model(playerModel, playerModel2 /*? if >=1.21.2 {*/, playerCapeModel/*?}*/);
 		}
 
 		public void render(@Nullable PlayerSkinWidget widget, GuiGraphics guiGraphics, LegacySkin playerSkin) {
+			//? if <1.21.2 {
+			/*render0(widget, guiGraphics, playerSkin, guiGraphics.bufferSource());
+			*///?} else
+			guiGraphics.drawSpecial(source -> render0(widget, guiGraphics, playerSkin, source));
+		}
+		private void render0(@Nullable PlayerSkinWidget widget, GuiGraphics guiGraphics, LegacySkin playerSkin, MultiBufferSource source) {
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(1.0F, 1.0F, -1.0F);
 			guiGraphics.pose().translate(0.0F, -1.5F, 0.0F);
@@ -315,7 +332,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 			PlayerSkinUtils.F skin = PlayerSkinUtils.skinOf(gameProfile);
 			ResourceLocation skinLoc = skin.skinLocation;
 			//Minecraft.getInstance().getSkinManager().
-			PlayerModel<?> playerModel = playerSkin == null ? skin.slim ? this.slimModel : this.wideModel : this.wideModel;
+			PlayerModel/*? if <1.21.2 {*//*<?>*//*?}*/ playerModel = playerSkin == null ? skin.slim ? this.slimModel : this.wideModel : this.wideModel;
 			IClientAPI.PlayerRenderer<net.minecraft.client.model.Model, ResourceLocation, RenderType, MultiBufferSource, GameProfile> renderer = null;
 			if (playerSkin != null) {
 				renderer = rendererHashMap.computeIfAbsent(playerSkin.hashCode() + "-temp", c -> {
@@ -337,14 +354,14 @@ public class PlayerSkinWidget extends AbstractWidget {
 				renderer.setRenderModel(playerModel);
 				renderer.setRenderType(RenderType::entityTranslucent);
 			}
-			setupAnim(widget, playerModel);
 			if (renderer != null) {
 				try {
-					renderer.preRender(guiGraphics.bufferSource(), AnimationEngine.AnimationMode.GUI);
+					renderer.preRender(source, AnimationEngine.AnimationMode.GUI);
 				} catch (Throwable t) {
 					Legacyskins.LOGGER.error("Error!", t);
 				}
 			}
+			setupAnim(widget, playerModel);
 			if(renderer == null || renderer.getDefaultTexture() != null) {
 				RenderType renderType = null;
 				if (renderer != null) {
@@ -352,7 +369,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 				} else {
 					renderType = playerModel.renderType(skinLoc);
 				}
-				playerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY/*? if <1.21 {*//*, 1.0F, 1.0F, 1.0F, 1.0F*//*?}*/);
+				playerModel.renderToBuffer(guiGraphics.pose(), source.getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY/*? if <1.21 {*//*, 1.0F, 1.0F, 1.0F, 1.0F*//*?}*/);
 				l:
 				if (renderer != null && renderer.getDefaultTexture() != null) {
 					//CapeLayerMixin
@@ -360,31 +377,41 @@ public class PlayerSkinWidget extends AbstractWidget {
 					if (renderer.getDefaultTexture().equals(((PlayerRendererImplAccessor) renderer).getTextureMap().get(playerModel))) break l;
 					RenderType capeRenderType = renderer.<net.minecraft.client.model.Model>getRenderTypeForSubModel(playerModel); //RenderType.entitySolid(playerSkin.cape().get().texture());
 					guiGraphics.pose().pushPose();
-					guiGraphics.pose().translate(0.0F, 0.0F, 0.125F);
+					/*? if <1.21.2*//*guiGraphics.pose().translate(0.0F, 0.0F, 0.125F);*/
 					PoseStack poseStack = guiGraphics.pose();
 					poseStack.mulPose(Axis.XP.rotationDegrees(6.0F + 0 / 2.0F + (widget != null && widget.statf == State.STEAKING ? 25.0F : 0)));
-					poseStack.mulPose(Axis.ZP.rotationDegrees(0 / 2.0F));
-					poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - 0 / 2.0F));
+					/*? if <1.21.2*//*poseStack.mulPose(Axis.ZP.rotationDegrees(0 / 2.0F));*/
+					/*? if <1.21.2*//*poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - 0 / 2.0F));*/
 					poseStack.mulPose(Axis.XP.rotation((float) ((Math.sin(System.currentTimeMillis() / 1000d) - 1) / 10f)));
 					if (widget != null && widget.statf == State.STEAKING) {
-						guiGraphics.pose().translate(0, 1.85F / 16, 1.4F / 16);
+						guiGraphics.pose().translate(0, 1.85F / 16, /*? if >=1.21.2 {*/0/*?} else {*//*1.4F / 16*//*?}*/);
 					}
-					playerModel.renderCloak(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(capeRenderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
+					//? if <1.21.2 {
+					/*playerModel.renderCloak
+					*///?} else
+					playerCapeModel.renderToBuffer
+							(guiGraphics.pose(), source.getBuffer(capeRenderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
 					guiGraphics.pose().popPose();
 				} else if (renderer == null) {
 					if (skin.capeLocation != null) {
 						RenderType capeRenderType = RenderType.entityTranslucent(skin.capeLocation); // even though Minecraft uses entitySolid, we use entityTranslucent because many cape mods make it translucent
 						guiGraphics.pose().pushPose();
-						guiGraphics.pose().translate(0.0F, 0.0F, 0.125F);
+						guiGraphics.pose().pushPose();
+						/*? if <1.21.2*//*guiGraphics.pose().translate(0.0F, 0.0F, 0.125F);*/
 						PoseStack poseStack = guiGraphics.pose();
 						poseStack.mulPose(Axis.XP.rotationDegrees(6.0F + 0 / 2.0F + (widget != null && widget.statf == State.STEAKING ? 25.0F : 0)));
-						poseStack.mulPose(Axis.ZP.rotationDegrees(0 / 2.0F));
-						poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - 0 / 2.0F));
+						/*? if <1.21.2*//*poseStack.mulPose(Axis.ZP.rotationDegrees(0 / 2.0F));*/
+					    /*? if <1.21.2*//*poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - 0 / 2.0F));*/
 						poseStack.mulPose(Axis.XP.rotation((float) ((Math.sin(System.currentTimeMillis() / 1000d) - 1) / 10f)));
 						if (widget != null && widget.statf == State.STEAKING) {
-							guiGraphics.pose().translate(0, 1.85F / 16, 1.4F / 16);
+							guiGraphics.pose().translate(0, 1.85F / 16, /*? if >=1.21.2 {*/0/*?} else {*//*1.4F / 16*//*?}*/);
 						}
-						playerModel.renderCloak(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(capeRenderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
+						//? if <1.21.2 {
+						/*playerModel.renderCloak
+						 *///?} else
+						playerCapeModel.renderToBuffer
+								(guiGraphics.pose(), source.getBuffer(capeRenderType), 0xf000f0, OverlayTexture.NO_OVERLAY);
+						guiGraphics.pose().popPose();
 						guiGraphics.pose().popPose();
 					}
 				}
@@ -395,7 +422,46 @@ public class PlayerSkinWidget extends AbstractWidget {
 			guiGraphics.pose().popPose();
 		}
 
-		public void setupAnim(@Nullable PlayerSkinWidget widget, PlayerModel<?> model) {
+		//? if >=1.21.2 {
+		public void setupNewAnim(@Nullable PlayerSkinWidget widget, PlayerModel model) {
+			long l = System.currentTimeMillis();
+			model.leftArm.zRot = (float) Math.toRadians(-5);
+			model.rightArm.zRot = (float) Math.toRadians(5);
+			model.leftArm.xRot = (float) Math.sin(l / 250d) / 5f;
+			model.leftLeg.xRot = (float) -Math.sin(l / 250d) / 5f;
+			model.rightArm.xRot = (float) -Math.sin(l / 250d) / 5f;
+			model.rightLeg.xRot = (float) Math.sin(l / 250d) / 5f;
+
+			if (widget != null && widget.statf == State.STEAKING) {
+				model.body.xRot = 0.5F;
+				model.rightArm.xRot += 0.4F;
+				model.leftArm.xRot += 0.4F;
+				model.rightLeg.z = 4.0F;
+				model.leftLeg.z = 4.0F;
+				model.rightLeg.y = 12.2F;
+				model.leftLeg.y = 12.2F;
+				model.head.y = 4.2F;
+				model.body.y = 3.2F;
+				model.leftArm.y = 5.2F;
+				model.rightArm.y = 5.2F;
+			} else {
+				model.body.xRot = 0.0F;
+				model.rightLeg.z = 0.0F;
+				model.leftLeg.z = 0.0F;
+				model.rightLeg.y = 12.0F;
+				model.leftLeg.y = 12.0F;
+				model.head.y = 0.0F;
+				model.body.y = 0.0F;
+				model.leftArm.y = 2.0F;
+				model.rightArm.y = 2.0F;
+			}
+			model.copyPropertiesTo((HumanoidModel<PlayerRenderState>) playerCapeModel);
+		}
+		//?}
+
+		public void setupAnim(@Nullable PlayerSkinWidget widget, PlayerModel/*? if <1.21.2 {*//*<?>*//*?}*/ model) {
+			//? if >=1.21.2
+			if (true) { setupNewAnim(widget, model); return; }
 			long l = System.currentTimeMillis();
 			model.leftArm.zRot = (float) Math.toRadians(-5);
 			model.rightArm.zRot = (float) Math.toRadians(5);
@@ -430,6 +496,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 				model.rightArm.y = 2.0F;
 			}
 
+			/*
 			if (widget != null && widget.statf == State.PCFVUCING) {
 //				int i = this.getCurrentSwingDuration();
 //		if (this.swinging) {
@@ -463,6 +530,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 				//model.leftArm.xRot = 0;
 				model.leftArm.yRot = 0;
 			}
+			 */
 
 			model.leftPants.copyFrom(model.leftLeg);
 			model.rightPants.copyFrom(model.rightLeg);
@@ -474,37 +542,38 @@ public class PlayerSkinWidget extends AbstractWidget {
 			//model.setupAttackAnimation()
 		}
 
-		protected void setupAttackAnimation(PlayerModel<?> model, float f) {
-			if (!(model.attackTime <= 0.0F)) {
-				//AbstractClientPlayer
-				HumanoidArm humanoidArm = HumanoidArm.RIGHT;
-				//noinspection ConstantValue
-				ModelPart modelPart = humanoidArm == HumanoidArm.RIGHT ? model.rightArm : model.leftArm;
-				float g = model.attackTime;
-				model.body.yRot = Mth.sin(Mth.sqrt(g) * (float) (Math.PI * 2)) * 0.2F;
-				//noinspection ConstantValue
-				if (humanoidArm == HumanoidArm.LEFT) {
-					model.body.yRot *= -1.0F;
-				}
 
-				model.rightArm.z = Mth.sin(model.body.yRot) * 5.0F;
-				model.rightArm.x = -Mth.cos(model.body.yRot) * 5.0F;
-				model.leftArm.z = -Mth.sin(model.body.yRot) * 5.0F;
-				model.leftArm.x = Mth.cos(model.body.yRot) * 5.0F;
-				model.rightArm.yRot = model.rightArm.yRot + model.body.yRot;
-				model.leftArm.yRot = model.leftArm.yRot + model.body.yRot;
-				model.leftArm.xRot = model.leftArm.xRot + model.body.yRot;
-				g = 1.0F - model.attackTime;
-				g *= g;
-				g *= g;
-				g = 1.0F - g;
-				float h = Mth.sin(g * (float) Math.PI);
-				float i = Mth.sin(model.attackTime * (float) Math.PI) * -(model.head.xRot - 0.7F) * 0.75F;
-				modelPart.xRot -= h * 1.2F + i;
-				modelPart.yRot = modelPart.yRot + model.body.yRot * 2.0F;
-				modelPart.zRot = modelPart.zRot + Mth.sin(model.attackTime * (float) Math.PI) * -0.4F;
-			}
-		}
+//		protected void setupAttackAnimation(PlayerModel/*? if <1.21.2 {*//*<?>*//*?}*/ model, float f) {
+//			if (!(model.attackTime <= 0.0F)) {
+//				//AbstractClientPlayer
+//				HumanoidArm humanoidArm = HumanoidArm.RIGHT;
+//				//noinspection ConstantValue
+//				ModelPart modelPart = humanoidArm == HumanoidArm.RIGHT ? model.rightArm : model.leftArm;
+//				float g = model.attackTime;
+//				model.body.yRot = Mth.sin(Mth.sqrt(g) * (float) (Math.PI * 2)) * 0.2F;
+//				//noinspection ConstantValue
+//				if (humanoidArm == HumanoidArm.LEFT) {
+//					model.body.yRot *= -1.0F;
+//				}
+//
+//				model.rightArm.z = Mth.sin(model.body.yRot) * 5.0F;
+//				model.rightArm.x = -Mth.cos(model.body.yRot) * 5.0F;
+//				model.leftArm.z = -Mth.sin(model.body.yRot) * 5.0F;
+//				model.leftArm.x = Mth.cos(model.body.yRot) * 5.0F;
+//				model.rightArm.yRot = model.rightArm.yRot + model.body.yRot;
+//				model.leftArm.yRot = model.leftArm.yRot + model.body.yRot;
+//				model.leftArm.xRot = model.leftArm.xRot + model.body.yRot;
+//				g = 1.0F - model.attackTime;
+//				g *= g;
+//				g *= g;
+//				g = 1.0F - g;
+//				float h = Mth.sin(g * (float) Math.PI);
+//				float i = Mth.sin(model.attackTime * (float) Math.PI) * -(model.head.xRot - 0.7F) * 0.75F;
+//				modelPart.xRot -= h * 1.2F + i;
+//				modelPart.yRot = modelPart.yRot + model.body.yRot * 2.0F;
+//				modelPart.zRot = modelPart.zRot + Mth.sin(model.attackTime * (float) Math.PI) * -0.4F;
+//			}
+//		}
 
 //		void a() {
 //			IClientAPI.LocalModel localModel = CPMCompat.loadModel(playerSkin.hashCode() + "-temp", LegacySkinUtils.from(playerSkin));

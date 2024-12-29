@@ -27,9 +27,14 @@ project.ext["loom.platform"] = loader.friendlyName
 version = project.mod_version + "+" + loader.friendlyName + "+" + minecraftVersion
 group = project.maven_group
 
-String l4jVerStr = project.legacy4j_version as String
-apply plugin: 'dev.architectury.loom'
-stonecutter.dependency("legacy4j", l4jVerStr.substring(l4jVerStr.indexOf("-") + 1))
+String l4jVerStr
+if (project.legacy4j_repo_version != "[VERSIONED]") {
+	l4jVerStr = project.legacy4j_repo_version as String
+} else l4jVerStr = project.legacy4j_version as String
+String legacy4jVersionStr = l4jVerStr.substring(l4jVerStr.indexOf("-") + 1)
+if (legacy4jVersionStr.contains("rc")) legacy4jVersionStr = legacy4jVersionStr.replace("-rc", ".9999.")
+apply plugin: 'dev.architectury.loom' // stonecutter.compare(mcVersion, "1.21") >= 0
+stonecutter.dependency("legacy4j", legacy4jVersionStr)
 stonecutter.const("fabric", loader == FABRIC)
 stonecutter.const("forge", loader == FORGE)
 stonecutter.const("neoforge", loader == NEOFORGE)
@@ -40,14 +45,15 @@ stonecutter.const("yacl", project.yacl_version != "[VERSIONED]")
 stonecutter.const("clothconfig", project.clothconfig_version != "[VERSIONED]")
 
 stonecutter.swap("l4joptionsscreen") {
-	if (stonecutter.eval(l4jVerStr.substring(l4jVerStr.indexOf("-") + 1), ">=1.7.5")) "HelpAndOptionsScreen" else "HelpOptionsScreen"
+	if (stonecutter.eval(legacy4jVersionStr, ">=1.7.5")) "HelpAndOptionsScreen" else "HelpOptionsScreen"
 }
+boolean neoforgeClientDatagen = minecraftIntVersion >= 1_21_04
 
 stonecutter.swap("userAgent") {
 	"\"RedRainOoO/legacy-skins/" + version + "\""
 }
 base {
-	archivesName = project.archives_base_name
+	archivesName = project.archives_base_name + (stonecutter.compare(legacy4jVersionStr, "1.7.4") > 0 ? "x" : "")
 }
 
 def packageJar = tasks.create("packageJar", Copy.class) {
@@ -111,7 +117,25 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	compileOnly "com.tom5454.cpm:CustomPlayerModels-API:${project.cpm_api_version}"
 	modImplementation "com.tom5454.cpm:CustomPlayerModels${loader == FORGE ? "" : "-" /* ... */}${loader == NEOFORGE ? "" : "${project.cpm_loader}-"}${project.cpm_mc_version}:${project.cpm_runtime_version}"
-	modImplementation "maven.modrinth:legacy4j:${project.legacy4j_version}"
+	if (project.legacy4j_repo_version != "[VERSIONED]") {
+		modImplementation "wily.legacy:legacy-${loader.friendlyName}:${project.legacy4j_repo_version}", {
+			transitive = false
+		}
+	} else {
+		modImplementation "maven.modrinth:legacy4j:${project.legacy4j_version}"
+	}
+	if (project.factoryapi_repo_version != "[VERSIONED]") {
+		modImplementation "wily.factory_api:factory_api-${loader.friendlyName}:${project.factoryapi_repo_version}", {
+			transitive = false
+		}
+	} else if (project.factoryapi_version != "[VERSIONED]") {
+		modImplementation "maven.modrinth:nkTZHOLD:${project.factoryapi_version}+${loader.friendlyName}"
+	}
+	if (project.reborn_energy_version != "[VERSIONED]") {
+		modImplementation "teamreborn:energy:${project.reborn_energy_version}", {
+			transitive = false
+		}
+	}
 	api "dev.isxander:libsdl4j:${project.libsdl4j_version}"
 	if (loader.isForgeLike()) {
 		 forgeRuntimeLibrary "dev.isxander:libsdl4j:${project.libsdl4j_version}"
@@ -167,18 +191,26 @@ test {
 
 if (loader == FABRIC) {
 	fabricApi {
-		configureDataGeneration()
+		configureDataGeneration {
+			client = true
+		}
+	}
+	afterEvaluate {
+		loom.getRunConfigs().maybeCreate("datagen").property("fabric.debug.disableModIds", "legacy,factory_api,cpm")
 	}
 } else if (loader.isForgeLike()) {
 	loom {
 		afterEvaluate {
 			runs {
 				datagen {
-					data()
+					if (loader == NEOFORGE && neoforgeClientDatagen) {
+						clientData()
+					} else data()
 					programArg "--mod"
 					programArg "legacyskins"
 					programArg "--output"
 					programArg getProject().file("src/main/generated").toPath().toAbsolutePath().toString()
+					property "ignoreList", "mixinextras-neoforge-0.4.1.jar,main,client-extra,neoforge-"
 				}
 			}
 		}
@@ -340,5 +372,13 @@ publishMods {
 		}
 		requires("legacy-minecraft")
 		requires("custom-player-models")
+	}
+}
+
+task("copyDependencyOverrides").doLast {
+	if (loader == FABRIC) {
+		var f = project.layout.buildDirectory.get().asFile.toPath().resolve("datagen/config")
+		f.toFile().mkdirs()
+		Files.copy(rootProject.file("fabric_loader_dependencies.json").toPath(), f.resolve("fabric_loader_dependencies.json"), StandardCopyOption.REPLACE_EXISTING)
 	}
 }

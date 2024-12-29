@@ -1,6 +1,7 @@
 package io.github.redrain0o0.legacyskins.util;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 
 //? if <=1.20.4 {
@@ -46,4 +47,11 @@ public enum VersionUtils {
 		return Codec.withAlternative(primary, alternative);
 	}
 	//?}
+
+	public static void schedule(Runnable runnable) {
+		//? if <1.21.2 {
+		/*Minecraft.getInstance().tell(runnable);
+		*///?} else
+		Minecraft.getInstance().schedule(runnable);
+	}
 }

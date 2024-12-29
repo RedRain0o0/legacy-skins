@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "overrides": {
+    "legacy": {
+      "-depends": {
+        "fabric": "IGNORED"
+      }
+    },
+    "cpm": {
+      "-depends": {
+        "fabric-api": "IGNORED"
+      }
+    },
+    "legacyskins": {
+      "depends": {}
+    }
+  }
+}

@@ -6,7 +6,9 @@ import io.github.redrain0o0.legacyskins.client.screen.ChangeSkinScreen;
 import io.github.redrain0o0.legacyskins.modrinth.ModrinthOauth;
 import io.github.redrain0o0.legacyskins.modrinth.ModrinthSkinPackCollection;
 import io.github.redrain0o0.legacyskins.modrinth.data.ModrinthDataObjects;
+import io.github.redrain0o0.legacyskins.util.Legacy4JUtils;
 import io.github.redrain0o0.legacyskins.util.TriConsumer;
+import io.github.redrain0o0.legacyskins.util.VersionUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -53,14 +55,15 @@ public class AuthScreen extends Screen {
 
 	public void signIntoModrinthAccount() {
 		LegacyLoadingScreen screen = new LegacyLoadingScreen(Component.literal("..."), Component.literal("..."));
-		screen.genericLoading = true;
+		Legacy4JUtils.LegacyLoadingScreenInterface screenInterface = Legacy4JUtils.loadingScreen(screen);
+		screenInterface.setGenericLoading(true);
 		assert minecraft != null;
 		minecraft.setScreen(screen);
 		ModrinthOauth.callbackInfo = (a, b) -> {
-			screen.lastLoadingHeader = Component.literal(a + "");
-			screen.lastLoadingStage = Component.literal(b);
+			screenInterface.setLoadingHeader(Component.literal(a + ""));
+			screenInterface.setLoadingStage(Component.literal(b));
 			if (a == ModrinthOauth.Status.SERVER_CLOSED) {
-				minecraft.tell(() -> minecraft.setScreen(this));
+				VersionUtils.schedule(() -> minecraft.setScreen(this));
 				ModrinthOauth.callbackInfo = (c, d) -> {}; // stop memory leak
 			} else if (a == ModrinthOauth.Status.SERVER_STARTED) {
 				Util.getPlatform().openUri(ModrinthOauth.OAUTH_URL);
@@ -98,12 +101,13 @@ public class AuthScreen extends Screen {
 				return tip;
 			}
 		};
+		Legacy4JUtils.LegacyLoadingScreenInterface screenInterface = Legacy4JUtils.loadingScreen(loadingScreen);
 		TriConsumer<String, String, Double> triConsumer = (a, b, c) -> {
-			if (a != null) loadingScreen.lastLoadingHeader = Component.literal(a);
-			if (b != null) loadingScreen.lastLoadingStage = Component.literal(b);
-			if (c != null) loadingScreen.progress = (int) (c * 100);
+			if (a != null) screenInterface.setLoadingHeader(Component.literal(a));
+			if (b != null) screenInterface.setLoadingStage(Component.literal(b));
+			if (c != null) screenInterface.setProgress((int) (c * 100));
 		};
-		Runnable finish = () -> minecraft.tell(() -> {
+		Runnable finish = () -> VersionUtils.schedule(() -> {
 			this.replaceParent = true;
 			minecraft.setScreen(this);
 		});

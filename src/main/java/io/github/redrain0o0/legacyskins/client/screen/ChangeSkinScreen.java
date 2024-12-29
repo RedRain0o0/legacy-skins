@@ -18,6 +18,7 @@ import io.github.redrain0o0.legacyskins.client.util.EasterEggUtils;
 import io.github.redrain0o0.legacyskins.client.util.SkinCollection;
 import io.github.redrain0o0.legacyskins.mixin.legacy4j.RenderableVListAccessor;
 import io.github.redrain0o0.legacyskins.mixin.ScreenAccessor;
+import io.github.redrain0o0.legacyskins.util.GuiGraphicsUtils;
 import io.github.redrain0o0.legacyskins.util.Legacy4JUtils;
 import io.github.redrain0o0.legacyskins.util.LegacySkinSprites;
 import io.github.redrain0o0.legacyskins.util.VersionUtils;
@@ -85,7 +86,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		hardcoreModeHearts = EasterEggUtils.isHardcoreMode();
 		renderableVList.layoutSpacing(l -> 0);
 		minecraft = Minecraft.getInstance();
-		//int[] index = new int[]{0};
 		LegacySkinPack.list.forEach((id, pack) -> {
 			if (pack.type() == LegacyPackType.DEV && !Legacyskins.INSTANCE.showDevPacks() && !Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)).pack().equals(id)) return;
 			SkinCollection collection = SkinCollection.ofSkinPack(pack);
@@ -110,27 +110,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			renderableVList.addRenderable(button);
 		});
 		openToCurrentSkin();
-		// this.focusedPack = Pair.of(id, pack);
-		//				skinPack();
-//		for (LegacySkinPack legacySkinPack : LegacySkinPack.list.entrySet()) {
-//			renderableVList.addRenderable(Button.builder(Component.translatable(legacySkinPack)))
-//		}
-//        list.forEach(s-> renderableVList.addRenderable(new AbstractButton(0,0,260,22, Component.translatable(s.buttonName().getString())) {
-//            @Override
-//            public void onPress() {
-//                if (isFocused()) {
-//					for (LegacySkinPack legacySkinPack : LegacySkinPack.list) {
-//						System.out.println("Clicked");
-//						Minecraft.getInstance().getToasts().addToast(new LegacyTip(Component.literal(legacySkinPack.skins().get(0).toString())));
-//						LegacySkinUtils.switchSkin(legacySkinPack.skins().get(0));
-//					}
-//                }
-//            }
-//            @Override
-//            protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-//                defaultButtonNarrationText(narrationElementOutput);
-//            }
-//        }));
 	}
 
 	@Override
@@ -265,9 +244,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 	@Override
 	public void addControlTooltips(ControlTooltip.Renderer renderer) {
-		super.addControlTooltips(renderer);
-		renderer.set(0, () -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_RETURN) : ControllerBinding.DOWN_BUTTON.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.select_skin"));
-		renderer.set(1, () -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_ESCAPE) : ControllerBinding.RIGHT_BUTTON.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.cancel"));
+		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_RETURN) : ControllerBinding.DOWN_BUTTON.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.select_skin"));
+		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_ESCAPE) : ControllerBinding.RIGHT_BUTTON.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.cancel"));
 		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.UP_BUTTON.bindingState.getIcon(), () -> Component.translatable(this.playerSkinWidgetList != null && Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get()) ? "legacyskins.menu.unfavorite" : "legacyskins.menu.favorite"));
 		renderer.add(() -> ControlType.getActiveType().isKbm() ? COMPOUND_ICON_FUNCTION.apply(new ControlTooltip.Icon[]{ControlTooltip.getKeyIcon(InputConstants.KEY_LEFT),ControlTooltip.SPACE_ICON,ControlTooltip.getKeyIcon(InputConstants.KEY_RIGHT)})  : ControllerBinding.LEFT_STICK.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.navigate"));
 		renderer.add(() -> selectedSkinHasCreditsLink() ? (ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_C) : ControllerBinding.START.bindingState.getIcon()) : (ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_A) : ControllerBinding.LEFT_BUTTON.bindingState.getIcon()), () -> selectedSkinHasCreditsLink() ? Component.literal("Show Credits") : Component.literal("Download Skin Packs"));
@@ -290,27 +268,29 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			queuedChangeSkinPack = false;
 			skinPack();
 		}
-		ScreenUtil.renderDefaultBackground(guiGraphics, false);
-		p(guiGraphics).blitSprite(LegacySkinSprites.SKIN_PANEL, panel.x + panel.width - 10, panel.y + 7, tooltipBox.getWidth(), tooltipBox.getHeight() - 2);
-		p(guiGraphics).blitSprite(LegacySkinSprites.PANEL_FILLER, panel.x + panel.width - 5, panel.y + 16 + tooltipBox.getHeight() - 80, tooltipBox.getWidth() - 14, 60);
-		p(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width - 1, panel.y + tooltipBox.getHeight() - 59, tooltipBox.getWidth() - 55, 55);
-		guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
-		guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 0, 0, 24, 24, 24, 24);
-		//guiGraphics.blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 24, 24);
+		//? if legacy4j: <1.7.5 {
+		/*ScreenUtil.renderDefaultBackground(guiGraphics, false);
+		*///?} else
+		ScreenUtil.renderDefaultBackground(wily.factoryapi.base.client.UIDefinition.Accessor.of(this), guiGraphics, false);
+		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.SKIN_PANEL, panel.x + panel.width - 10, panel.y + 7, tooltipBox.getWidth(), tooltipBox.getHeight() - 2);
+		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.PANEL_FILLER, panel.x + panel.width - 5, panel.y + 16 + tooltipBox.getHeight() - 80, tooltipBox.getWidth() - 14, 60);
+		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + panel.width - 1, panel.y + tooltipBox.getHeight() - 59, tooltipBox.getWidth() - 55, 55);
+		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
+		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 0, 0, 24, 24, 24, 24);
 		RenderSystem.enableBlend();
-		p(guiGraphics).blitSprite(LegacySkinSprites.PACK_NAME_BOX, panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
-		p(guiGraphics).blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80);
+		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.PACK_NAME_BOX, panel.x + panel.width - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
+		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.SKIN_BOX, panel.x + panel.width - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80);
 		if (this.playerSkinWidgetList != null) {
 			// Responsible for drawing the selected skin icon and its background
 			if (this.playerSkinWidgetList.element3.skinRef.get().equals(Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(new SkinReference(Constants.DEFAULT_PACK, 0)))) {
-				guiGraphics.blit(VersionUtils.of(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
+				GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.of(Legacy4J.MOD_ID, "textures/gui/sprites/container/beacon_check.png"), panel.x + panel.width + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
 			}
 
 			// Responsible for drawing the favorites icon and its background
 			if (Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get())) {
 				//? if >=1.20.2 {
-				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/container.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
-				guiGraphics.blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/" + (hardcoreModeHearts ? "hardcore_" : "") + "full.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
+				GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/container.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
+				GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.ofMinecraft("textures/gui/sprites/hud/heart/" + (hardcoreModeHearts ? "hardcore_" : "") + "full.png"), panel.x + panel.width + tooltipBox.getWidth() - 50 + 4, panel.y + tooltipBox.getHeight() - 60 + 30 + 4, 0, 0, 16, 16, 16, 16);
 				//?} else {
 				/*// Method params
 				// ResourceLocation atlasLocation, int x, int y, float uOffset, float vOffset, int width, int height, int textureWidth, int textureHeight
@@ -397,25 +377,6 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			}
 		}
 		RenderSystem.disableBlend();
-
-		//RenderSystem.enableScissor(panel.x + panel.width - 2, panel.y + 16, tooltipBox.getWidth() - 18, tooltipBox.getHeight() - 80);
-
-			/*
-			if (false) {
-				LayerDefinition layerDefinition = LayerDefinitions.createRoots().get(ModelLayers.PLAYER);
-				PlayerModel<LivingEntity> livingEntityPlayerModel = new PlayerModel<>(layerDefinition.bakeRoot(), false);
-				RenderType renderType = livingEntityPlayerModel.renderType(VersionUtils.parse("minecraft:textures/entity/player/wide/steve.png"));
-				guiGraphics.pose().pushPose();
-				guiGraphics.pose().scale(100, 100, 100);
-				guiGraphics.pose().scale(1, 1, -1);
-				guiGraphics.pose().mulPose(new Quaternionf().rotationXYZ((float) Math.toRadians(180), 0, 0));
-				guiGraphics.pose().mulPose((new Quaternionf()).rotationXYZ(0.43633232F, (float) Math.toRadians(System.currentTimeMillis() % 360), 3.1415927F));
-				Lighting.setupForEntityInInventory();
-				livingEntityPlayerModel.renderToBuffer(guiGraphics.pose(), guiGraphics.bufferSource().getBuffer(renderType), 0xf000f0, OverlayTexture.NO_OVERLAY/^, 1, 1, 1, 1^/);
-				Lighting.setupFor3DItems();
-				guiGraphics.pose().popPose();
-			}
-		    */
 	}
 
 	private int k;
@@ -436,23 +397,21 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 
 	@Override
 	public void renderableVListInit() {
-		addRenderableOnly(((guiGraphics, i, j, f) -> p(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + 7, panel.y + 7 + 130 - 8, panel.width - 14, panel.height - 14 - 135 + 1 + 8)));
-		addRenderableOnly(((guiGraphics, i, j, f) -> p(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + 34, panel.y + 10, 112, 112)));
+		addRenderableOnly(((guiGraphics, i, j, f) -> GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + 7, panel.y + 7 + 130 - 8, panel.width - 14, panel.height - 14 - 135 + 1 + 8)));
+		addRenderableOnly(((guiGraphics, i, j, f) -> GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, panel.x + 34, panel.y + 10, 112, 112)));
 		addRenderableOnly((guiGraphics, i, j, f) -> {
 			if (this.focusedPack == null) return;
 			ResourceLocation icon = EasterEggUtils.processIconId(this.focusedPack.getSecond().icon());
 			// x, y, u, v, width, height, texWidth, texHeight?
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().translate(panel.x + 35.3, panel.y + 11.3, 0);
-			guiGraphics.blit(icon, 0, 0, 0, 0, 109, 109, 109, 109);
+			GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(icon, 0, 0, 0, 0, 109, 109, 109, 109);
 			guiGraphics.pose().popPose();
 		});
-		//addRenderableOnly(ChangeSkinScreen::renderDolls);
-
-		//playerSkinWidgetList = PlayerSkinWidgetList.of(this.focusedPack.getSecond().skins().stream().map(a -> new PlayerSkinWidget(85, 120, this.minecraft.getEntityModels(), () -> a))).toArray(PlayerSkinWidget[]::new));
 
 		tooltipBox.init();
-		getRenderableVList().init(this, panel.x + 11, panel.y + 11 + 125 - 10 + 5 - 15, panel.width - 22, panel.height - 135 + 10 - 2 /*? if legacy4j: >=1.7.5 {*//*- 20*//*?}*/);
+		// TODO, should the GUI api be able to touch this list?
+		getRenderableVList().init(/*? if legacy4j: <1.7.5 {*//*this*//*?} else {*/"renderableVList"/*?}*/, panel.x + 11, panel.y + 11 + 125 - 10 + 5 - 15, panel.width - 22, panel.height - 135 + 10 - 2 /*? if legacy4j: >=1.7.5 {*/- 20/*?}*/);
 	}
 
 
@@ -473,13 +432,25 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			this.setFocused(this.buttons.get(focusedPack.getFirst()));
 		}
 	}
-	
+
 	@SuppressWarnings("LoggingSimilarMessage" /* Fix when it stops working */)
 	void ix() {
-		ProfilerFiller profiler = this.minecraft.getProfiler();
+		//? if <1.21.2 {
+		/*ProfilerFiller profiler = this.minecraft.getProfiler();
+		*///?} else {
+		// TODO profiler
+		var profiler = new Object() {
+			void push(Supplier<String> supplier) {
+
+			}
+			void pop() {
+
+			}
+		};
+		//?}
 		Logger logger = Legacyskins.LOGGER;
 		Renderable renderable = this.buttons.get(focusedPack.getFirst());
-		for (Renderable renderable1 : ((ScreenAccessor) this).getRenderables()) {
+		for (Renderable renderable1 : ((ScreenAccessor) this).legacyskins$getRenderables()) {
 			if (renderable1 instanceof Button button) {
 				logger.debug("Button found: {}", button.getMessage().getString());
 			}
@@ -525,17 +496,19 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 	Renderable g;
 	void skinPack(int index) {
 		this.queuedChangeSkinPack = false;
+		// Clear up the 2 scissors, as well as all the dolls
 		if (f != null) {
-			((ScreenAccessor)this).getRenderables().remove(f);
+			((ScreenAccessor)this).legacyskins$getRenderables().remove(f);
 		}
 		if (g != null) {
-			((ScreenAccessor)this).getRenderables().remove(g);
+			((ScreenAccessor)this).legacyskins$getRenderables().remove(g);
 		}
 		if (playerSkinWidgetList != null) {
 			for (PlayerSkinWidget widget : playerSkinWidgetList.widgets) {
 				removeWidget(widget);
 			}
 		}
+
 		if (this.focusedPack != null) {
 			int quota = 10;
 			int x = (panel.x + panel.width);
@@ -555,7 +528,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 					quota--;
 				}
 			}
-			
+
 			if (quota > 0) {
 				playerSkinWidgetList = null;
 			} else {

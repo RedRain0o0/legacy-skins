@@ -53,7 +53,7 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 	//? if neoforge || forge
 	/*public static class Manager extends SimplePreparableReloadListener<Map<ResourceLocation, LegacySkinPack>> {*/
 		@Override
-		public /*? if fabric {*/ CompletableFuture< /*?}*/ Map<ResourceLocation, LegacySkinPack> /*? if fabric {*/ > load /*?} else if neoforge || forge {*/ /*prepare *//*?}*/(ResourceManager resourceManager, ProfilerFiller profiler /*? if fabric {*/, Executor executor /*?}*/) {
+		public /*? if fabric {*/ CompletableFuture< /*?}*/ Map<ResourceLocation, LegacySkinPack> /*? if fabric {*/ > load /*?} else if neoforge || forge {*/ /*prepare *//*?}*/(ResourceManager resourceManager /*? if <1.21.2 || neoforge {*//*, ProfilerFiller profiler *//*?}*//*? if fabric {*/, Executor executor /*?}*/) {
 			//? if fabric {
 			return CompletableFuture.supplyAsync(() -> {
 				return loadPacksFromResourceManager(resourceManager);
@@ -113,7 +113,7 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 		// addFirst does not exist before Java 21
 		@SuppressWarnings("SequencedCollectionMethodCanBeUsed")
 		@Override
-		public /*? if fabric {*/ CompletableFuture<Void> /*?} else if neoforge || forge {*/ /*void *//*?}*/ apply(Map<ResourceLocation, LegacySkinPack> data, ResourceManager manager, ProfilerFiller profiler /*? if fabric {*/ , Executor executor /*?}*/) {
+		public /*? if fabric {*/ CompletableFuture<Void> /*?} else if neoforge || forge {*/ /*void *//*?}*/ apply(Map<ResourceLocation, LegacySkinPack> data, ResourceManager manager/*? if <1.21.2 || neoforge {*//*, ProfilerFiller profiler *//*?}*//*? if fabric {*/ , Executor executor /*?}*/) {
 			LegacySkinUtils.cleanup();
 			list.clear();
 			// The default skin

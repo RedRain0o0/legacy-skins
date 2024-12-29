@@ -8,6 +8,12 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import java.util.List;
 import java.util.Set;
 
+//? if neoforge {
+/*import net.neoforged.fml.loading.FMLLoader;
+*///?} elif forge {
+/*import net.minecraftforge.fml.loading.FMLLoader;
+ *///?}
+
 public class LegacySkinsMixinPlugin implements IMixinConfigPlugin {
 	private boolean legacyLoaded;
 	@Override
@@ -23,7 +29,12 @@ public class LegacySkinsMixinPlugin implements IMixinConfigPlugin {
 	@SuppressWarnings("SpellCheckingInspection")
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		return mixinClassName.contains("nonlegacy4j") ? !legacyLoaded : mixinClassName.contains("legacy4j") && legacyLoaded;
+		//? if legacy4j: >=1.7.5 && (forge || neoforge) {
+		/*if (!FMLLoader.launcherHandlerName().contains("data")) {
+			if (mixinClassName.contains("Legacy4JClientMixin")) return false;
+		}
+		*///?}
+		return mixinClassName.contains("nonlegacy4j") ? !legacyLoaded : !mixinClassName.contains("legacy4j") || legacyLoaded;
 	}
 
 	@Override

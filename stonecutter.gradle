@@ -1,10 +1,10 @@
 plugins {
 	id "dev.kikugie.stonecutter"
-	id "dev.architectury.loom" version "1.7-SNAPSHOT" apply false
+	id "dev.architectury.loom" version "1.9.17999" apply false
 }
 
 plugins.apply "dev.kikugie.stonecutter"
-stonecutter.active "1.21-fabric" /* [SC] DO NOT EDIT */
+stonecutter.active "1.21.4-fabric" /* [SC] DO NOT EDIT */
 
 stonecutter.registerChiseled tasks.register("chiseledBuild", stonecutter.chiseled) {
 	setGroup "project"
@@ -19,6 +19,12 @@ stonecutter.registerChiseled tasks.register("chiseledRunDatagen", stonecutter.ch
 stonecutter.registerChiseled tasks.register("chiseledPublishMods", stonecutter.chiseled) {
 	setGroup "project"
 	ofTask "publishMods"
+}
+
+
+stonecutter.registerChiseled tasks.register("chiseledCopyDependencyOverrides", stonecutter.chiseled) {
+	setGroup "project"
+	ofTask "copyDependencyOverrides"
 }
 
 stonecutter.exclude("*.cpmmodel")
