@@ -345,6 +345,20 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				guiGraphics.pose().popPose();
 			}
 
+			// Responsible for displaying the Modrinth icon on packs downloaded by Modrinth
+			{
+				if (focusedPack != null && LegacySkinPack.modrinthSkinPacks.contains(focusedPack.getFirst())) {
+					guiGraphics.pose().pushPose();
+					int x = panel.x + panel.width;
+					int width = tooltipBox.getWidth() - 30;
+					int wHLogo = 30;
+					int placementX = x + width - wHLogo;
+					guiGraphics.pose().translate(placementX, panel.y + 16 + 4 + 7 - 2, 0);
+					GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(Constants.MODRINTH_STORE_LOGO, 0, 0, 0, 0, wHLogo, wHLogo, wHLogo, wHLogo);
+					guiGraphics.pose().popPose();
+				}
+			}
+
 			// Responsible for drawing the skin pack type
 			if (this.focusedPack.getSecond().type() != LegacyPackType.DEFAULT) {
 				guiGraphics.pose().pushPose();

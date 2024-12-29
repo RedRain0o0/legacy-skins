@@ -44,6 +44,7 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 			Codec.list(LegacySkin.CODEC).fieldOf("skins").xmap(a -> (List<LegacySkin>) new ArrayList<>(a), a -> a).forGetter(LegacySkinPack::skins)
 	).apply(instance, LegacySkinPack::new));
 	public static final Codec<Map<ResourceLocation, LegacySkinPack>> MAP_CODEC = Codec.unboundedMap(ResourceLocation.CODEC, LegacySkinPack.CODEC);
+	public static final List<ResourceLocation> modrinthSkinPacks = new ArrayList<>(); // order doesn't matter
 	public static final UnboundedMapCodec<ResourceLocation, SortingOrder<ResourceLocation>> PRIORITIES_CODEC = Codec.unboundedMap(ResourceLocation.CODEC, SortingOrderCodecs.CODEC);
 	private static final String PACKS = "skin_packs.json";
 	private static final String PRIORITIES = "skin_pack_priorities.json";
@@ -101,6 +102,11 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 						JsonElement obj = GsonHelper.parse(bufferedReader);
 						obj = Migrator.SKIN_PACKS_FIXER.fix(JsonOps.INSTANCE, obj);
 						Map<ResourceLocation, LegacySkinPack> map = MAP_CODEC.parse(JsonOps.INSTANCE, obj).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+						if (Legacyskins.lazyInstance().downloadedPacks().values().stream().anyMatch(f -> ("file/" + f).equals(r.sourcePackId()))) {
+							map.forEach((a, b) -> modrinthSkinPacks.add(a));
+						} else {
+							map.forEach((a, b) -> modrinthSkinPacks.remove(a));
+						}
 						packs.putAll(map);
 						bufferedReader.close();
 					} catch (IOException e) {
