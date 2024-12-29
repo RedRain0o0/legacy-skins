@@ -53,7 +53,7 @@ stonecutter.swap("userAgent") {
 	"\"RedRainOoO/legacy-skins/" + version + "\""
 }
 base {
-	archivesName = project.archives_base_name + (stonecutter.compare(legacy4jVersionStr, "1.7.4") > 0 ? "x" : "")
+	archivesName = project.archives_base_name
 }
 
 def packageJar = tasks.create("packageJar", Copy.class) {
