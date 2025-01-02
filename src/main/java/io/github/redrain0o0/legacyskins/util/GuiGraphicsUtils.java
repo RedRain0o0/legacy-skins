@@ -3,8 +3,13 @@ package io.github.redrain0o0.legacyskins.util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-//? if <1.20.2
-/*import wily.legacy.client.LegacyGuiGraphics;*/
+//? if <1.20.2 {
+/*//? if legacy4j: >=1.7.5 {
+import wily.factoryapi.base.client.FactoryGuiGraphics;
+//?} else {
+/^import wily.legacy.client.LegacyGuiGraphics;
+^///?}
+*///?}
 
 public interface GuiGraphicsUtils {
 	static GuiGraphicsUtils ofGuiGraphics(GuiGraphics guiGraphics) {
@@ -25,11 +30,11 @@ public interface GuiGraphicsUtils {
 				/*guiGraphics.blit(resourceLocation, x, y, u, v, width, height, texWidth, texHeight);*/
 			}
 
-			private /*? if >=1.20.2 {*/ GuiGraphics /*?} else {*/ /*LegacyGuiGraphics *//*?}*/ p(GuiGraphics in) {
+			private /*? if >=1.20.2 {*/ GuiGraphics /*?} else {*//*/^? if legacy4j: <1.7.5 {^//^LegacyGuiGraphics^//^?} else {^/FactoryGuiGraphics/^?}^/*//*?}*/ p(GuiGraphics in) {
 				//? if >=1.20.2 {
 				return in;
 				 //?} else
-				/*return LegacyGuiGraphics.of(in);*/
+				/*return*/ /*? if legacy4j: <1.7.5 {*//*LegacyGuiGraphics*//*?} else {*/FactoryGuiGraphics/*?}*/.of(in);
 			}
 		};
 	}

@@ -49,8 +49,13 @@ import org.joml.Quaternionf;
 import org.slf4j.Logger;
 import wily.legacy.Legacy4J;
 import wily.legacy.client.ControlType;
-//? if <=1.20.1
-/*import wily.legacy.client.LegacyGuiGraphics;*/
+//? if <1.20.2 {
+/*//? if legacy4j: >=1.7.5 {
+import wily.factoryapi.base.client.FactoryGuiGraphics;
+//?} else {
+/^import wily.legacy.client.LegacyGuiGraphics;
+ ^///?}
+*///?}
 import wily.legacy.client.controller.BindingState;
 import wily.legacy.client.controller.Controller;
 import wily.legacy.client.controller.ControllerBinding;
@@ -402,11 +407,11 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		return super.mouseScrolled(d, e, /*? if >=1.20.2 {*/ f, /*?}*/ g);
 	}
 
-	private /*? if >=1.20.2 {*/ GuiGraphics /*?} else {*/ /*LegacyGuiGraphics *//*?}*/ p(GuiGraphics in) {
+	private /*? if >=1.20.2 {*/ GuiGraphics /*?} else {*//*/^? if legacy4j: <1.7.5 {^//^LegacyGuiGraphics^//^?} else {^/FactoryGuiGraphics/^?}^/*//*?}*/ p(GuiGraphics in) {
 		//? if >=1.20.2 {
 		return in;
-		//?} else
-		/*return LegacyGuiGraphics.of(in);*/
+		 //?} else
+		/*return*/ /*? if legacy4j: <1.7.5 {*//*LegacyGuiGraphics*//*?} else {*/FactoryGuiGraphics/*?}*/.of(in);
 	}
 
 	@Override
