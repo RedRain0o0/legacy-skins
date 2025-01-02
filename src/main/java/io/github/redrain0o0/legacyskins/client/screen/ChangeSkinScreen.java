@@ -60,6 +60,8 @@ import wily.legacy.client.controller.BindingState;
 import wily.legacy.client.controller.Controller;
 import wily.legacy.client.controller.ControllerBinding;
 import wily.legacy.client.screen.ControlTooltip;
+//? if legacy4j: >=1.7.10
+import wily.legacy.client.screen.HelpAndOptionsScreen;
 import wily.legacy.client.screen.LegacyScrollRenderer;
 import wily.legacy.client.screen.Panel;
 import wily.legacy.client.screen.PanelVListScreen;
@@ -132,6 +134,12 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			minecraft.setScreen(new AuthScreen(this));
 			return true;
 		}
+		//? if legacy4j: >=1.7.10 {
+		if (keyCode == InputConstants.KEY_D) {
+			minecraft.setScreen(HelpAndOptionsScreen.CHANGE_SKIN.build(this));
+			return true;
+		}
+		//?}
 		if (keyCode == InputConstants.KEY_C && selectedSkinHasCreditsLink()) {
 			openCreditsLink();
 			return true;
@@ -212,6 +220,12 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			minecraft.setScreen(new AuthScreen(this));
 			return;
 		}
+		//? if legacy4j: >=1.7.10 {
+		if (state.is(ControllerBinding.BACK) && state.justPressed) {
+			minecraft.setScreen(HelpAndOptionsScreen.CHANGE_SKIN.build(this));
+			return;
+		}
+		//?}
 		if (state.is(ControllerBinding.START) && state.justPressed) {
 			openCreditsLink();
 			state.block();
@@ -254,6 +268,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.UP_BUTTON.bindingState.getIcon(), () -> Component.translatable(this.playerSkinWidgetList != null && Legacyskins.INSTANCE.getActiveSkinsConfig().getFavorites().contains(this.playerSkinWidgetList.element3.skinRef.get()) ? "legacyskins.menu.unfavorite" : "legacyskins.menu.favorite"));
 		renderer.add(() -> ControlType.getActiveType().isKbm() ? COMPOUND_ICON_FUNCTION.apply(new ControlTooltip.Icon[]{ControlTooltip.getKeyIcon(InputConstants.KEY_LEFT),ControlTooltip.SPACE_ICON,ControlTooltip.getKeyIcon(InputConstants.KEY_RIGHT)})  : ControllerBinding.LEFT_STICK.bindingState.getIcon(), () -> Component.translatable("legacyskins.menu.navigate"));
 		renderer.add(() -> selectedSkinHasCreditsLink() ? (ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_C) : ControllerBinding.START.bindingState.getIcon()) : (ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_A) : ControllerBinding.LEFT_BUTTON.bindingState.getIcon()), () -> selectedSkinHasCreditsLink() ? Component.literal("Show Credits") : Component.literal("Download Skin Packs"));
+		//? if legacy4j: >=1.7.10
+		renderer.add(() -> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_D) : ControllerBinding.BACK.bindingState.getIcon(), () -> Component.literal("Skin Layers"));
 		//renderer.add(()-> ControlType.getActiveType().isKbm() ? ControlTooltip.getKeyIcon(InputConstants.KEY_F) : ControllerBinding.LEFT_STICK.bindingState.getIcon(), ()-> null);
 	}
 
