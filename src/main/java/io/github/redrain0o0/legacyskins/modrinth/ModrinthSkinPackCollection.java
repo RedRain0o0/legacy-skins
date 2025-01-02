@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ModrinthSkinPackCollection {
-	private static final String userAgent = /*$ userAgent {*/"RedRainOoO/legacy-skins/1.3.0-beta.4.quirkbox.8+fabric+1.21.4"/*$}*/;
+	private static final String userAgent = /*$ userAgent {*/"RedRainOoO/legacy-skins/1.3.0.1+fabric+1.21.4"/*$}*/;
 	private static final String collectionUrl = "https://api.modrinth.com/v3/collection/bJ8YVFtd";
 	private static final String projectsUrl = "https://api.modrinth.com/v3/projects";
 	private static final String teamsUrl = "https://api.modrinth.com/v3/teams";
