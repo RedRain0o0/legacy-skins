@@ -1,0 +1,10 @@
+{
+  "targetType": "class",
+  "targetUI": "io.github.redrain0o0.legacyskins.client.screen.ChangeSkinScreen",
+  "elements": {
+    "hasUsername": {
+      "type": "put_boolean",
+      "value": false
+    }
+  }
+}
