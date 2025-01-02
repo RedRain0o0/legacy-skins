@@ -33,8 +33,9 @@ public interface GuiGraphicsUtils {
 			private /*? if >=1.20.2 {*/ GuiGraphics /*?} else {*//*/^? if legacy4j: <1.7.5 {^//^LegacyGuiGraphics^//^?} else {^/FactoryGuiGraphics/^?}^/*//*?}*/ p(GuiGraphics in) {
 				//? if >=1.20.2 {
 				return in;
-				 //?} else
-				/*return*/ /*? if legacy4j: <1.7.5 {*//*LegacyGuiGraphics*//*?} else {*/FactoryGuiGraphics/*?}*/.of(in);
+				 //?} else {
+				/*return /^? if legacy4j: <1.7.5 {^//^LegacyGuiGraphics^//^?} else {^/FactoryGuiGraphics/^?}^/.of(in);
+				*///?}
 			}
 		};
 	}
