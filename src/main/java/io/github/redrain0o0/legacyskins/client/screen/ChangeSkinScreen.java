@@ -445,7 +445,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 			guiGraphics.pose().popPose();
 		});
 
-		tooltipBox.init("tooltipBox");
+		tooltipBox.init(/*? if legacy4j: >=1.7.5 {*/"tooltipBox"/*?}*/);
 		// TODO, should the GUI api be able to touch this list?
 		getRenderableVList().init(/*? if legacy4j: <1.7.5 {*//*this*//*?} else {*/"renderableVList"/*?}*/, panel.x + 11, panel.y + 11 + 125 - 10 + 5 - 15, panel.width - 22, panel.height - 135 + 10 - 2 /*? if legacy4j: >=1.7.5 {*/- 20/*?}*/);
 	}

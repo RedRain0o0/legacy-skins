@@ -41,7 +41,7 @@ public class HelpOptionsMixin extends RenderableVListScreen {
 		ci.cancel();
 	}
 	*///?} else {
-	@Inject(method = "lambda$new$16()Lnet/minecraft/client/gui/screens/Screen;", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "lambda$new$16()Lnet/minecraft/client/gui/screens/Screen;", at = @At("HEAD"), cancellable = true /*? if forge {*//*, remap = false*//*?}*/)
 	private void ChangeSkinButton(CallbackInfoReturnable<Screen> cir) {
 		cir.setReturnValue(LegacySkinsClient.getSkinsScreen(this));
 	}
