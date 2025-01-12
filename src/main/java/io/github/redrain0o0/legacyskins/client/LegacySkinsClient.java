@@ -8,8 +8,8 @@ import io.github.redrain0o0.legacyskins.client.screen.NonLegacy4JChangeSkinScree
 import io.github.redrain0o0.legacyskins.client.screen.config.LegacyConfigScreens;
 import io.github.redrain0o0.legacyskins.client.util.EasterEggUtils;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
-//? if fabric {
 import io.github.redrain0o0.legacyskins.util.PlatformUtils;
+//? if fabric {
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
