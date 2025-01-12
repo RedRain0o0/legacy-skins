@@ -1,6 +1,7 @@
 plugins {
 	id "dev.kikugie.stonecutter"
-	id "dev.architectury.loom" version "1.9.17999" apply false
+	// 1.9.17999 is only for datagen
+	id "dev.architectury.loom" version "1.9-SNAPSHOT" apply false
 }
 
 plugins.apply "dev.kikugie.stonecutter"
