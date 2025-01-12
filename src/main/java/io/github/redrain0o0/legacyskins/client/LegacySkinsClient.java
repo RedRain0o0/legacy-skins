@@ -9,6 +9,7 @@ import io.github.redrain0o0.legacyskins.client.screen.config.LegacyConfigScreens
 import io.github.redrain0o0.legacyskins.client.util.EasterEggUtils;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 //? if fabric {
+import io.github.redrain0o0.legacyskins.util.PlatformUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -60,8 +61,32 @@ public class LegacySkinsClient {
 		});
 		LegacyConfigScreens.init();
 		//?}
-		//? if legacy4j: >=1.7.5
-		wily.factoryapi.base.client.UIDefinition.Manager.WidgetAction.defaultScreensMap.put(io.github.redrain0o0.legacyskins.util.VersionUtils.of(Legacyskins.MOD_ID, "skins_screen"), LegacySkinsClient::getSkinsScreen);
+		//? if legacy4j: >=1.7.5 {
+		if (PlatformUtils.isModLoaded("legacy")) {
+			Supplier<Supplier<Supplier<Runnable>>> goofyahhclassloading = new Supplier<Supplier<Supplier<Runnable>>>() {
+				@Override
+				public Supplier<Supplier<Runnable>> get() {
+					return new Supplier<Supplier<Runnable>>() {
+						@Override
+						public Supplier<Runnable> get() {
+							return new Supplier<Runnable>() {
+								@Override
+								public Runnable get() {
+									return new Runnable() {
+										@Override
+										public void run() {
+											wily.factoryapi.base.client.UIDefinition.Manager.WidgetAction.defaultScreensMap.put(io.github.redrain0o0.legacyskins.util.VersionUtils.of(Legacyskins.MOD_ID, "skins_screen"), LegacySkinsClient::getSkinsScreen);
+										}
+									};
+								}
+							};
+						}
+					};
+				}
+			};
+			goofyahhclassloading.get().get().get().run();
+		}
+		//?}
 	}
 
 	//? if neoforge || forge {
