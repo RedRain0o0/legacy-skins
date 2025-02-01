@@ -78,7 +78,7 @@ public class PlayerSkinWidget extends AbstractWidget {
 	private boolean overrideVisible = true;
 
 	public PlayerSkinWidget(int width, int height, EntityModelSet entityModelSet, Supplier<SkinReference> supplier) {
-		super(0, 0, width, height, CommonComponents.EMPTY);
+		super(-9999, -9999, width, height, CommonComponents.EMPTY);
 		originalWidth = width;
 		originalHeight = height;
 		this.model = PlayerSkinWidget.Model.bake(entityModelSet);
