@@ -24,7 +24,7 @@ stonecutter {
 		for (final def r in loaders) {
 			vers(r, r.split("-")[0])
 		}
-		vcsVersion = "1.21-fabric"
+		vcsVersion = "1.21.1-fabric"
 	}
 
 	create rootProject
