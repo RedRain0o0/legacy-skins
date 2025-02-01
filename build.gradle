@@ -109,6 +109,18 @@ repositories {
 			includeGroup "maven.modrinth"
 		}
 	}
+
+	exclusiveContent {
+		forRepository {
+			maven {
+				name = "Kyubion Studios"
+				url = "https://raw.githubusercontent.com/Kyubion-Studios/Mod-Resources/refs/heads/main/maven/"
+			}
+		}
+		filter {
+			includeGroupAndSubgroups "wily"
+		}
+	}
 }
 
 dependencies {
