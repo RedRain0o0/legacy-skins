@@ -75,7 +75,7 @@ public class LegacySkinsClient {
 									return new Runnable() {
 										@Override
 										public void run() {
-											wily.factoryapi.base.client.UIDefinition.Manager.WidgetAction.defaultScreensMap.put(io.github.redrain0o0.legacyskins.util.VersionUtils.of(Legacyskins.MOD_ID, "skins_screen"), LegacySkinsClient::getSkinsScreen);
+											wily.factoryapi.base.client.UIDefinitionManager.DEFAULT_SCREENS_MAP.put(io.github.redrain0o0.legacyskins.util.VersionUtils.of(Legacyskins.MOD_ID, "skins_screen"), LegacySkinsClient::getSkinsScreen);
 										}
 									};
 								}

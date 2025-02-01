@@ -292,7 +292,7 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		//? if legacy4j: <1.7.5 {
 		/*ScreenUtil.renderDefaultBackground(guiGraphics, false);
 		*///?} else
-		ScreenUtil.renderDefaultBackground(wily.factoryapi.base.client.UIDefinition.Accessor.of(this), guiGraphics, false);
+		ScreenUtil.renderDefaultBackground(wily.factoryapi.base.client.UIAccessor.of(this), guiGraphics, false);
 		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.SKIN_PANEL, tooltipBox.x - 10, panel.y + 7, tooltipBox.getWidth(), tooltipBox.getHeight() - 2);
 		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.PANEL_FILLER, tooltipBox.x - 5, panel.y + 16 + tooltipBox.getHeight() - 80, tooltipBox.getWidth() - 14, 60);
 		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, tooltipBox.x - 1, panel.y + tooltipBox.getHeight() - 59, tooltipBox.getWidth() - 55, 55);

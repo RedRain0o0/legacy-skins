@@ -8,12 +8,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import wily.legacy.client.screen.Assort;
+import wily.legacy.client.PackAlbum;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Mixin(Assort.class)
+@Mixin(PackAlbum.class)
 public class AssortMixin {
 	@Inject(method = "updateSavedResourcePacks", at = @At("RETURN"), remap = false)
 	private static void updateSavedResourcePacksInject(CallbackInfo ci) {
