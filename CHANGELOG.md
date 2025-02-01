@@ -1,5 +1,13 @@
-- Legacy Skins 1.20.1, 1.20.4, 1.21.1, 1.21.3, and 1.21.4 have been ported to use Legacy4J 1.7.10.
-- The "tooltip box" is now accessible via Factory API.
-- The Modrinth logo is now displayed on skin packs downloaded from Modrinth.
-- On LS versions that support Legacy4J 1.7.10, the screen opened by the Change Skin button without Legacy Skins installed is now accessible by clicking the "BACK" button on a controller (the same button used to open the Host Options menu) or by pressing the "D" button on a keyboard while being in the skins screen.
-- Updated the mod's icon to be closer to Legacy4J's.
+- Changed Modrinth logo.
+- Changed dolls to not sometimes show up in the wrong location when the screen has an abnormal aspect ratio
+
+### **⚠️ This may or may not be the last update to versions that use Legacy4J 1.7.4.**
+
+**Versions that use Legacy4J 1.7.4:**
+- **1.20.2-fabric**
+- **1.20.2-forge**
+- **1.20.2-neoforge**
+- **1.20.6-fabric**
+- **1.20.6-neoforge**
+
+Users of these versions will not be guaranteed to receive any more feature updates and support may be dropped at any time.
