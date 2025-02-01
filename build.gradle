@@ -4,6 +4,7 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
 import static io.github.redrain0o0.legacyskins.buildscript.ModLoader.*
+import static io.github.redrain0o0.legacyskins.buildscript.VersioningUtils.semverifyL4JVer
 import io.github.redrain0o0.legacyskins.buildscript.ProjectInfo
 plugins {
 	id 'maven-publish'
@@ -33,6 +34,7 @@ if (project.legacy4j_repo_version != "[VERSIONED]") {
 } else l4jVerStr = project.legacy4j_version as String
 String legacy4jVersionStr = l4jVerStr.substring(l4jVerStr.indexOf("-") + 1)
 if (legacy4jVersionStr.contains("rc")) legacy4jVersionStr = legacy4jVersionStr.replace("-rc", ".9999.")
+legacy4jVersionStr = semverifyL4JVer(legacy4jVersionStr)
 apply plugin: 'dev.architectury.loom' // stonecutter.compare(mcVersion, "1.21") >= 0
 stonecutter.dependency("legacy4j", legacy4jVersionStr)
 stonecutter.const("fabric", loader == FABRIC)
