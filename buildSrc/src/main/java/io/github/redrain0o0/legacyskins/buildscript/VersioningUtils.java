@@ -7,10 +7,19 @@ public class VersioningUtils {
 			"1.7.10.2504.3", "1.8.0-beta.2504.3"
 	);
 	public static String semverifyL4JVer(String inputVersion) {
+		String suffix = "";
+		if (inputVersion.endsWith("+fabric")) {
+			suffix = "+fabric";
+		} else if (inputVersion.endsWith("+neoforge")) {
+			suffix = "+neoforge";
+		} else if (inputVersion.endsWith("+forge")) {
+			suffix = "+forge";
+		}
+		inputVersion = inputVersion.substring(0, inputVersion.length() - suffix.length());
 		if (inputVersion.length() - inputVersion.replace(".", "").length() > 2) {
-			if (MAP.containsKey(inputVersion)) return MAP.get(inputVersion);
+			if (MAP.containsKey(inputVersion)) return MAP.get(inputVersion) + suffix;
 			throw new IllegalStateException("Unable to correct version " + inputVersion);
 		}
-		return inputVersion;
+		return inputVersion + suffix;
 	}
 }
