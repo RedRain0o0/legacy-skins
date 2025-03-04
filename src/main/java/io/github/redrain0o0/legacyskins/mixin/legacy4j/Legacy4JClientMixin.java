@@ -21,8 +21,8 @@ import wily.legacy.client.screen.LegacyLoadingScreen;
 })
 public class Legacy4JClientMixin {
 	//? if legacy4j: >=1.7.5 && (neoforge || forge) {
-	/*@Redirect(method = {"<init>()V"}, at = @At(value = "INVOKE", target = "wily/factoryapi/base/client/UIDefinition$Accessor.of(Lnet/minecraft/client/gui/screens/Screen;)Lwily/factoryapi/base/client/UIDefinition$Accessor;"), remap = false)
-	private UIDefinition.Accessor init(Screen screen) {
+	/*@Redirect(method = {"<init>()V"}, at = @At(value = "INVOKE", target = "wily/factoryapi/base/client/UIDefinition$Accessor.of(Lnet/minecraft/client/gui/screens/Screen;)Lwily/factoryapi/base/client/UIAccessor;"), remap = false)
+	private UIAccessor init(Screen screen) {
 		return null;
 	}
 	*///?}
