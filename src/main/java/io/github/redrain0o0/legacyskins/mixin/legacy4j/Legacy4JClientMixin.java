@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 //?}
 
 //? if legacy4j: >=1.7.5 {
-import wily.factoryapi.base.client.UIDefinition;
+import wily.factoryapi.base.client.UIAccessor;
 import wily.legacy.client.screen.LegacyLoadingScreen;
 //?}
 
@@ -21,7 +21,7 @@ import wily.legacy.client.screen.LegacyLoadingScreen;
 })
 public class Legacy4JClientMixin {
 	//? if legacy4j: >=1.7.5 && (neoforge || forge) {
-	/*@Redirect(method = {"<init>()V"}, at = @At(value = "INVOKE", target = "wily/factoryapi/base/client/UIDefinition$Accessor.of(Lnet/minecraft/client/gui/screens/Screen;)Lwily/factoryapi/base/client/UIAccessor;"), remap = false)
+	/*@Redirect(method = {"<init>()V"}, at = @At(value = "INVOKE", target = "wily/factoryapi/base/client/UIAccessor.of(Lnet/minecraft/client/gui/screens/Screen;)Lwily/factoryapi/base/client/UIAccessor;"), remap = false)
 	private UIAccessor init(Screen screen) {
 		return null;
 	}
