@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 //? if neoforge {
 
 //?} elif forge {
-/*import net.minecraftforge.fml.loading.FMLLoader;*/
-//?}
+/*import net.minecraftforge.fml.loading.FMLLoader;
+*///?}
 
 //? if legacy4j: >=1.7.5 {
 import wily.factoryapi.base.client.UIAccessor;

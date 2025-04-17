@@ -47,7 +47,7 @@ import java.util.function.Supplier;
 //? if neoforge && multientrypoints
 /*@Mod(value = Legacyskins.MOD_ID, dist = Dist.CLIENT)*/
 //? if neoforge || forge {
-/*@EventBusSubscriber(/^? if !multientrypoints {^/ /^modid = Legacyskins.MOD_ID, ^//^?}^/ bus = EventBusSubscriber.Bus.MOD)
+/*@EventBusSubscriber(/^? if !multientrypoints {^/ modid = Legacyskins.MOD_ID, /^?}^/ bus = EventBusSubscriber.Bus.MOD)
 *///?}
 public class LegacySkinsClient {
 	// used in a mixin
@@ -92,7 +92,7 @@ public class LegacySkinsClient {
 	//? if neoforge || forge {
 	/*public LegacySkinsClient(ModContainer modContainer) {
 		//? if neoforge
-		NeoForge.EVENT_BUS.addListener(GameShuttingDownEvent.class, LegacySkinsClient::event);
+		/^NeoForge.EVENT_BUS.addListener(GameShuttingDownEvent.class, LegacySkinsClient::event);^/
 		//? if forge
 		/^MinecraftForge.EVENT_BUS.addListener(LegacySkinsClient::event);^/
 		LegacyConfigScreens.init();

@@ -12,7 +12,7 @@ public class ConfigEntryMixin {
 
 	@Shadow protected Map<String, Object> data;
 
-	//? if !forge && !(neoforge && =1.20.4) {
+	//? if !(forge || (1.20.4 && neoforge)) {
 	@com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod(method = "getEntry", remap = false)
 	public ConfigEntry legacyskins$getEntry(String name, com.llamalad7.mixinextras.injector.wrapoperation.Operation<ConfigEntry> original) {
 		synchronized (entries) {

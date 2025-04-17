@@ -43,15 +43,15 @@ public class Legacyskins {
 	}
 
 	//? if neoforge || forge {
-	/*public Legacyskins(/^? if constructorargs {^/ IEventBus bus, ModContainer container /^?}^/) {
+	/*public Legacyskins(/^? if constructorargs {^/ /^IEventBus bus, ModContainer container ^//^?}^/) {
 		//? if !constructorargs {
-		/^IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		ModContainer container = ModLoadingContext.get().getActiveContainer();
-		^///?}
+		//?}
 		onInitialize();
-		bus.addListener(/^? if eventbusupdates {^/ InterModEnqueueEvent.class,/^?}^/ this::event);
+		bus.addListener(/^? if eventbusupdates {^/ /^InterModEnqueueEvent.class,^//^?}^/ this::event);
 		//? if !multientrypoints
-		/^PlatformUtils.executeInDist(PlatformUtils.Env.CLIENT, () -> () -> () -> new LegacySkinsClient(container));^/
+		PlatformUtils.executeInDist(PlatformUtils.Env.CLIENT, () -> () -> () -> new LegacySkinsClient(container));
 	}
 
 

@@ -196,6 +196,7 @@ dependencies {
 		neoForge "net.neoforged:neoforge:$project.properties.neoforge_version"
 	} else if (loader == FORGE) {
 		forge "net.minecraftforge:forge:$project.properties.forge_version"
+		localRuntime "io.github.llamalad7:mixinextras-forge:0.4.1"
 	}
 }
 
