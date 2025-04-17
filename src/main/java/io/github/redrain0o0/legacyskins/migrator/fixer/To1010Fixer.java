@@ -2,7 +2,7 @@ package io.github.redrain0o0.legacyskins.migrator.fixer;
 
 import com.mojang.serialization.Dynamic;
 
-// Add erase modrinth authentication, as we have to sign in again.
+// Adds the Smooth Interpolation config option
 public class To1010Fixer extends Fixer {
 
 	public To1010Fixer() {
