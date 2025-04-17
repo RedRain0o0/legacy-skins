@@ -1,7 +1,7 @@
 plugins {
 	id "dev.kikugie.stonecutter"
 	// 1.9.17999 is only for datagen
-	id "dev.architectury.loom" version "1.9-SNAPSHOT" apply false
+	id "dev.architectury.loom" version "1.10-SNAPSHOT" apply false
 }
 
 plugins.apply "dev.kikugie.stonecutter"
@@ -28,4 +28,4 @@ stonecutter.registerChiseled tasks.register("chiseledCopyDependencyOverrides", s
 	ofTask "copyDependencyOverrides"
 }
 
-stonecutter.exclude("*.cpmmodel")
+//stonecutter.exclude("*.cpmmodel")
