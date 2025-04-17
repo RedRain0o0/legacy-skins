@@ -18,6 +18,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackRepository;
+import wily.legacy.client.GlobalPacks;
 import wily.legacy.client.LegacyTip;
 import wily.legacy.client.screen.LegacyLoadingScreen;
 import wily.legacy.client.screen.Panel;
@@ -184,11 +185,18 @@ public class AuthScreen extends Screen {
 											triConsumer.accept(null, "Reloading resource packs...", null);
 											resourcePackRepository.reload();
 											Legacyskins.LOGGER.info(resourcePackRepository.getAvailablePacks().stream().map(Pack::getId).toList().toString());
+											GlobalPacks globalPacks = GlobalPacks.globalResources.get();
+											boolean b = globalPacks.applyOnTop();
+											List<String> list = new ArrayList<>(globalPacks.list());
 											for (CompletableFuture<Pair<ModrinthDataObjects.VersionFile, Path>> pairCompletableFuture : toDownload) {
 												Pair<ModrinthDataObjects.VersionFile, Path> join = pairCompletableFuture.join();
 												resourcePackRepository.addPack("file/" + join.getFirst().filename());
+												if (!list.contains("file/" + join.getFirst().filename())) {
+													list.add("file/" + join.getFirst().filename());
+												}
 											}
 											System.out.println("Downloaded all files");
+											GlobalPacks.globalResources.set(new GlobalPacks(list, b));
 											minecraft.options.updateResourcePacks(resourcePackRepository);
 											finish.run();
 											//minecraft.tell(resourcePackRepository::reload);
