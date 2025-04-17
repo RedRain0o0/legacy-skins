@@ -4,6 +4,7 @@
   "plugin": "io.github.redrain0o0.legacyskins.LegacySkinsMixinPlugin",
   "compatibilityLevel": "JAVA_${deps.java}",
   "mixins": [
+    "ConfigEntryMixin",
     "EditorAccessor",
     "EditorGuiAccessor",
     "GeneratorsAccessor",
