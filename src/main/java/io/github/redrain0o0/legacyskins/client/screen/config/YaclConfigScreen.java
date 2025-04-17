@@ -49,8 +49,17 @@ public class YaclConfigScreen {
 								.binding(M.NONE, M.of(Legacyskins.INSTANCE::configScreenType), t -> Legacyskins.INSTANCE.configScreenType = Optional.ofNullable(t.type))
 								.controller(c -> EnumControllerBuilder.create(c).enumClass(M.class))
 								.build()
-						).option(
-								LabelOption.create(Component.literal("Get more skin packs!").withStyle(s -> s.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/RedRain0o0/legacy-skins/discussions/categories/showcase"))))
+						).option(Option.<Boolean>createBuilder()
+								.name(Component.literal("Smooth Interpolation"))
+								.binding(true, () -> !Legacyskins.INSTANCE.choppyLerp(), b -> Legacyskins.INSTANCE.choppyLerp = !b)
+								.controller(TickBoxControllerBuilder::create)
+								.build()).option(
+								LabelOption.create(Component.literal("Get more skin packs!").withStyle(s -> s.withClickEvent(
+										//? if <1.21.5 {
+										/*new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/RedRain0o0/legacy-skins/discussions/categories/showcase")
+										 *///?} else
+										new ClickEvent.OpenUrl(java.net.URI.create("https://github.com/RedRain0o0/legacy-skins/discussions/categories/showcase"))
+								)))
 						).build()
 				).build();
 		return yacl.generateScreen(parent);

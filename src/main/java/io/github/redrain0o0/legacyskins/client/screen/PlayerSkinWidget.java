@@ -183,6 +183,13 @@ public class PlayerSkinWidget extends AbstractWidget {
 		float x = progress;
 		// sin((2πx - π) / 2) + 1) / 2
 		float delta = x;//Mth.sin(x*Mth.HALF_PI);//(Mth.sin((2 * Mth.PI * x - Mth.PI) / 2 + 1) / 2);
+		// access field directly since it's faster that way
+		//noinspection removal
+		if (Legacyskins.INSTANCE.choppyLerp) {
+			delta /= 0.2f;
+			delta = Math.round(delta);
+			delta = delta * 0.2f;
+		}
 		float nX = prevRotationX * (1 - delta) + targetRotationX * delta;
 		float nY = prevRotationY * (1 - delta) + targetRotationY * delta;
 		float nX2 = prevPosX * (1 - delta) + targetPosX * delta;

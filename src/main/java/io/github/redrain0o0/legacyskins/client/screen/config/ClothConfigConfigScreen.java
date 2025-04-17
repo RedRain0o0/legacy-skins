@@ -26,7 +26,13 @@ public class ClothConfigConfigScreen {
 				.addEntry(configBuilder.entryBuilder().startBooleanToggle(Component.literal("Show Skin Editor Button"), Legacyskins.INSTANCE.showSkinEditorButton()).setDefaultValue(Legacyskins.INSTANCE::showSkinEditorButton).setSaveConsumer(a -> Legacyskins.INSTANCE.showEditorButton = a).build())
 				.addEntry(configBuilder.entryBuilder().startFloatField(Component.literal("Doll X Rotation Limit"), Legacyskins.INSTANCE.dollRotationXLimit()).setDefaultValue(Legacyskins.INSTANCE::dollRotationXLimit).setSaveConsumer(a -> Legacyskins.INSTANCE.dollRotationXLimit = a).setMin(0).setMax(90).build())
 				.addEntry(configBuilder.entryBuilder().startEnumSelector(Component.literal("Preferred Config Screen"), M.class, M.of(Legacyskins.INSTANCE::configScreenType)).setDefaultValue(M.NONE).setSaveConsumer(a -> Legacyskins.INSTANCE.configScreenType = Optional.ofNullable(a.type)).build())
-				.addEntry(configBuilder.entryBuilder().startTextDescription(Component.literal("Get more skin packs!").withStyle(s -> s.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/RedRain0o0/legacy-skins/discussions/categories/showcase")))).build());
+				.addEntry(configBuilder.entryBuilder().startBooleanToggle(Component.literal("Smooth Interpolation"), !Legacyskins.INSTANCE.choppyLerp()).setDefaultValue(() -> !Legacyskins.INSTANCE.choppyLerp()).setSaveConsumer(a -> Legacyskins.INSTANCE.choppyLerp = !a).build())
+				.addEntry(configBuilder.entryBuilder().startTextDescription(Component.literal("Get more skin packs!").withStyle(s -> s.withClickEvent(
+						//? if <1.21.5 {
+						/*new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/RedRain0o0/legacy-skins/discussions/categories/showcase")
+						*///?} else
+						new ClickEvent.OpenUrl(java.net.URI.create("https://github.com/RedRain0o0/legacy-skins/discussions/categories/showcase"))
+				))).build());
 		return configBuilder.build();
 	}
 

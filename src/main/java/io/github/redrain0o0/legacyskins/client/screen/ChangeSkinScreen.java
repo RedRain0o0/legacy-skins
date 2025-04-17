@@ -154,7 +154,12 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		SkinReference skinReference = playerSkinWidgetList.element3.skinRef.get();
 
 		LegacySkin legacySkin = LegacySkinPack.list.get(skinReference.pack()).skins().get(skinReference.ordinal());
-		handleComponentClicked(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, legacySkin.creditsLink().get())));
+		handleComponentClicked(Style.EMPTY.withClickEvent(
+				//? if <1.21.5 {
+				/*new ClickEvent(ClickEvent.Action.OPEN_URL, legacySkin.creditsLink().get()
+				*///?} else
+				new ClickEvent.OpenUrl(java.net.URI.create(legacySkin.creditsLink().get())
+				)));
 	}
 
 	private void selectSkin() {
@@ -298,7 +303,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySprites.SQUARE_RECESSED_PANEL, tooltipBox.x - 1, panel.y + tooltipBox.getHeight() - 59, tooltipBox.getWidth() - 55, 55);
 		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), tooltipBox.x + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 3, 0, 0, 24, 24, 24, 24);
 		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blit(VersionUtils.of(Legacy4J.MOD_ID,"textures/gui/sprites/container/sizeable_icon_holder.png"), tooltipBox.x + tooltipBox.getWidth() - 50, panel.y + tooltipBox.getHeight() - 60 + 30, 0, 0, 24, 24, 24, 24);
-		RenderSystem.enableBlend();
+		//? if <1.21.5
+		/*RenderSystem.enableBlend();*/
 		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.PACK_NAME_BOX, tooltipBox.x - 5, panel.y + 16 + 4, tooltipBox.getWidth() - 18, 40);
 		GuiGraphicsUtils.ofGuiGraphics(guiGraphics).blitSprite(LegacySkinSprites.SKIN_BOX, tooltipBox.x - 5, panel.y + 16, tooltipBox.getWidth() - 14, tooltipBox.getHeight() - 80);
 		if (this.playerSkinWidgetList != null) {
@@ -411,7 +417,8 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 				pose.popPose();
 			}
 		}
-		RenderSystem.disableBlend();
+		//? if <1.21.5
+		/*RenderSystem.disableBlend();*/
 	}
 
 	private int k;
