@@ -38,7 +38,11 @@ import net.neoforged.neoforge.client.ConfigScreenHandler;
 ^///?}
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+//? if >=1.21.4 {
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
+//?} else {
+/^import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+^///?}
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.GameShuttingDownEvent;
 *///?}
@@ -105,10 +109,17 @@ public class LegacySkinsClient {
 		}
 	}
 
+	//? if >= 1.21.4 {
 	@SubscribeEvent
+	public static void onResourceReload(AddClientReloadListenersEvent event) {
+		event.addListener(io.github.redrain0o0.legacyskins.util.VersionUtils.of(Legacyskins.MOD_ID, "manager"), new LegacySkinPack.Manager());
+	}
+	//?} else {
+	/^@SubscribeEvent
 	public static void onResourceReload(RegisterClientReloadListenersEvent event) {
 		event.registerReloadListener(new LegacySkinPack.Manager());
 	}
+	^///?}
 
 	public static void event(GameShuttingDownEvent event) {
 		LegacySkinUtils.cleanup();
