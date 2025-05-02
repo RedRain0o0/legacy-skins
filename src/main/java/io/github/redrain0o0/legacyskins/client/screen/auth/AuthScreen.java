@@ -52,7 +52,6 @@ public class AuthScreen extends Screen {
 	@Override
 	public void onClose() {
 		if (replaceParent && parent instanceof ChangeSkinScreen screen) {
-			System.out.println("changed parent screen");
 			this.parent = new ChangeSkinScreen(screen.parent);
 		}
 		minecraft.setScreen(parent);
