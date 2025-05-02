@@ -1,2 +1,8 @@
-- Dropped 1.20.2 and 1.20.6 versions
-- Ported to use Legacy4J 1.8
+- Dropped 1.21.3 Fabric.
+- Added support for 1.21.5 for Fabric and NeoForge.
+- Fixed a bug where some skins would sometimes not load.
+- Changed interpolation to be less smooth, to be more accurate to the Legacy Console Editions. (Can be reverted to the old smooth animation in Legacy Skins's config screen.)
+- Skin packs downloaded by Legacy Skins are now automatically added to Legacy4J's Global Resource Packs.
+- Ported to use Legacy4J 1.8.1
+- Replaced the "Replace this text before release!" text with a download progress text, showing the download progress for each resource pack.
+- Removed the "changed parent screen" text logged into the console every time the auth screen is closed.
