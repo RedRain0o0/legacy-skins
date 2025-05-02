@@ -6,6 +6,10 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.modrinth.data.ModrinthDataObjects;
+import io.github.redrain0o0.legacyskins.util.ByteSizeFormatter;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 import java.io.IOException;
 import java.net.URI;
@@ -13,6 +17,7 @@ import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -20,6 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Flow;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -143,8 +151,81 @@ public class ModrinthSkinPackCollection {
 		});
 	}
 
-	public static CompletableFuture<Pair<ModrinthDataObjects.VersionFile, Path>> downloadFile(ModrinthDataObjects.VersionFile file, Path to) {
-		return client.sendAsync(builder().GET().uri(URI.create(file.url())).build(), HttpResponse.BodyHandlers.ofFile(to)).thenApply(vf -> {
+	public static class DownloadProgressInfo {
+		public boolean hasTotalBytes;
+		public long totalBytes;
+		public long downloadedBytes;
+		// TODO, this is unused now basically
+		public Consumer<DownloadProgressInfo> done;
+		public String packName;
+		private boolean isDone;
+		public Component format(int len) {
+			if (hasTotalBytes) {
+				double prog = (double) downloadedBytes / totalBytes;
+				int ls = Math.min((int) Math.ceil(prog * len), len);
+				int le = len - ls;
+				MutableComponent component = Component.empty().append(packName + ": ").append(Component.literal("|".repeat(ls)).withStyle(ChatFormatting.GREEN)).append(Component.literal("|".repeat(le))).append(" " + ByteSizeFormatter.formatByteSizes(downloadedBytes, totalBytes));
+				return isDone ? component.withStyle(ChatFormatting.GREEN) : component;
+			} else {
+				return Component.empty().append(packName + ": ").append(Component.literal("|".repeat(len)).withStyle(ChatFormatting.DARK_GRAY)).append(" ?/" + ByteSizeFormatter.formatBytes(downloadedBytes));
+			}
+		}
+
+		public void done() {
+			isDone = true;
+			//done.accept(this);
+		}
+	}
+
+	public static class FH implements HttpResponse.BodyHandler<Path> {
+		private final HttpResponse.BodyHandler<Path> delegate;
+		private final DownloadProgressInfo info;
+		FH(HttpResponse.BodyHandler<Path> delegate, DownloadProgressInfo info) {
+			this.delegate = delegate;
+			this.info = info;
+		}
+ 		@Override
+		public HttpResponse.BodySubscriber<Path> apply(HttpResponse.ResponseInfo responseInfo) {
+			return new HttpResponse.BodySubscriber<>() {
+				private final HttpResponse.BodySubscriber<Path> bodySubscriber = delegate.apply(responseInfo);
+				private long downloadedBytes = 0;
+				private long prevDownloadedBytes = 0;
+				@Override
+				public CompletionStage<Path> getBody() {
+					return bodySubscriber.getBody();
+				}
+
+				@Override
+				public void onSubscribe(Flow.Subscription subscription) {
+					bodySubscriber.onSubscribe(subscription);
+				}
+
+				@Override
+				public void onNext(List<ByteBuffer> item) {
+					downloadedBytes += item.stream().mapToLong(ByteBuffer::capacity).sum();
+					if (downloadedBytes != prevDownloadedBytes) {
+						prevDownloadedBytes = downloadedBytes;
+						info.downloadedBytes = downloadedBytes;
+					}
+					bodySubscriber.onNext(item);
+				}
+
+				@Override
+				public void onError(Throwable throwable) {
+					bodySubscriber.onError(throwable);
+				}
+
+				@Override
+				public void onComplete() {
+					bodySubscriber.onComplete();
+				}
+			};
+		}
+	}
+	public record DownloadedFile(ModrinthDataObjects.VersionFile mrMetadata, Path realLocation) {}
+	public record DownloadInfo(ModrinthDataObjects.VersionFile mrMetadata, Path realLocation) {}
+	public static CompletableFuture<DownloadedFile> downloadFile(DownloadInfo info, DownloadProgressInfo downloadProgressInfo) {
+		return client.sendAsync(builder().GET().uri(URI.create(info.mrMetadata().url())).build(), new FH(HttpResponse.BodyHandlers.ofFile(info.realLocation()), downloadProgressInfo)).thenApply(vf -> {
 			// TODO: this doesn't work
 //			try {
 //				Path body = vf.body();
@@ -156,7 +237,8 @@ public class ModrinthSkinPackCollection {
 //			} catch (Throwable t) {
 //				throw new RuntimeException("An error occured while downloading " + file.url() + ".", t);
 //			}
-			return Pair.of(file, to);
+			downloadProgressInfo.done();
+			return new DownloadedFile(info.mrMetadata(), info.realLocation());
 		});
 	}
 }

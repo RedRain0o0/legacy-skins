@@ -15,6 +15,7 @@
     "legacy4j.HelpOptionsMixin",
     "legacy4j.Legacy4JClientMixin",
     "legacy4j.Legacy4JForgeMixin",
+    "legacy4j.LegacyTipAccessor",
     "legacy4j.RenderableVListAccessor"
   ],
   "injectors": {

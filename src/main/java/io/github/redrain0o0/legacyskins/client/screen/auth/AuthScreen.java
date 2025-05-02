@@ -1,8 +1,8 @@
 package io.github.redrain0o0.legacyskins.client.screen.auth;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.redrain0o0.legacyskins.Legacyskins;
 import io.github.redrain0o0.legacyskins.client.screen.ChangeSkinScreen;
+import io.github.redrain0o0.legacyskins.mixin.legacy4j.LegacyTipAccessor;
 import io.github.redrain0o0.legacyskins.modrinth.ModrinthOauth;
 import io.github.redrain0o0.legacyskins.modrinth.ModrinthSkinPackCollection;
 import io.github.redrain0o0.legacyskins.modrinth.data.ModrinthDataObjects;
@@ -16,6 +16,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackRepository;
 import wily.legacy.client.GlobalPacks;
@@ -27,13 +28,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
 public class AuthScreen extends Screen {
 	private Panel panel = Panel.centered(this, 300, 250);
@@ -93,12 +97,34 @@ public class AuthScreen extends Screen {
 		}
 	}
 
-	private LegacyTip tip = new LegacyTip(Component.literal("TODO: ").append(Component.literal("Replace").withStyle(ChatFormatting.RED)).append(" this text before release!")).centered();
+	private LegacyTip tip = ((Supplier<LegacyTip>) () -> {
+		LegacyTip replace = new LegacyTip(Component.empty()).centered();
+		replace.width = 300;
+		return replace;
+	}).get();
 	private void updateSkinPacks() {
-
+		Deque<ModrinthSkinPackCollection.DownloadProgressInfo> infoStack = new ArrayDeque<>();
 		LegacyLoadingScreen loadingScreen = new LegacyLoadingScreen(Component.literal("Downloading skin packs..."), Component.literal("...")) {
+			@SuppressWarnings("SequencedCollectionMethodCanBeUsed")
 			@Override
 			public LegacyTip getLoadingTip() {
+				ArrayList<Component> components = new ArrayList<>();
+				for (ModrinthSkinPackCollection.DownloadProgressInfo downloadProgressInfo : infoStack) {
+					components.add(downloadProgressInfo.format(20));
+				}
+				List<Component> list = new ArrayList<>(components.stream().filter(a -> a.getStyle().getColor() != null && a.getStyle().getColor().getValue() == ChatFormatting.GREEN.getColor()).toList());
+				while (components.size() > 10) {
+					if (list.isEmpty()) break;
+					components.remove(list.remove(0));
+				}
+				MutableComponent component = Component.empty();
+				for (Component component1 : components) {
+					component = component.append(component1).append("\n");
+				}
+				tip.tip(component);
+				tip.width = Math.max(this.width - 30, 300);
+				int tipLabelHeight = ((LegacyTipAccessor) tip).getTipLabel().getHeight();
+				tip.height = tipLabelHeight <= 0 ? 0 : tipLabelHeight + 13;
 				return tip;
 			}
 		};
@@ -154,7 +180,7 @@ public class AuthScreen extends Screen {
 										AtomicInteger downloaded = new AtomicInteger();
 										int size = map.size();
 										try {
-											List<CompletableFuture<Pair<ModrinthDataObjects.VersionFile, Path>>> toDownload = new ArrayList<>();
+											List<CompletableFuture<ModrinthSkinPackCollection.DownloadedFile>> toDownload = new ArrayList<>();
 											for (Map.Entry<ModrinthDataObjects.Project, ModrinthDataObjects.VersionFile> projectVersionFileEntry : map.entrySet()) {
 												toDownload.add(CompletableFuture.supplyAsync(() -> {
 													Path tempFile = null;
@@ -163,21 +189,27 @@ public class AuthScreen extends Screen {
 													} catch (IOException e) {
 														throw new RuntimeException(e);
 													}
-													Pair<ModrinthDataObjects.VersionFile, Path> pair = ModrinthSkinPackCollection.downloadFile(projectVersionFileEntry.getValue(), tempFile).join();
+													ModrinthSkinPackCollection.DownloadProgressInfo downloadProgressInfo = new ModrinthSkinPackCollection.DownloadProgressInfo();
+													downloadProgressInfo.totalBytes = projectVersionFileEntry.getValue().size();
+													downloadProgressInfo.hasTotalBytes = true;
+													downloadProgressInfo.done = infoStack::removeFirstOccurrence;
+													downloadProgressInfo.packName = projectVersionFileEntry.getKey().name();
+													infoStack.addFirst(downloadProgressInfo);
+													ModrinthSkinPackCollection.DownloadedFile downloadedFile = ModrinthSkinPackCollection.downloadFile(new ModrinthSkinPackCollection.DownloadInfo(projectVersionFileEntry.getValue(), tempFile), downloadProgressInfo).join();
 													int i = downloaded.incrementAndGet();
 													triConsumer.accept(null, s.formatted(i), ((i / (double) size)));
-													return pair;
+													return downloadedFile;
 												}));
 											}
 											CompletableFuture.allOf(toDownload.toArray(CompletableFuture[]::new)).join();
 											PackRepository resourcePackRepository = Minecraft.getInstance().getResourcePackRepository();
 											triConsumer.accept(null, "Moving files to the resource packs folder...", null);
-											for (CompletableFuture<Pair<ModrinthDataObjects.VersionFile, Path>> pairCompletableFuture : toDownload) {
-												Pair<ModrinthDataObjects.VersionFile, Path> join = pairCompletableFuture.join();
-												Path path = resourcePackDirectory.resolve(join.getFirst().filename());
+											for (CompletableFuture<ModrinthSkinPackCollection.DownloadedFile> pairCompletableFuture : toDownload) {
+												ModrinthSkinPackCollection.DownloadedFile join = pairCompletableFuture.join();
+												Path path = resourcePackDirectory.resolve(join.mrMetadata().filename());
 												try {
-													Files.move(join.getSecond(), path, StandardCopyOption.REPLACE_EXISTING);
-													Legacyskins.lazyInstance().downloadedPacks().put(reversoMap.get(join.getFirst()).id(), join.getFirst().filename());
+													Files.move(join.realLocation(), path, StandardCopyOption.REPLACE_EXISTING);
+													Legacyskins.lazyInstance().downloadedPacks().put(reversoMap.get(join.mrMetadata()).id(), join.mrMetadata().filename());
 												} catch (IOException e) {
 													throw new RuntimeException(e);
 												}
@@ -188,11 +220,11 @@ public class AuthScreen extends Screen {
 											GlobalPacks globalPacks = GlobalPacks.globalResources.get();
 											boolean b = globalPacks.applyOnTop();
 											List<String> list = new ArrayList<>(globalPacks.list());
-											for (CompletableFuture<Pair<ModrinthDataObjects.VersionFile, Path>> pairCompletableFuture : toDownload) {
-												Pair<ModrinthDataObjects.VersionFile, Path> join = pairCompletableFuture.join();
-												resourcePackRepository.addPack("file/" + join.getFirst().filename());
-												if (!list.contains("file/" + join.getFirst().filename())) {
-													list.add("file/" + join.getFirst().filename());
+											for (CompletableFuture<ModrinthSkinPackCollection.DownloadedFile> pairCompletableFuture : toDownload) {
+												ModrinthSkinPackCollection.DownloadedFile join = pairCompletableFuture.join();
+												resourcePackRepository.addPack("file/" + join.mrMetadata().filename());
+												if (!list.contains("file/" + join.mrMetadata().filename())) {
+													list.add("file/" + join.mrMetadata().filename());
 												}
 											}
 											System.out.println("Downloaded all files");
