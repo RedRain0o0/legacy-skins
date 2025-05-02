@@ -11,6 +11,6 @@ public class To1010Fixer extends Fixer {
 
 	@Override
 	public <T> Dynamic<T> fix(Dynamic<T> element) {
-		return element.set("choppyLerp", element.createBoolean(false));
+		return element.set("choppyLerp", element.createBoolean(true));
 	}
 }
