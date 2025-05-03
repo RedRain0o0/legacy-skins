@@ -282,8 +282,10 @@ public class ChangeSkinScreen extends PanelVListScreen implements Controller.Eve
 		if (playerSkinWidgetList == null) return false;
 		SkinReference skinReference = playerSkinWidgetList.element3.skinRef.get();
 
-		LegacySkin legacySkin = LegacySkinPack.list.get(skinReference.pack()).skins().get(skinReference.ordinal());
-		if (legacySkin == null) return false; // shouldn't happen
+		LegacySkinPack legacySkinPack = LegacySkinPack.list.get(skinReference.pack());
+		if (legacySkinPack == null) return false; // shouldn't happen
+		LegacySkin legacySkin = legacySkinPack.skins().get(skinReference.ordinal());
+		if (legacySkin == null) return false; // also shouldn't happen
 		return legacySkin.creditsLink().isPresent();
 	}
 
