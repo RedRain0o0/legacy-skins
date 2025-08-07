@@ -1,7 +1,7 @@
 //? if clothconfig {
 package io.github.redrain0o0.legacyskins.client.screen.config;
 
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.LegacySkins;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.ClickEvent;
@@ -22,11 +22,11 @@ public class ClothConfigConfigScreen {
 		ConfigBuilder configBuilder = ConfigBuilder.create();
 		configBuilder.setParentScreen(parent);
 		configBuilder.setTitle(Component.literal("Legacy Skins")).getOrCreateCategory(Component.literal("General"))
-				.addEntry(configBuilder.entryBuilder().startBooleanToggle(Component.literal("Show Dev Skins"), Legacyskins.INSTANCE.showDevPacks()).setDefaultValue(Legacyskins.INSTANCE::showDevPacks).setSaveConsumer(a -> Legacyskins.INSTANCE.showDevPacks = a).build())
-				.addEntry(configBuilder.entryBuilder().startBooleanToggle(Component.literal("Show Skin Editor Button"), Legacyskins.INSTANCE.showSkinEditorButton()).setDefaultValue(Legacyskins.INSTANCE::showSkinEditorButton).setSaveConsumer(a -> Legacyskins.INSTANCE.showEditorButton = a).build())
-				.addEntry(configBuilder.entryBuilder().startFloatField(Component.literal("Doll X Rotation Limit"), Legacyskins.INSTANCE.dollRotationXLimit()).setDefaultValue(Legacyskins.INSTANCE::dollRotationXLimit).setSaveConsumer(a -> Legacyskins.INSTANCE.dollRotationXLimit = a).setMin(0).setMax(90).build())
-				.addEntry(configBuilder.entryBuilder().startEnumSelector(Component.literal("Preferred Config Screen"), M.class, M.of(Legacyskins.INSTANCE::configScreenType)).setDefaultValue(M.NONE).setSaveConsumer(a -> Legacyskins.INSTANCE.configScreenType = Optional.ofNullable(a.type)).build())
-				.addEntry(configBuilder.entryBuilder().startBooleanToggle(Component.literal("Smooth Interpolation"), !Legacyskins.INSTANCE.choppyLerp()).setDefaultValue(() -> !Legacyskins.INSTANCE.choppyLerp()).setSaveConsumer(a -> Legacyskins.INSTANCE.choppyLerp = !a).build())
+				.addEntry(configBuilder.entryBuilder().startBooleanToggle(Component.literal("Show Dev Skins"), LegacySkins.INSTANCE.showDevPacks()).setDefaultValue(LegacySkins.INSTANCE::showDevPacks).setSaveConsumer(a -> LegacySkins.INSTANCE.showDevPacks = a).build())
+				.addEntry(configBuilder.entryBuilder().startBooleanToggle(Component.literal("Show Skin Editor Button"), LegacySkins.INSTANCE.showSkinEditorButton()).setDefaultValue(LegacySkins.INSTANCE::showSkinEditorButton).setSaveConsumer(a -> LegacySkins.INSTANCE.showEditorButton = a).build())
+				.addEntry(configBuilder.entryBuilder().startFloatField(Component.literal("Doll X Rotation Limit"), LegacySkins.INSTANCE.dollRotationXLimit()).setDefaultValue(LegacySkins.INSTANCE::dollRotationXLimit).setSaveConsumer(a -> LegacySkins.INSTANCE.dollRotationXLimit = a).setMin(0).setMax(90).build())
+				.addEntry(configBuilder.entryBuilder().startEnumSelector(Component.literal("Preferred Config Screen"), M.class, M.of(LegacySkins.INSTANCE::configScreenType)).setDefaultValue(M.NONE).setSaveConsumer(a -> LegacySkins.INSTANCE.configScreenType = Optional.ofNullable(a.type)).build())
+				.addEntry(configBuilder.entryBuilder().startBooleanToggle(Component.literal("Smooth Interpolation"), !LegacySkins.INSTANCE.choppyLerp()).setDefaultValue(() -> !LegacySkins.INSTANCE.choppyLerp()).setSaveConsumer(a -> LegacySkins.INSTANCE.choppyLerp = !a).build())
 				.addEntry(configBuilder.entryBuilder().startTextDescription(Component.literal("Get more skin packs!").withStyle(s -> s.withClickEvent(
 						//? if <1.21.5 {
 						/*new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/RedRain0o0/legacy-skins/discussions/categories/showcase")

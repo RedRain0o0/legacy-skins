@@ -1,7 +1,9 @@
 package io.github.redrain0o0.legacyskins;
 
 
-import io.github.redrain0o0.legacyskins.client.LegacySkinsClient;
+//? if (neoforge || forge) && !multientrypoints {
+/*import io.github.redrain0o0.legacyskins.client.LegacySkinsClient;
+*///?}
 import io.github.redrain0o0.legacyskins.util.PlatformUtils;
 
 //? if forge {
@@ -24,12 +26,13 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 *///?}
-
-import java.util.function.Supplier;
+//? if neoforge || forge {
+/*import java.util.function.Supplier;
+*///?}
 
 //? if neoforge || forge
-/*@Mod(Legacyskins.MOD_ID)*/
-public class Legacyskins {
+/*@Mod(LegacySkins.MOD_ID)*/
+public class LegacySkins {
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
@@ -43,7 +46,7 @@ public class Legacyskins {
 	}
 
 	//? if neoforge || forge {
-	/*public Legacyskins(/^? if constructorargs {^/ /^IEventBus bus, ModContainer container ^//^?}^/) {
+	/*public LegacySkins(/^? if constructorargs {^/ /^IEventBus bus, ModContainer container ^//^?}^/) {
 		//? if !constructorargs {
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		ModContainer container = ModLoadingContext.get().getActiveContainer();

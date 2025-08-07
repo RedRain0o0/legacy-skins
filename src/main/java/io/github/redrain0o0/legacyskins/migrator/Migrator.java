@@ -31,10 +31,10 @@ public class Migrator {
 	);
 
 	public static final Migrator SKIN_PACKS_FIXER = new Migrator(
-			List.of(),
+			List.of(new io.github.redrain0o0.legacyskins.migrator.fixer.skinpacks.To2Fixer()),
 			1,
 			1,
-			1
+			2
 	);
 
 	public static final Migrator SKIN_PACK_PRIORITIES_FIXER = new Migrator(
@@ -68,6 +68,15 @@ public class Migrator {
 	 * @param <T> The {@link Dynamic<T>}'s underlying value's type.
 	 */
 	public <T> Dynamic<T> fix(Dynamic<T> element) {
+		return fix(element, false);
+	}
+
+	/**
+	 * @param element The input {@link Dynamic<T>}
+	 * @return The fixed {@link Dynamic<T>}
+	 * @param <T> The {@link Dynamic<T>}'s underlying value's type.
+	 */
+	public <T> Dynamic<T> fix(Dynamic<T> element, boolean shutup) {
 		int schemaVersion = element.get("schemaVersion").asInt(defaultValue);
 		if (schemaVersion < oldestSupportedVersion) throw new UnsupportedOperationException();
 		element = element.remove("schemaVersion");
@@ -86,7 +95,7 @@ public class Migrator {
 				appliedFixers++;
 			}
 		}
-		LOGGER.info("Migrated from schema version {} to {}, using {} fixer{}.", schemaVersion, this.schemaVersion, appliedFixers, appliedFixers == 1 ? "" : "s");
+		if (!shutup) LOGGER.info("Migrated from schema version {} to {}, using {} fixer{}.", schemaVersion, this.schemaVersion, appliedFixers, appliedFixers == 1 ? "" : "s");
 		return dynamic;
 	}
 
@@ -97,7 +106,17 @@ public class Migrator {
 	 * @param <T> the input type of the {@code value}
 	 */
 	public <T> T fix(DynamicOps<T> ops, T value) {
-		return fix(new Dynamic<>(ops, value)).getValue();
+		return fix(ops, value, false);
+	}
+
+	/**
+	 * @param ops {@link DynamicOps<T>}
+	 * @param value The input {@link T}
+	 * @return A fixed {@link T}.
+	 * @param <T> the input type of the {@code value}
+	 */
+	public <T> T fix(DynamicOps<T> ops, T value, boolean shutup) {
+		return fix(new Dynamic<>(ops, value), shutup).getValue();
 	}
 
 	/**

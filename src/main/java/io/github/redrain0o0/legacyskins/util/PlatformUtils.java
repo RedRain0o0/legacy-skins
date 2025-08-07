@@ -1,6 +1,6 @@
 package io.github.redrain0o0.legacyskins.util;
 
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.LegacySkins;
 //? if forge {
 /*import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.ModList;
@@ -50,11 +50,11 @@ public enum PlatformUtils {
 
 	public static Path findInMod(String path) {
 		//? if fabric
-		return FabricLoader.getInstance().getModContainer(Legacyskins.MOD_ID).orElseThrow().findPath(path).orElseThrow();
+		return FabricLoader.getInstance().getModContainer(LegacySkins.MOD_ID).orElseThrow().findPath(path).orElseThrow();
 		//? if neoforge
-		/*return ModList.get().getModContainerById(Legacyskins.MOD_ID).orElseThrow().getModInfo().getOwningFile().getFile().findResource(path);*/
+		/*return ModList.get().getModContainerById(LegacySkins.MOD_ID).orElseThrow().getModInfo().getOwningFile().getFile().findResource(path);*/
 		//? if forge
-		/*return ModList.get().getModContainerById(Legacyskins.MOD_ID).orElseThrow().getModInfo().getOwningFile().getFile().findResource(path);*/
+		/*return ModList.get().getModContainerById(LegacySkins.MOD_ID).orElseThrow().getModInfo().getOwningFile().getFile().findResource(path);*/
 	}
 
 	public static Env fromPlatformSpecific(/*? if fabric {*/ EnvType env /*?} elif neoforge || forge {*//*Dist dist *//*?}*/) {

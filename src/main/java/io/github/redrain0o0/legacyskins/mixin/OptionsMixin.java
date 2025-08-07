@@ -1,6 +1,6 @@
 package io.github.redrain0o0.legacyskins.mixin;
 
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.LegacySkins;
 import io.github.redrain0o0.legacyskins.client.LegacySkinsClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -15,8 +15,8 @@ public class OptionsMixin {
 	@Inject(method = "loadSelectedResourcePacks", at = @At("HEAD"))
 	void loadSelectedResourcePacksInject(PackRepository packRepository, CallbackInfo ci) {
 		System.out.println("OUR INJECT WORKED!");
-		Minecraft.getInstance().options.resourcePacks.addAll(Legacyskins.lazyInstance().downloadedPacks().values().stream().map(a -> "file/" + a).toList());
-		Legacyskins.lazyInstance().downloadedPacks().values().stream().map(a -> "file/" + a).forEachOrdered(packRepository::addPack);
+		Minecraft.getInstance().options.resourcePacks.addAll(LegacySkins.lazyInstance().downloadedPacks().values().stream().map(a -> "file/" + a).toList());
+		LegacySkins.lazyInstance().downloadedPacks().values().stream().map(a -> "file/" + a).forEachOrdered(packRepository::addPack);
 		LegacySkinsClient.singleFireAssortApply = true;
 	}
 }

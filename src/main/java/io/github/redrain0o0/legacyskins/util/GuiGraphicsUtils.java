@@ -1,7 +1,11 @@
 package io.github.redrain0o0.legacyskins.util;
 
 import net.minecraft.client.gui.GuiGraphics;
+//? if >=1.21.6 {
+/*import net.minecraft.client.renderer.RenderPipelines;
+*///?} else {
 import net.minecraft.client.renderer.RenderType;
+//?}
 import net.minecraft.resources.ResourceLocation;
 //? if <1.20.2 {
 /*//? if legacy4j: >=1.7.5 {
@@ -16,7 +20,9 @@ public interface GuiGraphicsUtils {
 		return new GuiGraphicsUtils() {
 			@Override
 			public void blitSprite(ResourceLocation resourceLocation, int x, int y, int width, int height) {
-				//? if >=1.21.2 {
+				//? if >=1.21.6 {
+				/*guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, resourceLocation, x, y, width, height);
+				*///?} else if >=1.21.2 {
 				guiGraphics.blitSprite(RenderType::guiTextured, resourceLocation, x, y, width, height);
 				//?} else
 				/*p(guiGraphics).blitSprite(resourceLocation, x, y, width, height);*/
@@ -24,7 +30,9 @@ public interface GuiGraphicsUtils {
 
 			@Override
 			public void blit(ResourceLocation resourceLocation, int x, int y, int u, int v, int width, int height, int texWidth, int texHeight) {
-				//? if >=1.21.2 {
+				//? if >=1.21.6 {
+				/*guiGraphics.blit(RenderPipelines.GUI_TEXTURED, resourceLocation, x, y, u, v, width, height, texWidth, texHeight);
+				*///?} else if >=1.21.2 {
 				guiGraphics.blit(RenderType::guiTextured, resourceLocation, x, y, u, v, width, height, texWidth, texHeight);
 				//?} else
 				/*guiGraphics.blit(resourceLocation, x, y, u, v, width, height, texWidth, texHeight);*/

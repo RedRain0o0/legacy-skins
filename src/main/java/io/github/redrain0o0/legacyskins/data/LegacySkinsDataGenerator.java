@@ -1,7 +1,7 @@
 package io.github.redrain0o0.legacyskins.data;
 
 //? if neoforge {
-/*import io.github.redrain0o0.legacyskins.Legacyskins;
+/*import io.github.redrain0o0.legacyskins.LegacySkins;
 
 import net.neoforged.bus.api.SubscribeEvent;
 //? if >=1.20.6 {
@@ -19,7 +19,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 //?}
 
 //? if forge {
-/*import io.github.redrain0o0.legacyskins.Legacyskins;
+/*import io.github.redrain0o0.legacyskins.LegacySkins;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -29,8 +29,9 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 import java.io.IOException;
 
-//? if neoforge || forge
-/*@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Legacyskins.MOD_ID)*/
+//? if neoforge || forge {
+/*@EventBusSubscriber(/^? if !(neoforge && >=1.21.6) {^/bus = EventBusSubscriber.Bus.MOD,/^?}^/ modid = LegacySkins.MOD_ID)
+*///?}
 public class LegacySkinsDataGenerator {
 	//? if fabric {
 	public void onInitializeDataGenerator(FabricDataGenerator generator) {

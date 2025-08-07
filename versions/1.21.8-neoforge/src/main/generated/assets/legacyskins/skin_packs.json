@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 2,
+  "legacyskins:default": {
+    "icon": "legacyskins:textures/skin_packs/default.png",
+    "skins": [
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/steve.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/tennissteve.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/tuxedosteve.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/athletesteve.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/scottishsteve.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/prisonersteve.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/cycliststeve.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/boxersteve.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/alex.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/tennisalex.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/tuxedoalex.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/athletealex.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/swedishalex.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/prisoneralex.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/cyclistalex.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/boxeralex.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/devsteve.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/default/devalex.cpmmodel"
+      }
+    ]
+  },
+  "legacyskins:favorites": {
+    "icon": "legacyskins:textures/skin_packs/default.png",
+    "skins": []
+  },
+  "legacyskins:dev": {
+    "type": "dev",
+    "icon": "legacyskins:textures/skin_packs/dev.png",
+    "skins": [
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/dev/redrain0o0.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/dev/jab125.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/dev/wilyicaro.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/dev/tom5454.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/dev/macandmayo.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/dev/lyn.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/dev/mintyroad.cpmmodel"
+      }
+    ]
+  },
+  "legacyskins:creditors": {
+    "type": "dev",
+    "icon": "legacyskins:textures/skin_packs/dev.png",
+    "skins": []
+  },
+  "legacyskins:modern-defaults": {
+    "type": "dev",
+    "icon": "legacyskins:textures/skin_packs/dev.png",
+    "skins": [
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/wide/steve.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/slim/steve.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/wide/sunny.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/slim/sunny.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/wide/zuri.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/slim/zuri.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/wide/alex.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/slim/alex.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/wide/ari.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/slim/ari.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/wide/efe.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/slim/efe.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/wide/kai.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/slim/kai.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/wide/makena.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/slim/makena.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/wide/noor.cpmmodel"
+      },
+      {
+        "modelType": "cpm",
+        "model": "legacyskins:skinpacks/modern-defaults/slim/noor.cpmmodel"
+      }
+    ]
+  }
+}

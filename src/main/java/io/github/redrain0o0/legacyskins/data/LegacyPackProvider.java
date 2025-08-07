@@ -5,7 +5,7 @@ import com.google.common.hash.HashingOutputStream;
 import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonWriter;
 import com.mojang.serialization.JsonOps;
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.LegacySkins;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.migrator.Migrator;
 import io.github.redrain0o0.legacyskins.util.VersionUtils;
@@ -53,7 +53,7 @@ public abstract class LegacyPackProvider implements DataProvider {
 		return registryLookup.thenCompose(v -> {
 			InternalPackBuilder internalPackBuilder = new InternalPackBuilder(packs);
 			addPacks(internalPackBuilder);
-			JsonElement element = LegacySkinPack.MAP_CODEC.encodeStart(JsonOps.INSTANCE, packs).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+			JsonElement element = LegacySkinPack.MAP_CODEC.encodeStart(JsonOps.INSTANCE, packs).resultOrPartial(LegacySkins.LOGGER::error).orElseThrow();
 			element = Migrator.SKIN_PACKS_FIXER.addSchemaVersion(JsonOps.INSTANCE, element);
 			return saveNotStable(cachedOutput, element, dataOutput.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(internalPackBuilder.getModId()).resolve("skin_packs.json"));
 		});

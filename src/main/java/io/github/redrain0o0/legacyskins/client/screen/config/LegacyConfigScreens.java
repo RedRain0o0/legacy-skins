@@ -1,7 +1,7 @@
 package io.github.redrain0o0.legacyskins.client.screen.config;
 
 import com.mojang.serialization.Codec;
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.LegacySkins;
 import io.github.redrain0o0.legacyskins.util.PlatformUtils;
 import net.minecraft.client.gui.screens.Screen;
 
@@ -26,7 +26,7 @@ public class LegacyConfigScreens {
 	public static Optional<Screen> createConfigScreen(Screen screen) {
 		if (CONFIG_SCREENS.isEmpty()) return Optional.empty();
 		ConfigScreenType type;
-		if (Legacyskins.INSTANCE.configScreenType().isPresent() && CONFIG_SCREENS.containsKey(type = Legacyskins.INSTANCE.configScreenType().get())) return Optional.ofNullable(CONFIG_SCREENS.get(type).apply(screen));
+		if (LegacySkins.INSTANCE.configScreenType().isPresent() && CONFIG_SCREENS.containsKey(type = LegacySkins.INSTANCE.configScreenType().get())) return Optional.ofNullable(CONFIG_SCREENS.get(type).apply(screen));
 		return Optional.ofNullable(CONFIG_SCREENS.entrySet().stream().findFirst().orElseThrow().getValue().apply(screen));
 	}
 

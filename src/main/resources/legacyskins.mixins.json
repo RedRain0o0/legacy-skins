@@ -10,6 +10,7 @@
     "GeneratorsAccessor",
     "PlayerRendererImplAccessor",
     "ScreenAccessor",
+    "figura.LocalAvatarLoaderMixin",
     "legacy4j.AssortMixin",
     "legacy4j.FactoryAPIMixin",
     "legacy4j.HelpOptionsMixin",
@@ -22,8 +23,11 @@
     "defaultRequire": 1
   },
   "client": [
+    "ClientLevelMixin",
     "DefaultPlayerSkinAccessor",
+    "GuiRendererMixin",
     "NetHandlerMixin",
-    "OptionsMixin"
+    "OptionsMixin",
+    "legacy4j.PlayerRendererMixin"
   ]
 }

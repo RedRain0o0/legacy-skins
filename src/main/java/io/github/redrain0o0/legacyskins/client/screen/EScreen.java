@@ -1,5 +1,6 @@
 package io.github.redrain0o0.legacyskins.client.screen;
 
+import io.github.redrain0o0.legacyskins.util.CommonMatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -16,11 +17,11 @@ public class EScreen extends Screen {
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int i, int j, float f) {
-		guiGraphics.pose().pushPose();
-		guiGraphics.pose().translate(width / 2, height / 2, 0);
-		guiGraphics.pose().scale(5, 5, 0);
+		CommonMatrixStack.of(guiGraphics.pose()).pushPose();
+		CommonMatrixStack.of(guiGraphics.pose()).translate(width / 2, height / 2, 0);
+		CommonMatrixStack.of(guiGraphics.pose()).scale(5, 5, 0);
 		guiGraphics.drawString(Minecraft.getInstance().font, "E", 0, 0, 0xffffffff);
-		guiGraphics.pose().popPose();
+		CommonMatrixStack.of(guiGraphics.pose()).popPose();
 	}
 
 	@Override

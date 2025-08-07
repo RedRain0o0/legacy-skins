@@ -5,7 +5,9 @@ import java.util.Map;
 public class VersioningUtils {
 	private static final Map<String, String> MAP = Map.of(
 			"1.7.10.2504.3", "1.8.0-beta.2504.3",
-			"1.8.0.2517.1", "1.8.1-beta.2517.1"
+			"1.8.0.2517.1", "1.8.1-beta.2517.1",
+			"1.8.2.2529.2", "1.8.3-beta.2529.2",
+			"1.8.2.2530.1", "1.8.3-beta.2530.1"
 	);
 	public static String semverifyL4JVer(String inputVersion) {
 		String suffix = "";

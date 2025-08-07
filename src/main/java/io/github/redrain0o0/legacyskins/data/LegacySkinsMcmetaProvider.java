@@ -7,7 +7,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.LegacySkins;
 import net.minecraft.SharedConstants;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -29,7 +29,7 @@ public class LegacySkinsMcmetaProvider implements DataProvider {
 	public CompletableFuture<?> run(CachedOutput arg) {
 		return CompletableFuture.runAsync(() -> {
 			Mcmeta mcmeta = new Mcmeta(new Pack(SharedConstants.RESOURCE_PACK_FORMAT, new SupportedFormats(0, 2147438647), "Mod resources for Legacy Skins."));
-			JsonElement json = Mcmeta.CODEC.encodeStart(JsonOps.INSTANCE, mcmeta).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+			JsonElement json = Mcmeta.CODEC.encodeStart(JsonOps.INSTANCE, mcmeta).resultOrPartial(LegacySkins.LOGGER::error).orElseThrow();
 			byte[] bytes = gson.toJson(json).getBytes(StandardCharsets.UTF_8);
 			try {
 				arg.writeIfNeeded(packOutput.getOutputFolder().resolve("pack.mcmeta"), bytes, Hashing.sha1().hashBytes(bytes));

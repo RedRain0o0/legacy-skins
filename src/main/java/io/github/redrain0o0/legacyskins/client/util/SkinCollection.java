@@ -1,7 +1,7 @@
 package io.github.redrain0o0.legacyskins.client.util;
 
 import io.github.redrain0o0.legacyskins.Constants;
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.LegacySkins;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacyPackType;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
@@ -38,7 +38,7 @@ public class SkinCollection {
 	}
 
 	public static SkinCollection ofFavorites() {
-		return new SkinCollection(Legacyskins.lazyInstance().getActiveSkinsConfig()::getFavorites, LegacySkinPack.list.get(Constants.FAVORITES_PACK));
+		return new SkinCollection(LegacySkins.lazyInstance().getActiveSkinsConfig()::getFavorites, LegacySkinPack.list.get(Constants.FAVORITES_PACK));
 	}
 
 	/*

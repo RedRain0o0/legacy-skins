@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.LegacySkins;
 import io.github.redrain0o0.legacyskins.modrinth.data.ModrinthDataObjects;
 import io.github.redrain0o0.legacyskins.util.ByteSizeFormatter;
 import net.minecraft.ChatFormatting;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ModrinthSkinPackCollection {
-	private static final String userAgent = /*$ userAgent {*/"RedRainOoO/legacy-skins/1.4.5-beta.2x+fabric+1.21.5"/*$}*/;
+	private static final String userAgent = /*$ userAgent {*/"RedRainOoO/legacy-skins/1.5.0+fabric+1.21.5"/*$}*/;
 	private static final String collectionUrl = "https://api.modrinth.com/v3/collection/bJ8YVFtd";
 	private static final String projectsUrl = "https://api.modrinth.com/v3/projects";
 	private static final String teamsUrl = "https://api.modrinth.com/v3/teams";
@@ -55,7 +55,7 @@ public class ModrinthSkinPackCollection {
 		return client.sendAsync(builder().GET().uri(URI.create(collectionUrl)).build(), HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)).thenApply(response -> {
 			String body = response.body();
 			JsonElement element = GSON.fromJson(body, JsonElement.class);
-			return ModrinthDataObjects.Collection.CODEC.parse(JsonOps.INSTANCE, element).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+			return ModrinthDataObjects.Collection.CODEC.parse(JsonOps.INSTANCE, element).resultOrPartial(LegacySkins.LOGGER::error).orElseThrow();
 		});
 	}
 
@@ -63,7 +63,7 @@ public class ModrinthSkinPackCollection {
 		return client.sendAsync(builder().GET().uri(URI.create(projectsUrl + "?ids=" + URLEncoder.encode("[" + collection.projects().stream().map(a -> "\"" + a.str() + "\"").collect(Collectors.joining(",")) + "]", StandardCharsets.UTF_8))).build(), HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)).thenApply(response -> {
 			String body = response.body();
 			JsonElement element = GSON.fromJson(body, JsonElement.class);
-			return ModrinthDataObjects.Project.CODEC.listOf().parse(JsonOps.INSTANCE, element).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+			return ModrinthDataObjects.Project.CODEC.listOf().parse(JsonOps.INSTANCE, element).resultOrPartial(LegacySkins.LOGGER::error).orElseThrow();
 		});
 	}
 
@@ -72,7 +72,7 @@ public class ModrinthSkinPackCollection {
 			// we end up with a list of a list
 			String body = response.body();
 			JsonElement element = GSON.fromJson(body, JsonElement.class);
-			return ModrinthDataObjects.TeamMember.CODEC.listOf().listOf().parse(JsonOps.INSTANCE, element).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+			return ModrinthDataObjects.TeamMember.CODEC.listOf().listOf().parse(JsonOps.INSTANCE, element).resultOrPartial(LegacySkins.LOGGER::error).orElseThrow();
 		});
 	}
 
@@ -81,7 +81,7 @@ public class ModrinthSkinPackCollection {
 			// we end up with a list of a list
 			String body = response.body();
 			JsonElement element = GSON.fromJson(body, JsonElement.class);
-			return ModrinthDataObjects.Organization.CODEC.listOf().parse(JsonOps.INSTANCE, element).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+			return ModrinthDataObjects.Organization.CODEC.listOf().parse(JsonOps.INSTANCE, element).resultOrPartial(LegacySkins.LOGGER::error).orElseThrow();
 		});
 	}
 
@@ -90,7 +90,7 @@ public class ModrinthSkinPackCollection {
 			// we end up with a list of a list
 			String body = response.body();
 			JsonElement element = GSON.fromJson(body, JsonElement.class);
-			return ModrinthDataObjects.Version.CODEC.listOf().parse(JsonOps.INSTANCE, element).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+			return ModrinthDataObjects.Version.CODEC.listOf().parse(JsonOps.INSTANCE, element).resultOrPartial(LegacySkins.LOGGER::error).orElseThrow();
 		});
 	}
 
@@ -147,7 +147,7 @@ public class ModrinthSkinPackCollection {
 			// we end up with a list of a list
 			String body = response.body();
 			JsonElement element = new Gson().fromJson(body, JsonElement.class);
-			return ModrinthDataObjects.User.CODEC.parse(JsonOps.INSTANCE, element).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+			return ModrinthDataObjects.User.CODEC.parse(JsonOps.INSTANCE, element).resultOrPartial(LegacySkins.LOGGER::error).orElseThrow();
 		});
 	}
 

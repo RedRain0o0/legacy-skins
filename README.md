@@ -1,5 +1,5 @@
 # Legacy Skins
-Legacy Skins is a compatibility mod for [Legacy4J](https://modrinth.com/mod/legacy4j) and [Customizable Player Models](https://modrinth.com/plugin/custom-player-models). It is entirely resource driven, meaning adding a new skin pack is as simple as applying a resource pack!
+Legacy Skins is a compatibility mod for [Legacy4J](https://modrinth.com/mod/legacy4j), [Customizable Player Models](https://modrinth.com/mod/custom-player-models), and [Figura](https://modrinth.com/mod/figura). It is entirely resource driven, meaning adding a new skin pack is as simple as applying a resource pack!
 
 <!-- For a tutorial on how to make a skin pack, check out !ADD YOUTUBE LINK! for a video tutorial or !ADD WIKI LINK! for a text rundown on everything. -->
 

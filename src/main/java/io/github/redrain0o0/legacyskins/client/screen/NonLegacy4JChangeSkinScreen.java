@@ -3,7 +3,7 @@ package io.github.redrain0o0.legacyskins.client.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import io.github.redrain0o0.legacyskins.Constants;
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.LegacySkins;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.util.SkinCollection;
 import io.github.redrain0o0.legacyskins.mixin.ScreenAccessor;
@@ -37,7 +37,7 @@ public class NonLegacy4JChangeSkinScreen extends Screen {
 
 	private SkinCollection getInitialSkinCollection() {
 		SkinReference defaultSkin = new SkinReference(Constants.DEFAULT_PACK, 0);
-		SkinReference currentSkin = Legacyskins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(defaultSkin);
+		SkinReference currentSkin = LegacySkins.INSTANCE.getActiveSkinsConfig().getCurrentSkin().orElse(defaultSkin);
 		if (SkinCollection.ofFavorites().has(currentSkin)) {
 			return SkinCollection.ofFavorites();
 		}

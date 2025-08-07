@@ -1,8 +1,6 @@
-- Dropped 1.21.3 Fabric.
-- Added support for 1.21.5 for Fabric and NeoForge.
-- Fixed a bug where some skins would sometimes not load.
-- Changed interpolation to be less smooth, to be more accurate to the Legacy Console Editions. (Can be reverted to the old smooth animation in Legacy Skins's config screen.)
-- Skin packs downloaded by Legacy Skins are now automatically added to Legacy4J's Global Resource Packs.
-- Ported to use Legacy4J 1.8.1
-- Replaced the "Replace this text before release!" text with a download progress text, showing the download progress for each resource pack.
-- Removed the "changed parent screen" text logged into the console every time the auth screen is closed.
+- Added support for 1.21.7 and 1.21.8 for Fabric and NeoForge.
+- Added support for Figura avatars!
+- A padlock icon now shows if a skin cannot be loaded, such as if Legacy Skins can't find the skin file, or CPM/Figura is not installed.
+- Legacy Skins will now search for `skin_packs2.json` on top of the preexisting `skin_packs.json` file.
+- The schema version of the `skin_packs.json` file is now 2.
+- Fixed a few edge cases in the skins screen that could cause a crash.

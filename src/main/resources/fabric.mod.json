@@ -18,7 +18,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.redrain0o0.legacyskins.Legacyskins::onInitialize"
+      "io.github.redrain0o0.legacyskins.LegacySkins::onInitialize"
     ],
     "client": [
       "io.github.redrain0o0.legacyskins.client.LegacySkinsClient::onInitializeClient"
@@ -41,7 +41,9 @@
     "minecraft": "${deps.minecraft}",
     "java": ">=${deps.java}",
     "fabric-api": "*",
-    "legacy": "*",
-    "cpm": "*"
+    "legacy": "*"
+  },
+  "recommends": {
+    "cpm": "${deps.cpm1}"
   }
 }

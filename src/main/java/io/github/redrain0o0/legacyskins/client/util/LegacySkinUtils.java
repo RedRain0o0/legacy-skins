@@ -1,12 +1,10 @@
 package io.github.redrain0o0.legacyskins.client.util;
 
-import com.tom.cpm.shared.MinecraftClientAccess;
-import com.tom.cpm.shared.config.ConfigKeys;
-import com.tom.cpm.shared.config.ModConfig;
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.LegacySkins;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
+import io.github.redrain0o0.legacyskins.client.LegacySkinsClient;
 import io.github.redrain0o0.legacyskins.util.PlatformUtils;
 import io.github.redrain0o0.legacyskins.util.VersionUtils;
 import net.minecraft.client.Minecraft;
@@ -26,19 +24,31 @@ import java.util.Map;
 
 public class LegacySkinUtils {
 	public static void switchSkin(@Nullable LegacySkin skin) {
+		if (skin != null && skin.type() == LegacySkin.Type.FIGURA) {
+			LegacySkinsClient.generalCpmQ.vh1();
+			LegacySkinsClient.generalFiguraQ.q5();
+			LegacySkinsClient.generalFiguraQ.q4(() -> LegacySkinsClient.generalFiguraQ.q(skin));
+
+			if (Minecraft.getInstance().getConnection() != null) {
+				LegacySkinsClient.generalCpmQ.vh3();
+			}
+			return;
+		}
 		if (skin == null) {
-			ModConfig.getCommonConfig().clearValue(ConfigKeys.SELECTED_MODEL);
-			ModConfig.getCommonConfig().save();
+			LegacySkinsClient.generalCpmQ.vh1();
+			LegacySkinsClient.generalFiguraQ.q5();
+			LegacySkinsClient.generalFiguraQ.q4(() -> LegacySkinsClient.generalFiguraQ.q2());
 		} else {
 			try (InputStream opened = from(skin)) {
-				ModConfig.getCommonConfig().setString(ConfigKeys.SELECTED_MODEL, temp(skin.model(), opened.readAllBytes()));
-				ModConfig.getCommonConfig().save();
+				LegacySkinsClient.generalCpmQ.vh2(skin, opened);
+				LegacySkinsClient.generalFiguraQ.q5();
+				LegacySkinsClient.generalFiguraQ.q4(() -> LegacySkinsClient.generalFiguraQ.q2());
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
 		}
 		if (Minecraft.getInstance().getConnection() != null) {
-			MinecraftClientAccess.get().sendSkinUpdate();
+			LegacySkinsClient.generalCpmQ.vh3();
 		}
 	}
 
@@ -48,18 +58,20 @@ public class LegacySkinUtils {
 			Resource resource = Minecraft.getInstance().getResourceManager().getResource(texture).orElseThrow();
 			return resource.open();
 		} catch (Throwable t) {
-			Legacyskins.LOGGER.error("Failed to load skin %s".formatted(texture), t);
+			LegacySkins.LOGGER.error("Failed to load skin %s".formatted(texture), t);
 			return from(new LegacySkin(VersionUtils.of("legacyskins", "fallback.cpmmodel")));
 		}
 	}
 
 	public static void cleanup() {
 		Path playerModels = PlatformUtils.getGameDir().resolve("player_models").resolve("legacyskins-models");
+		Path lstempcache = PlatformUtils.getGameDir().resolve(".ls-tempcache");
 		try {
+			FileUtils.deleteDirectory(lstempcache.toFile());
 			FileUtils.deleteDirectory(playerModels.toFile());
 		} catch (IOException e) {
 			// Don't bother throwing here, the client is stopping already
-			Legacyskins.LOGGER.error("Failed to delete temporary models folder!", e);
+			LegacySkins.LOGGER.error("Failed to delete temporary models folder!", e);
 		}
 	}
 
@@ -67,7 +79,7 @@ public class LegacySkinUtils {
 	public static String temp(ResourceLocation location, byte[] bytes) {
 		Path gameDir = PlatformUtils.getGameDir();
 		Path playerModels = gameDir.resolve("player_models");
-		Path resolve = playerModels.resolve(Legacyskins.MOD_ID + "-models");
+		Path resolve = playerModels.resolve(LegacySkins.MOD_ID + "-models");
 		Path resolve1 = resolve.resolve(location.hashCode() + ".cpmmodel");
 		resolve.toFile().mkdirs();
 		try {
@@ -76,7 +88,7 @@ public class LegacySkinUtils {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		return Legacyskins.MOD_ID + "-models/" + location.hashCode() + ".cpmmodel";
+		return LegacySkins.MOD_ID + "-models/" + location.hashCode() + ".cpmmodel";
 	}
 
 	/**

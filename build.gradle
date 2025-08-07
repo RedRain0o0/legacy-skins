@@ -28,6 +28,10 @@ project.ext["loom.platform"] = loader.friendlyName
 version = project.mod_version + "+" + loader.friendlyName + "+" + minecraftVersion
 group = project.maven_group
 
+boolean figura = false
+if (project.figura_version != "[VERSIONED]") {
+	figura = true
+}
 String l4jVerStr
 if (project.legacy4j_repo_version != "[VERSIONED]") {
 	l4jVerStr = project.legacy4j_repo_version as String
@@ -43,8 +47,10 @@ stonecutter.const("neoforge", loader == NEOFORGE)
 stonecutter.const("eventbusupdates", loader == NEOFORGE)
 stonecutter.const("multientrypoints", loader == NEOFORGE && minecraftIntVersion >= 1_20_06)
 stonecutter.const("constructorargs", loader == NEOFORGE && minecraftIntVersion >= 1_20_02)
+stonecutter.const("figurac", figura)
 stonecutter.const("yacl", project.yacl_version != "[VERSIONED]")
 stonecutter.const("clothconfig", project.clothconfig_version != "[VERSIONED]")
+stonecutter.const("newera", minecraftIntVersion >= 1_21_06)
 
 stonecutter.swap("l4joptionsscreen") {
 	if (stonecutter.eval(legacy4jVersionStr, ">=1.7.5")) "HelpAndOptionsScreen" else "HelpOptionsScreen"
@@ -121,6 +127,15 @@ repositories {
 			includeGroupAndSubgroups "wily"
 		}
 	}
+	maven {
+		name = "Figura Maven Release"
+		url = uri("https://maven.figuramc.org/releases")
+	}
+	maven {
+		name = "Figura Maven Snapshots"
+		url = uri("https://maven.figuramc.org/snapshots")
+	}
+	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -198,6 +213,25 @@ dependencies {
 		forge "net.minecraftforge:forge:$project.properties.forge_version"
 		localRuntime "io.github.llamalad7:mixinextras-forge:0.4.1"
 	}
+
+	if (figura) {
+		if (minecraftIntVersion >= 1_21_05) {
+			modCompileOnly("com.github.FiguraMC.luaj:luaj-core:${project.properties.luaj_version}-figura")
+			modCompileOnly("com.github.FiguraMC.luaj:luaj-jse:${project.properties.luaj_version}-figura")
+			modCompileOnly("com.neovisionaries:nv-websocket-client:${project.properties.nv_websocket_version}")
+			modCompileOnly "org.figuramc:figura-${loader.friendlyName}:${project.properties.figura_version}"
+		} else {
+			modImplementation("com.github.FiguraMC.luaj:luaj-core:${project.properties.luaj_version}-figura")
+			modImplementation("com.github.FiguraMC.luaj:luaj-jse:${project.properties.luaj_version}-figura")
+			modImplementation("com.neovisionaries:nv-websocket-client:${project.properties.nv_websocket_version}")
+			modImplementation "org.figuramc:figura-${loader.friendlyName}:${project.properties.figura_version}"
+			if (loader == NEOFORGE || loader == FORGE) {
+				forgeRuntimeLibrary("com.github.FiguraMC.luaj:luaj-core:${project.properties.luaj_version}-figura")
+				forgeRuntimeLibrary("com.github.FiguraMC.luaj:luaj-jse:${project.properties.luaj_version}-figura")
+				forgeRuntimeLibrary("com.neovisionaries:nv-websocket-client:${project.properties.nv_websocket_version}")
+			}
+		}
+	}
 }
 
 test {
@@ -257,7 +291,8 @@ processResources {
 			"version": project.version,
 	        "minecraft": "~" + project.minecraft_version,
 			"java": javaVersion,
-			"ml": loader.friendlyName
+			"ml": loader.friendlyName,
+			"cpm1": figura ? "*\",\n    \"figura\": \">=0.1.5" : "*"
 	]
 	inputs.property "version", project.version
 	inputs.property "deps", deps
@@ -362,7 +397,12 @@ publishMods {
 			optional("cloth-config")
 		}
 		requires("legacy4j")
-		requires("custom-player-models")
+		if (figura) {
+			optional("custom-player-models")
+			optional("figura")
+		} else {
+			requires("custom-player-models")
+		}
 	}
 
 	curseforge {

@@ -8,6 +8,7 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.redrain0o0.legacyskins.client.LegacySkin;
 import io.github.redrain0o0.legacyskins.client.LegacySkinPack;
 import io.github.redrain0o0.legacyskins.client.screen.config.LegacyConfigScreens;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
@@ -166,23 +167,45 @@ public class LegacySkinsConfig {
 			try {
 				throw new NullPointerException("Cannot set skin " + skin.pack() + ":" + skin.ordinal() + " because " + skin.pack() + " is null!");
 			} catch (NullPointerException e) {
-				Legacyskins.LOGGER.error("Attempted to set a skin that has no pack!", e);
+				LegacySkins.LOGGER.error("Attempted to set a skin that has no pack!", e);
+				return;
+			}
+		}
+		LegacySkin legacySkin = skin != null ? LegacySkinPack.list.get(skin.pack()).skins().get(skin.ordinal()) : null;
+		if (legacySkin != null && !legacySkin.canBeUsed()) {
+			try {
+				throw new RuntimeException("Cannot set skin " + skin.pack() + ":" + skin.ordinal() + " because " + reasonFor(legacySkin.type()) + "!");
+			} catch (RuntimeException e) {
+				LegacySkins.LOGGER.error("Attempted to set a skin that is not available!", e);
 				return;
 			}
 		}
 		skinsConfig.currentSkin = Optional.ofNullable(skin);
-		LegacySkinUtils.switchSkin(skin != null ? LegacySkinPack.list.get(skin.pack()).skins().get(skin.ordinal()) : null);
+		LegacySkinUtils.switchSkin(legacySkin);
+	}
+
+	private String reasonFor(LegacySkin.Type type) {
+		if (type == LegacySkin.Type.FIGURA) {
+			//? if figurac {
+			return "Figura is not installed";
+			//?} else {
+			/*return "this version of Legacy Skins doesn't support Figura avatars";
+			*///?}
+		} else if (type == LegacySkin.Type.CPM) {
+			return "Customizable Player Models is not installed";
+		}
+		return "missingno";
 	}
 
 	@VisibleForTesting
 	public static <T> LegacySkinsConfig fromDynamic(Dynamic<T> dynamic) {
 		Dynamic<T> fix = Migrator.CONFIG_FIXER.fix(dynamic);
-		return LegacySkinsConfig.CODEC.parse(fix).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+		return LegacySkinsConfig.CODEC.parse(fix).resultOrPartial(LegacySkins.LOGGER::error).orElseThrow();
 	}
 
 	@VisibleForTesting
 	public <T> Dynamic<T> toDynamic(DynamicOps<T> ops) {
-		Dynamic<T> dynamic = new Dynamic<>(ops, CODEC.encodeStart(ops, this).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow());
+		Dynamic<T> dynamic = new Dynamic<>(ops, CODEC.encodeStart(ops, this).resultOrPartial(LegacySkins.LOGGER::error).orElseThrow());
 		return Migrator.CONFIG_FIXER.addSchemaVersion(dynamic);
 	}
 
@@ -196,10 +219,10 @@ public class LegacySkinsConfig {
 				throw new RuntimeException(e);
 			}
 			Dynamic<JsonElement> jsonElementDynamic = new Dynamic<>(JsonOps.INSTANCE, s);
-			Legacyskins.INSTANCE = fromDynamic(jsonElementDynamic);
+			LegacySkins.INSTANCE = fromDynamic(jsonElementDynamic);
 
 		} else {
-			(Legacyskins.INSTANCE = new LegacySkinsConfig(new HashMap<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment(), false, 50f, Optional.empty(), Optional.empty(), new HashMap<>(), true)).save();
+			(LegacySkins.INSTANCE = new LegacySkinsConfig(new HashMap<>(), SkinsScreen.DEFAULT, PlatformUtils.isDevelopmentEnvironment(), false, 50f, Optional.empty(), Optional.empty(), new HashMap<>(), true)).save();
 		}
 	}
 
@@ -210,7 +233,7 @@ public class LegacySkinsConfig {
 			Dynamic<JsonElement> dynamic = toDynamic(instance);
 			Files.writeString(configFile, new GsonBuilder().setPrettyPrinting().create().toJson(dynamic.getValue()));
 		} catch (IOException e) {
-			Legacyskins.LOGGER.error("Failed to save config", e);
+			LegacySkins.LOGGER.error("Failed to save config", e);
 		}
 	}
 }

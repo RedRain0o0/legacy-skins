@@ -1,16 +1,13 @@
 package io.github.redrain0o0.legacyskins.client;
 
 import io.github.redrain0o0.legacyskins.LegacySkinsConfig;
-import io.github.redrain0o0.legacyskins.Legacyskins;
-import io.github.redrain0o0.legacyskins.client.screen.ChangeSkinScreen;
-import io.github.redrain0o0.legacyskins.client.screen.EScreen;
-import io.github.redrain0o0.legacyskins.client.screen.NonLegacy4JChangeSkinScreen;
+import io.github.redrain0o0.legacyskins.LegacySkins;
+import io.github.redrain0o0.legacyskins.client.screen.*;
 import io.github.redrain0o0.legacyskins.client.screen.config.LegacyConfigScreens;
 import io.github.redrain0o0.legacyskins.client.util.EasterEggUtils;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import io.github.redrain0o0.legacyskins.util.PlatformUtils;
 //? if fabric {
-import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 //?}
@@ -49,19 +46,43 @@ import net.neoforged.neoforge.event.GameShuttingDownEvent;
 import java.util.function.Supplier;
 
 //? if neoforge && multientrypoints
-/*@Mod(value = Legacyskins.MOD_ID, dist = Dist.CLIENT)*/
+/*@Mod(value = LegacySkins.MOD_ID, dist = Dist.CLIENT)*/
 //? if neoforge || forge {
-/*@EventBusSubscriber(/^? if !multientrypoints {^/ modid = Legacyskins.MOD_ID, /^?}^/ bus = EventBusSubscriber.Bus.MOD)
+/*@EventBusSubscriber(/^? if !multientrypoints {^/ modid = LegacySkins.MOD_ID, /^?}^//^? if !(neoforge && >=1.21.6) {^/bus = EventBusSubscriber.Bus.MOD/^?}^/)
 *///?}
 public class LegacySkinsClient {
+	public static IPlayerSkinQ cpmPlayerSkinQ;
+	public static IGeneralCPMQ generalCpmQ;
+	public static IGeneralFiguraQ generalFiguraQ;
+	public static IFiguraL4JQ figuraL4JQ;
 	// used in a mixin
 	public static boolean singleFireAssortApply = false;
 	public void onInitializeClient() {
+		IPlayerSkinQ cpmSkinQ;
+		IPlayerSkinQ figuraSkinQ;
+		if (PlatformUtils.isModLoaded("cpm")) {
+			cpmSkinQ = new CPMPlayerSkinQ();
+			generalCpmQ = new GeneralCPMQ();
+		} else {
+			cpmSkinQ = new NoPlayerSkinQ();
+			generalCpmQ = new NoGeneralCPMQ();
+		}
+		/*? if figurac {*/
+		if (PlatformUtils.isModLoaded("figura")) {
+			figuraSkinQ = new FiguraPlayerSkinQ(new NoPlayerSkinQ());
+			generalFiguraQ = new GeneralFiguraQ();
+			figuraL4JQ = PlatformUtils.isModLoaded("legacy") ? new FiguraL4JQ() : new NoFiguraL4JQ();
+		} else/*?}*/{
+			figuraSkinQ = new NoPlayerSkinQ();
+			generalFiguraQ = new NoGeneralFiguraQ();
+			figuraL4JQ = new NoFiguraL4JQ();
+		}
+		cpmPlayerSkinQ = new ContextualPlayerSkinQ(cpmSkinQ, figuraSkinQ);
 		//? if fabric {
 		ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new LegacySkinPack.Manager());
 		ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
 			LegacySkinUtils.cleanup();
-			Legacyskins.INSTANCE.save();
+			LegacySkins.INSTANCE.save();
 		});
 		LegacyConfigScreens.init();
 		//?}
@@ -79,8 +100,8 @@ public class LegacySkinsClient {
 									return new Runnable() {
 										@Override
 										public void run() {
-											wily.factoryapi.FactoryAPIClient.registerDefaultConfigScreen(Legacyskins.MOD_ID, screen -> LegacyConfigScreens.createConfigScreen(screen).orElse(null));
-											wily.factoryapi.base.client.UIDefinitionManager.DEFAULT_SCREENS_MAP.put(io.github.redrain0o0.legacyskins.util.VersionUtils.of(Legacyskins.MOD_ID, "skins_screen"), LegacySkinsClient::getSkinsScreen);
+											wily.factoryapi.FactoryAPIClient.registerDefaultConfigScreen(LegacySkins.MOD_ID, screen -> LegacyConfigScreens.createConfigScreen(screen).orElse(null));
+											wily.factoryapi.base.client.UIDefinitionManager.DEFAULT_SCREENS_MAP.put(io.github.redrain0o0.legacyskins.util.VersionUtils.of(LegacySkins.MOD_ID, "skins_screen"), LegacySkinsClient::getSkinsScreen);
 										}
 									};
 								}
@@ -107,12 +128,13 @@ public class LegacySkinsClient {
 			//?} else
 			/^modContainer.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((mc, screen) -> LegacyConfigScreens.createConfigScreen(screen).orElseThrow()));^/
 		}
+		onInitializeClient();
 	}
 
 	//? if >= 1.21.4 {
 	@SubscribeEvent
 	public static void onResourceReload(AddClientReloadListenersEvent event) {
-		event.addListener(io.github.redrain0o0.legacyskins.util.VersionUtils.of(Legacyskins.MOD_ID, "manager"), new LegacySkinPack.Manager());
+		event.addListener(io.github.redrain0o0.legacyskins.util.VersionUtils.of(LegacySkins.MOD_ID, "manager"), new LegacySkinPack.Manager());
 	}
 	//?} else {
 	/^@SubscribeEvent
@@ -123,7 +145,7 @@ public class LegacySkinsClient {
 
 	public static void event(GameShuttingDownEvent event) {
 		LegacySkinUtils.cleanup();
-		Legacyskins.INSTANCE.save();
+		LegacySkins.INSTANCE.save();
 	}
 	*///?}
 
@@ -142,7 +164,7 @@ public class LegacySkinsClient {
 								return new Supplier<Screen>() {
 									@Override
 									public Screen get() {
-										return EasterEggUtils.eEasterEgg() ? new EScreen(previousScreen) : Legacyskins.INSTANCE.getSkinsScreen() == LegacySkinsConfig.SkinsScreen.DEFAULT || Legacyskins.INSTANCE.getSkinsScreen() == LegacySkinsConfig.SkinsScreen.REMOVED_CLASSIC ? new ChangeSkinScreen(previousScreen) : new NonLegacy4JChangeSkinScreen(previousScreen);
+										return EasterEggUtils.eEasterEgg() ? new EScreen(previousScreen) : LegacySkins.INSTANCE.getSkinsScreen() == LegacySkinsConfig.SkinsScreen.DEFAULT || LegacySkins.INSTANCE.getSkinsScreen() == LegacySkinsConfig.SkinsScreen.REMOVED_CLASSIC ? new ChangeSkinScreen(previousScreen) : new NonLegacy4JChangeSkinScreen(previousScreen);
 									}
 								};
 							}

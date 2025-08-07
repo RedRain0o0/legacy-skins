@@ -9,7 +9,7 @@ import dev.isxander.yacl3.api.controller.ControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.LegacySkins;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -31,27 +31,27 @@ public class YaclConfigScreen {
 						.name(Component.literal("General"))
 						.option(Option.<Boolean>createBuilder()
 								.name(Component.literal("Show Dev Skins"))
-								.binding(false, Legacyskins.INSTANCE::showDevPacks, b -> Legacyskins.INSTANCE.showDevPacks = b)
+								.binding(false, LegacySkins.INSTANCE::showDevPacks, b -> LegacySkins.INSTANCE.showDevPacks = b)
 								.controller(TickBoxControllerBuilder::create)
 								.build()
 						).option(Option.<Boolean>createBuilder()
 								.name(Component.literal("Show Skin Editor Button"))
-								.binding(true, Legacyskins.INSTANCE::showSkinEditorButton, b -> Legacyskins.INSTANCE.showEditorButton = b)
+								.binding(true, LegacySkins.INSTANCE::showSkinEditorButton, b -> LegacySkins.INSTANCE.showEditorButton = b)
 								.controller(TickBoxControllerBuilder::create)
 								.build()
 						).option(Option.<Float>createBuilder()
 								.name(Component.literal("Doll X Rotation Limit"))
-								.binding(50.0f, Legacyskins.INSTANCE::dollRotationXLimit, f -> Legacyskins.INSTANCE.dollRotationXLimit = f)
+								.binding(50.0f, LegacySkins.INSTANCE::dollRotationXLimit, f -> LegacySkins.INSTANCE.dollRotationXLimit = f)
 								.controller(c -> FloatSliderControllerBuilder.create(c).range(0.0f, 90.0f).step(1.0f))
 								.build()
 						).option(Option.<M>createBuilder()
 								.name(Component.literal("Preferred Config Screen"))
-								.binding(M.NONE, M.of(Legacyskins.INSTANCE::configScreenType), t -> Legacyskins.INSTANCE.configScreenType = Optional.ofNullable(t.type))
+								.binding(M.NONE, M.of(LegacySkins.INSTANCE::configScreenType), t -> LegacySkins.INSTANCE.configScreenType = Optional.ofNullable(t.type))
 								.controller(c -> EnumControllerBuilder.create(c).enumClass(M.class))
 								.build()
 						).option(Option.<Boolean>createBuilder()
 								.name(Component.literal("Smooth Interpolation"))
-								.binding(true, () -> !Legacyskins.INSTANCE.choppyLerp(), b -> Legacyskins.INSTANCE.choppyLerp = !b)
+								.binding(true, () -> !LegacySkins.INSTANCE.choppyLerp(), b -> LegacySkins.INSTANCE.choppyLerp = !b)
 								.controller(TickBoxControllerBuilder::create)
 								.build()).option(
 								LabelOption.create(Component.literal("Get more skin packs!").withStyle(s -> s.withClickEvent(

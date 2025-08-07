@@ -6,7 +6,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mojang.serialization.codecs.UnboundedMapCodec;
 import io.github.redrain0o0.legacyskins.Constants;
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.LegacySkins;
 import io.github.redrain0o0.legacyskins.SkinReference;
 import io.github.redrain0o0.legacyskins.client.util.LegacySkinUtils;
 import io.github.redrain0o0.legacyskins.client.util.SortingOrder;
@@ -14,6 +14,7 @@ import io.github.redrain0o0.legacyskins.client.util.SortingOrderCodecs;
 import io.github.redrain0o0.legacyskins.migrator.Migrator;
 import io.github.redrain0o0.legacyskins.util.VersionUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -47,6 +48,7 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 	public static final List<ResourceLocation> modrinthSkinPacks = new ArrayList<>(); // order doesn't matter
 	public static final UnboundedMapCodec<ResourceLocation, SortingOrder<ResourceLocation>> PRIORITIES_CODEC = Codec.unboundedMap(ResourceLocation.CODEC, SortingOrderCodecs.CODEC);
 	private static final String PACKS = "skin_packs.json";
+	private static final String PACKS2 = "skin_packs2.json";
 	private static final String PRIORITIES = "skin_pack_priorities.json";
 
 	//? if fabric
@@ -67,7 +69,7 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 		private static @NotNull Map<ResourceLocation, LegacySkinPack> loadPacksFromResourceManager(ResourceManager resourceManager) {
 			Map<ResourceLocation, LegacySkinPack> packs = new LinkedHashMap<>();
 			Map<ResourceLocation, SortingOrder<ResourceLocation>> priorities = new LinkedHashMap<>();
-			List<String> allNamespaces = resourceManager.getNamespaces().stream().sorted(Comparator.comparingInt(s -> s.equals(Legacyskins.MOD_ID) ? 0 : 1)).toList();
+			List<String> allNamespaces = resourceManager.getNamespaces().stream().sorted(Comparator.comparingInt(s -> s.equals(LegacySkins.MOD_ID) ? 0 : 1)).toList();
 			allNamespaces.forEach(loadPriorities(resourceManager, priorities));
 			allNamespaces.forEach(loadPackData(resourceManager, packs));
 			Map<ResourceLocation, LegacySkinPack> packs2 = new LinkedHashMap<>();
@@ -83,12 +85,12 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 					try {
 						BufferedReader bufferedReader = r.openAsReader();
 						JsonElement obj = GsonHelper.parse(bufferedReader);
-						obj = Migrator.SKIN_PACK_PRIORITIES_FIXER.fix(JsonOps.INSTANCE, obj);
-						Map<ResourceLocation, SortingOrder<ResourceLocation>> map = PRIORITIES_CODEC.parse(JsonOps.INSTANCE, obj).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
+						obj = Migrator.SKIN_PACK_PRIORITIES_FIXER.fix(JsonOps.INSTANCE, obj, true);
+						Map<ResourceLocation, SortingOrder<ResourceLocation>> map = PRIORITIES_CODEC.parse(JsonOps.INSTANCE, obj).resultOrPartial(LegacySkins.LOGGER::error).orElseThrow();
 						priorities.putAll(map);
 						bufferedReader.close();
 					} catch (IOException e) {
-						Legacyskins.LOGGER.warn(e.getMessage());
+						LegacySkins.LOGGER.warn(e.getMessage());
 					}
 				});
 			};
@@ -96,24 +98,27 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 
 		private static @NotNull Consumer<String> loadPackData(ResourceManager resourceManager, Map<ResourceLocation, LegacySkinPack> packs) {
 			return name -> {
-				resourceManager.getResource(ResourceLocation.tryBuild(name, PACKS)).ifPresent(r -> {
-					try {
-						BufferedReader bufferedReader = r.openAsReader();
-						JsonElement obj = GsonHelper.parse(bufferedReader);
-						obj = Migrator.SKIN_PACKS_FIXER.fix(JsonOps.INSTANCE, obj);
-						Map<ResourceLocation, LegacySkinPack> map = MAP_CODEC.parse(JsonOps.INSTANCE, obj).resultOrPartial(Legacyskins.LOGGER::error).orElseThrow();
-						if (Legacyskins.lazyInstance().downloadedPacks().values().stream().anyMatch(f -> ("file/" + f).equals(r.sourcePackId()))) {
-							map.forEach((a, b) -> modrinthSkinPacks.add(a));
-						} else {
-							map.forEach((a, b) -> modrinthSkinPacks.remove(a));
-						}
-						packs.putAll(map);
-						bufferedReader.close();
-					} catch (IOException e) {
-						Legacyskins.LOGGER.warn(e.getMessage());
-					}
-				});
+				resourceManager.getResource(ResourceLocation.tryBuild(name, PACKS)).ifPresent(r -> load(packs, r));
+				resourceManager.getResource(ResourceLocation.tryBuild(name, PACKS2)).ifPresent(r -> load(packs, r));
 			};
+		}
+
+		private static void load(Map<ResourceLocation, LegacySkinPack> packs, Resource r) {
+			try {
+				BufferedReader bufferedReader = r.openAsReader();
+				JsonElement obj = GsonHelper.parse(bufferedReader);
+				obj = Migrator.SKIN_PACKS_FIXER.fix(JsonOps.INSTANCE, obj, true);
+				Map<ResourceLocation, LegacySkinPack> map = MAP_CODEC.parse(JsonOps.INSTANCE, obj).resultOrPartial(LegacySkins.LOGGER::error).orElseThrow();
+				if (LegacySkins.lazyInstance().downloadedPacks().values().stream().anyMatch(f -> ("file/" + f).equals(r.sourcePackId()))) {
+					map.forEach((a, b) -> modrinthSkinPacks.add(a));
+				} else {
+					map.forEach((a, b) -> modrinthSkinPacks.remove(a));
+				}
+				packs.putAll(map);
+				bufferedReader.close();
+			} catch (IOException e) {
+				LegacySkins.LOGGER.warn(e.getMessage());
+			}
 		}
 
 		// addFirst does not exist before Java 21
@@ -125,15 +130,15 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 			// The default skin
 			data.get(Constants.DEFAULT_PACK).skins().add(0, null);
 			list.putAll(data);
-			Optional<SkinReference> skin = Legacyskins.lazyInstance().getActiveSkinsConfig().getCurrentSkin();
+			Optional<SkinReference> skin = LegacySkins.lazyInstance().getActiveSkinsConfig().getCurrentSkin();
 			if (skin.isPresent()) {
 				SkinReference skinReference = skin.get();
 				try {
 					LegacySkin legacySkin = list.get(skinReference.pack()).skins().get(skinReference.ordinal());
 					LegacySkinUtils.switchSkin(legacySkin);
 				} catch (Throwable t) {
-					Legacyskins.LOGGER.error("Failed to load skin from pack: %s, resetting skin.".formatted(skinReference.pack()), t);
-					Legacyskins.lazyInstance().setSkin(null);
+					LegacySkins.LOGGER.error("Failed to load skin from pack: %s, resetting skin.".formatted(skinReference.pack()), t);
+					LegacySkins.lazyInstance().setSkin(null);
 				}
 			}
 			//? if fabric
@@ -143,7 +148,7 @@ public record LegacySkinPack(LegacyPackType type, ResourceLocation icon, List<Le
 		//? if fabric {
 		@Override
 		public ResourceLocation getFabricId() {
-			return VersionUtils.of(Legacyskins.MOD_ID, "manager");
+			return VersionUtils.of(LegacySkins.MOD_ID, "manager");
 		}
 		//?}
 	}

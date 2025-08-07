@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.LegacySkins;
 import io.github.redrain0o0.legacyskins.migrator.fixer.Fixer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -51,8 +51,8 @@ public class MigratorTest {
 		{
 			Dynamic<JsonElement> jsonElementDynamic = new Dynamic<>(JsonOps.INSTANCE, load("2mig.json"));
 			jsonElementDynamic = Migrators.migrator.fix(jsonElementDynamic);
-			Assertions.assertEquals("1", jsonElementDynamic.get("value2").asString().resultOrPartial(Legacyskins.LOGGER::error).orElseThrow());
-			Assertions.assertEquals("2", jsonElementDynamic.get("value1").asString().resultOrPartial(Legacyskins.LOGGER::error).orElseThrow());
+			Assertions.assertEquals("1", jsonElementDynamic.get("value2").asString().resultOrPartial(LegacySkins.LOGGER::error).orElseThrow());
+			Assertions.assertEquals("2", jsonElementDynamic.get("value1").asString().resultOrPartial(LegacySkins.LOGGER::error).orElseThrow());
 		}
 	}
 

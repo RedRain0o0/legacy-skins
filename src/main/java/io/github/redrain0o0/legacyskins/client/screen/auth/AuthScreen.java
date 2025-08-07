@@ -1,6 +1,6 @@
 package io.github.redrain0o0.legacyskins.client.screen.auth;
 
-import io.github.redrain0o0.legacyskins.Legacyskins;
+import io.github.redrain0o0.legacyskins.LegacySkins;
 import io.github.redrain0o0.legacyskins.client.screen.ChangeSkinScreen;
 import io.github.redrain0o0.legacyskins.mixin.legacy4j.LegacyTipAccessor;
 import io.github.redrain0o0.legacyskins.modrinth.ModrinthOauth;
@@ -140,14 +140,14 @@ public class AuthScreen extends Screen {
 		minecraft.setScreen(loadingScreen);
 		triConsumer.accept(null, "Removing old skin packs...", null);
 		CompletableFuture.runAsync(() -> {
-			for (Map.Entry<ModrinthDataObjects.ProjectId, String> projectIdStringEntry : Legacyskins.lazyInstance().downloadedPacks().entrySet()) {
+			for (Map.Entry<ModrinthDataObjects.ProjectId, String> projectIdStringEntry : LegacySkins.lazyInstance().downloadedPacks().entrySet()) {
 				try {
 					Files.deleteIfExists(minecraft.getResourcePackDirectory().resolve(projectIdStringEntry.getValue()));
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
 			}
-			Legacyskins.lazyInstance().downloadedPacks().clear();
+			LegacySkins.lazyInstance().downloadedPacks().clear();
 		}).thenRun(() -> {
 			triConsumer.accept(null, "Loading collection...", null);
 			ModrinthSkinPackCollection.loadCollection().thenApply(f -> {
@@ -208,14 +208,14 @@ public class AuthScreen extends Screen {
 												Path path = resourcePackDirectory.resolve(join.mrMetadata().filename());
 												try {
 													Files.move(join.realLocation(), path, StandardCopyOption.REPLACE_EXISTING);
-													Legacyskins.lazyInstance().downloadedPacks().put(reversoMap.get(join.mrMetadata()).id(), join.mrMetadata().filename());
+													LegacySkins.lazyInstance().downloadedPacks().put(reversoMap.get(join.mrMetadata()).id(), join.mrMetadata().filename());
 												} catch (IOException e) {
 													throw new RuntimeException(e);
 												}
 											}
 											triConsumer.accept(null, "Reloading resource packs...", null);
 											resourcePackRepository.reload();
-											Legacyskins.LOGGER.info(resourcePackRepository.getAvailablePacks().stream().map(Pack::getId).toList().toString());
+											LegacySkins.LOGGER.info(resourcePackRepository.getAvailablePacks().stream().map(Pack::getId).toList().toString());
 											GlobalPacks globalPacks = GlobalPacks.globalResources.get();
 											boolean b = globalPacks.applyOnTop();
 											List<String> list = new ArrayList<>(globalPacks.list());
@@ -232,7 +232,7 @@ public class AuthScreen extends Screen {
 											finish.run();
 											//minecraft.tell(resourcePackRepository::reload);
 										} catch (Throwable t) {
-											Legacyskins.LOGGER.error("ERROR!", t);
+											LegacySkins.LOGGER.error("ERROR!", t);
 										}
 										return null;
 									});
